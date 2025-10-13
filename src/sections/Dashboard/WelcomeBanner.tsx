@@ -118,11 +118,11 @@ export function WelcomeBanner() {
   return (
     <WelcomeWrapper>
       <WelcomeContent>
-        <h1>Welcome to Sol-Win Casino</h1>
-        <p>A Your fair, simple and decentralized casino on Solana.</p>
+        <h1>Welcome to SOL-WIN</h1>
+        <p>Your fair, simple and decentralized casino on Solana.</p>
       </WelcomeContent>
       <ButtonGroup>
-        <ActionButton onClick={openLink('https://x.com//')}>
+        <ActionButton onClick={openLink('https://www.x.com//')}>
           Follow us on X
         </ActionButton>
         <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
