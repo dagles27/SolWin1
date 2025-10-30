@@ -9,7 +9,11 @@ export const StyledItemPreview = styled.div`
     width: 50px;
     aspect-ratio: 1/1.5;
     border-radius: 5px;
-    border: 1px solid #2d2d57;
+    border: 1px solid transparent;
+    border-image: linear-gradient(90deg, #00BFFF, #FF0040) 1;
+    box-shadow:
+      0 0 8px #00BFFF,
+      0 0 15px #FF0040;
   }
 
   & > div.hidden {
