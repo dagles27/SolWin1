@@ -18,7 +18,7 @@ const WelcomeWrapper = styled.div`
   }
 
   /* Styling */
-  background: linear-gradient(-45deg, #ffb07c, #ff3e88, #2969ff, #ef3cff, #ff3c87);
+  background: linear-gradient(-45deg, #063015, #088f44, #009866, #01cb82, #00d596);
   background-size: 300% 300%;
   animation: welcome-fade-in 0.5s ease, backgroundGradient 30s ease infinite;
   border-radius: 12px; /* Slightly larger radius for a modern look */
