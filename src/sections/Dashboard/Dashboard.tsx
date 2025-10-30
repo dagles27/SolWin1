@@ -47,13 +47,27 @@ export function GameGrid() {
 }
 
 
+const GamesHeader = () => (
+  <div style={{
+    backgroundImage: 'url("/public/games-banner.png")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '250px',
+    borderRadius: '12px',
+    margin: '40px auto',
+    width: '80%',
+  }}>
+  </div>
+);
+
 export default function Dashboard() {
   return (
     <>
       <WelcomeBanner />
       <FeaturedInlineGame />
+      <GamesHeader />
       <h2 style={{ textAlign: 'center' }}>Games</h2>
       <GameGrid />
     </>
-  )
+  );
 }
