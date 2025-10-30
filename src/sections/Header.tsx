@@ -81,7 +81,7 @@ export default function Header() {
 
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
-          <h1>Jackpot 💰</h1>
+          <h1>Jackpot </h1>
           <p style={{ fontWeight: 'bold' }}>
             There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the
             Jackpot.
