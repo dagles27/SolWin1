@@ -25,7 +25,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'slots',
     meta: {
-      background: '#5465ff',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Slots',
       image: '/games/slots.png',
       description: `
@@ -37,7 +37,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'flip',
     meta: {
-      background: '#ffe694',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Flip',
       image: '/games/flip.png',
       description: `
@@ -49,7 +49,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'hilo',
     meta: {
-      background: '#ff4f4f',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'HiLo',
       image: '/games/hilo.png',
       description: `
@@ -62,7 +62,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'mines',
     meta: {
-      background: '#8376ff',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Mines',
       image: '/games/mines.png',
       description: `
@@ -74,7 +74,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'roulette',
     meta: {
-      background: '#1de87e',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Roulette',
       image: '/games/roulette.png',
       description: `
@@ -86,7 +86,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'plinko',
     meta: {
-      background: '#7272ff',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Plinko',
       image: '/games/plinko.png',
       description: `
@@ -98,7 +98,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'crash',
     meta: {
-      background: '#de95e8',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Crash',
       image: '/games/crash.png',
       description: `
@@ -110,7 +110,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'blackjack',
     meta: {
-      background: '#084700',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'BlackJack',
       image: '/games/blackjack.png',
       description: `
@@ -122,7 +122,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'jackpot',
     meta: {
-      background: '#38acc9ff',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'JackPot',
       image: '/games/jackpot.png',
       description: `
@@ -135,7 +135,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'plinkorace',
     meta: {
-      background: '#62cc34ff',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'PlinkoRace',
       image: '/games/plinkorace.png',
       description: `
@@ -148,7 +148,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'pvpflip',
     meta: {
-      background: '#222a59',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'PvpFlip',
       image: '/games/pvpflip.png',
       description: `
