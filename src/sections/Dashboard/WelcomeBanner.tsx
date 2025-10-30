@@ -2,136 +2,69 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React from 'react';
 import styled from 'styled-components';
-import { useUserStore } from '../../hooks/useUserStore';
+import { useUserStore } from '../../hooks/useUserStore
 
 const WelcomeWrapper = styled.div`
-  /* Animations */
-  @keyframes welcome-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  height: 300px;
+  width: 100%;
+  background: linear-gradient(135deg, #013B33, #036B4F, #00C896);
+  background-size: 300% 300%;
+  animation: gradientShift 15s ease infinite;
+  box-shadow: 0 0 25px rgba(0, 200, 150, 0.2);
 
-  @keyframes backgroundGradient {
+  @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
-
-  /* Styling */
-  background: linear-gradient(135deg, #FFF9C4, #FFD700, #FFA500, #FFECB3);
-  background-size: 300% 300%;
-  animation: welcome-fade-in 0.5s ease, backgroundGradient 30s ease infinite;
-  border-radius: 12px; /* Slightly larger radius for a modern look */
-  padding: 24px; /* Consistent padding */
-  display: flex;
-  flex-direction: column;
-  gap: 24px; /* Consistent gap */
-  text-align: center;
-  filter: drop-shadow(0 4px 3px rgba(0,0,0,.07)) drop-shadow(0 2px 2px rgba(0,0,0,.06));
-
-  /* Desktop styles using a min-width media query */
-  @media (min-width: 800px) {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    align-items: center;
-    text-align: left;
-    padding: 40px;
-    gap: 40px;
-  }
 `;
 
-const WelcomeContent = styled.div`
-  h1 {
-    font-size: 1.75rem; /* Responsive font size */
-    margin: 0 0 8px 0;
-    color: #ffffff;
-  }
-
-  p {
-    font-size: 1rem;
-    color: #ffffffd1;
-    margin: 0;
-  }
-
-  @media (min-width: 800px) {
-    h1 {
-      font-size: 2.25rem;
-    }
-    p {
-      font-size: 1.125rem;
-    }
-  }
+const Slide = styled.div`
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  transition: opacity 1.5s ease-in-out;
+  filter: brightness(0.85);
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-wrap: wrap; /* Allows buttons to wrap onto the next line */
-  gap: 12px; /* Space between buttons */
-  justify-content: center; /* Center buttons on mobile */
-
-  @media (min-width: 800px) {
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-`;
-
-const ActionButton = styled.button`
-  /* Base styles */
-  border: none;
-  border-radius: 10px;
-  padding: 12px 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: #ffffffdf;
-  color: black;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  flex-grow: 1; /* Allows buttons to share space on mobile */
-  text-align: center;
-
-  &:hover {
-    background: white;
-    transform: translateY(-2px); /* Subtle hover effect */
-  }
-
-  /* On desktop, buttons take full width of their container */
-  @media (min-width: 800px) {
-    width: 100%;
-    flex-grow: 0; /* Reset flex-grow */
-  }
+const Overlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 255, 150, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
 `;
 
 export function WelcomeBanner() {
-  const wallet = useWallet();
-  const walletModal = useWalletModal();
-  const { set: setUserModal } = useUserStore(); // Destructure for cleaner access
+  const images = [
+    '/slider/slide1.png',
+    '/slider/slide2.png',
+    '/slider/slide3.png',
+    '/slider/slide4.png',
+  ];
 
-  const handleCopyInvite = () => {
-    setUserModal({ userModal: true });
-    if (!wallet.connected) {
-      walletModal.setVisible(true);
-    }
-  };
+  const [current, setCurrent] = useState(0);
 
-  const openLink = (url) => () => window.open(url, '_blank', 'noopener,noreferrer');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <WelcomeWrapper>
-      <WelcomeContent>
-        <h1>Welcome to SOL-WIN</h1>
-        <p>Your fair, simple and decentralized casino on Solana.</p>
-      </WelcomeContent>
-      <ButtonGroup>
-        <ActionButton onClick={openLink('https://www.x.com//')}>
-          Follow us on X
-        </ActionButton>
-        <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
-          Join Telegram
-        </ActionButton>
-        <ActionButton onClick={openLink('https://linktr.ee/Solwin_Casino')}>
-          How to LinkTree
-        </ActionButton>
-      </ButtonGroup>
+      {images.map((img, index) => (
+        <Slide
+          key={index}
+          active={index === current}
+          style={{ backgroundImage: `url(${img})` }}
+        />
+      ))}
+      <Overlay />
     </WelcomeWrapper>
   );
 }
