@@ -37,7 +37,11 @@ const StyledSlot = styled.div<{$good: boolean}>`
   background: #4444FF11;
   overflow: hidden;
   border-radius: 10px;
-  border: 2px solid #2d2d57;
+  border: 1px solid transparent;
+  border-image: linear-gradient(90deg, #00BFFF, #FF0040) 1;
+  box-shadow:
+    0 0 8px #00BFFF,
+    0 0 15px #FF0040;
   transition: background .2s, border .2s, box-shadow .2s;
   ${(props) => props.$revealed && css`
     animation: result-flash-2 ease .2s;
