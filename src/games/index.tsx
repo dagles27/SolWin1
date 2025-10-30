@@ -13,7 +13,7 @@ export const GAMES: ExtendedGameBundle[] = [
   {
     id: 'dice',
     meta: {
-      background: '#ff6490',
+      background: 'radial-gradient(circle at center, #036B4F 0%, #013B33 100%)',
       name: 'Dice',
       image: '/games/dice.png',
       description: `
