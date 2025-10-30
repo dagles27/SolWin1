@@ -48,7 +48,7 @@ export function GameGrid() {
 
 
 const GamesHeader = () => (
-  <div style={{ width: '100%', textAlign: 'center', margin: '10px 0' }}>
+  <div style={{ width: '100%', textAlign: 'center', margin: '0px 0' }}>
     <img
       src="/games-banner.png"
       alt="Games Header"
