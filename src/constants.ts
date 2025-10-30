@@ -16,7 +16,7 @@ export const EXPLORER_URL = 'https://explorer.gamba.so'
 export const PLATFORM_SHARABLE_URL = 'play.gamba.so'
 
 // Creator fee (in %)
-export const PLATFORM_CREATOR_FEE = 0.04 // 1% !!max 7%!!
+export const PLATFORM_CREATOR_FEE = 0.05 // 1% !!max 7%!!
 
 export const MULTIPLAYER_FEE = 0.015 // 1% 
 
@@ -24,10 +24,10 @@ export const MULTIPLAYER_FEE = 0.015 // 1%
 export const PLATFORM_JACKPOT_FEE = 0.001 // 0.1%,  not jackpot game specific, but platform wide
 
 // Referral fee (in %)
-export const PLATFORM_REFERRAL_FEE = 0.0025 // 0.25%
+export const PLATFORM_REFERRAL_FEE = 0.01 // 0.25%
 
 /** If the user should be able to revoke an invite after they've accepted an invite */
-export const PLATFORM_ALLOW_REFERRER_REMOVAL = true
+export const PLATFORM_ALLOW_REFERRER_REMOVAL = false
 
 // Just a helper function
 const lp = (tokenMint: PublicKey | string, poolAuthority?: PublicKey | string): PoolToken => ({
@@ -47,11 +47,9 @@ export const POOLS = [
   lp('So11111111111111111111111111111111111111112'),
   // USDC:
   lp('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
-  // Wormhole:
-  lp('85VBFQZC9TZkfaptBWjvUw7YbZjy52A6mjtPGjstQAmQ'),
   //private pool example (mint + authority)
   lp('So11111111111111111111111111111111111111112', 'Fki4Yah4ZXvFmDUw8WspxRAEmfERPth7PPEwPYt3bior'),
-]
+  ]
 
 // The default token to be selected
 export const DEFAULT_POOL = POOLS[0]
@@ -63,8 +61,8 @@ export const DEFAULT_POOL = POOLS[0]
 export const TOKEN_METADATA: (Partial<TokenMeta> & {mint: PublicKey})[] = [
   {
     mint: FAKE_TOKEN_MINT,
-    name: 'Solly Test',
-    symbol: 'SOLLY',
+    name: 'Emeralds',
+    symbol: 'EMBS',
     image: '/fakemoney.png',
     baseWager: 1e9,
     decimals: 9,
