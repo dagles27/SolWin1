@@ -49,7 +49,7 @@ export function GameGrid() {
 
 const GamesHeader = () => (
   <div style={{
-    backgroundImage: 'url("/public/games-banner.png")',
+    backgroundImage: 'url("/games-banner.png")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '250px',
