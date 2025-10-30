@@ -40,10 +40,10 @@ const Overlay = styled.div`
 
 export function WelcomeBanner() {
   const images = [
-    '/slider/slide1.png',
-    '/slider/slide2.png',
-    '/slider/slide3.png',
-    '/slider/slide4.png',
+    '/slide1.png',
+    '/slide2.png',
+    '/slide3.png',
+    '/slide4.png',
   ];
 
   const [current, setCurrent] = useState(0);
