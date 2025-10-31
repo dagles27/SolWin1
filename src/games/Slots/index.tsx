@@ -40,12 +40,12 @@ function Messages({ messages }: {messages: string[]}) {
 }
 
 export default function Slots() {
-  const game = GambaUi.useGame()  // Konsolidiert: Nur ein useGame()
+  const game = GambaUi.useGame()
   const pool = useCurrentPool()
   const [spinning, setSpinning] = React.useState(false)
   const [result, setResult] = React.useState<GameResult>()
   const [good, setGood] = React.useState(false)
-  const [revealedSlots, setRevealedSlots] = React.useState(0)  // Start mit 0 für Reveal-Logik
+  const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
@@ -68,7 +68,6 @@ export default function Slots() {
 
   useEffect(
     () => {
-      // Clear timeout when user leaves
       return () => {
         timeout.current && clearTimeout(timeout.current)
       }
@@ -90,13 +89,11 @@ export default function Slots() {
     setRevealedSlots(slot + 1)
 
     if (slot < NUM_SLOTS - 1) {
-      // Reveal next slot
       timeout.current = setTimeout(
         () => revealSlot(combination, slot + 1),
         REVEAL_SLOT_DELAY,
       )
     } else if (slot === NUM_SLOTS - 1) {
-      // Show final results
       sounds.sounds.spin.player.stop()
       timeout.current = setTimeout(() => {
         setSpinning(false)
@@ -129,9 +126,8 @@ export default function Slots() {
 
       sounds.play('spin', { playbackRate: .5 })
 
-      const result = await game.result()  // Konsolidiert: game.result()
+      const result = await game.result()
 
-      // Make sure we wait a minimum time of SPIN_DELAY before slots are revealed:
       const resultDelay = Date.now() - startTime
       const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
@@ -143,7 +139,6 @@ export default function Slots() {
 
       timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
     } catch (err) {
-      // Reset if there's an error
       setSpinning(false)
       setRevealedSlots(NUM_SLOTS)
       throw err
@@ -157,14 +152,14 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
-              <ItemPreview betArray={bet} />
-              {/* Banner HIER – direkt über den Slots (nach Bet-Karten, vor Slots-Div) */}
+              {/* Banner HIER – über den 6 Boxen (vor ItemPreview) */}
               <img 
                 className="headerImage" 
-                src="/slot-neonfruits-banner.png"  // Passe Endung an, z.B. .jpg falls nötig
+                src="/slot-neonfruits-banner.png"  
                 alt="Neon Fruits Banner" 
               />
-              <div className="slots">  // Nur eines – entfernt Duplikat
+              <ItemPreview betArray={bet} />  {/* Die 6 Boxen */}
+              <div className="slots">
                 {combination.map((slot, i) => (
                   <Slot
                     key={i}
