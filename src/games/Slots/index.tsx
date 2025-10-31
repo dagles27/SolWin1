@@ -158,6 +158,11 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
+              <img 
+                className="headerImage" 
+                src="/slot-neonfruits-banner.png"  // Ersetze .png durch die tatsächliche Endung, falls nötig
+                alt="Neon Fruits Banner"
+               />
               <ItemPreview betArray={bet} />
               <div className={'slots'}>
                 {combination.map((slot, i) => (
