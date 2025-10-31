@@ -123,7 +123,7 @@ export const StyledSlots = styled.div`
     max-width: 400px;        /* optional: max. Breite */
     margin: 0 auto 0px;     /* Zentriert + weniger Abstand unten (von 20px auf 10px) */
     display: block;
-    border-radius: 10px;     /* optional: abgerundete Ecken */
+    border-radius: 0px;     /* optional: abgerundete Ecken */
     object-fit: cover;
     animation: bannerSlide 0.8s ease-out;  /* Animation hinzufügen */
   }
