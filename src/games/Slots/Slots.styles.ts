@@ -6,7 +6,7 @@ export const StyledSlots = styled.div`
 
   & > div {
     display: grid;
-    gap: 10px;  /* Optional: Reduziere auf 10px für engeres Layout */
+    gap: 0px;  /* Optional: Reduziere auf 10px für engeres Layout */
     transform: rotateX(3deg) rotateY(0deg);
   }
 
