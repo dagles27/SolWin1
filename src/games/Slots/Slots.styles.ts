@@ -6,7 +6,7 @@ export const StyledSlots = styled.div`
 
   & > div {
     display: grid;
-    gap: 20px;
+    gap: 20px;  /* Optional: Reduziere auf 10px für engeres Layout */
     transform: rotateX(3deg) rotateY(0deg);
   }
 
@@ -121,7 +121,7 @@ export const StyledSlots = styled.div`
   .headerImage {
     width: 100%;             /* füllt die Breite */
     max-width: 400px;        /* optional: max. Breite */
-    margin: 0 auto 20px;     /* zentriert + Abstand nach unten */
+    margin: 0 auto 10px;     /* Zentriert + weniger Abstand unten (von 20px auf 10px) */
     display: block;
     border-radius: 10px;     /* optional: abgerundete Ecken */
     object-fit: cover;
