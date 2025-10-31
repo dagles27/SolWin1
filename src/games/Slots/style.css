@@ -1,41 +1,63 @@
-/* style.css – Länglicher Spin-Button wie im Screenshot */
-.spin-btn {
-  background: linear-gradient(45deg, #ff00ff, #00ffff);
-  color: white;
-  font-size: 1.6rem;          /* Schriftgröße anpassen */
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 16px 80px;         /* GRÖßE HIER ÄNDERN: Höhe 16px, Breite 80px → länglich */
-  border: none;
-  border-radius: 50px;        /* Abgerundet wie im Screenshot */
-  cursor: pointer;
-  box-shadow: 
-    0 0 20px rgba(255, 0, 255, 0.7),
-    inset 0 0 15px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  min-width: 240px;           /* Mindestbreite – bleibt länglich */
-  margin: 20px auto;
-  display: block;
-  text-align: center;
+/* style.css – 100% Screenshot: Grüne Neon-Buttons + Layout */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
+
+.game-container {
+  max-width: 400px; margin: 0 auto; padding: 20px; text-align: center;
 }
 
-.spin-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(255, 0, 255, 0.9);
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.logo { font-size: 1.8rem; color: #0ff; text-shadow: 0 0 10px #0ff; }
+.balance { background: #222; padding: 10px; border-radius: 20px; color: #0ff; }
+
+.neon-title {
+  font-size: 3rem; background: linear-gradient(90deg, #ff00ff 0%, #00ff00 50%, #ffff00 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px #f0f; margin: 10px 0;
 }
 
-.spin-btn:active {
-  transform: scale(0.98);
+.paytable { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+.payitem {
+  width: 55px; height: 65px; background: rgba(0,255,0,0.1); border: 2px solid #00ff00;
+  border-radius: 12px; display: flex; flex-direction: column; justify-content: center;
+  box-shadow: 0 0 15px #00ff00; font-size: 1.6rem;
 }
+.payitem span:last-child { font-size: 0.8rem; color: #ffff00; }
 
-/* Bonus: Andere Buttons (Bet, Multi) anpassen */
-.bet-btn, .multi-btn {
-  padding: 10px 15px;         /* Größe der kleinen Buttons */
-  font-size: 1.2rem;
-  background: #333;
-  color: #0ff;
-  border: 1px solid #0ff;
-  border-radius: 8px;
-  cursor: pointer;
+.reels { display: flex; gap: 12px; margin: 25px 0; justify-content: center; }
+.reel {
+  width: 85px; height: 105px; background: rgba(255,0,255,0.1); border: 3px solid #ff00ff;
+  border-radius: 15px; display: flex; flex-direction: column; justify-content: center;
+  font-size: 3rem; color: #ff0000; text-shadow: 0 0 20px #ff0000;
+  box-shadow: 0 0 25px #ff00ff;
 }
+.reel .multi { font-size: 1rem; color: #00ff00; margin-top: 5px; }
+
+/* BUTTONS – 100% SCREENSHOT: Grün Neon, Position/Größe/Form */
+.controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+
+.embs-btn { /* EMBs Button – Dunkelgrün, rund */
+  background: linear-gradient(#006400, #228B22); color: white; font-size: 1.4rem; font-weight: bold;
+  padding: 12px 24px; border: none; border-radius: 30px; box-shadow: 0 0 20px #00ff00;
+  min-width: 80px;
+}
+.embs-btn::before { content: '💎'; margin-right: 5px; }
+
+.multi-btn { /* x0.5/x2 – Klein, rund, neon */
+  background: rgba(0,255,0,0.2); color: #00ff00; border: 2px solid #00ff00; padding: 10px 16px;
+  border-radius: 25px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 0 15px #00ff00;
+  min-width: 45px;
+}
+.multi-red { background: rgba(255,0,0,0.2); color: #ff0000; border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+
+.spin-btn { /* GRÖSSER SPIN – Grün Neon Glow, länglich */
+  background: linear-gradient(45deg, #00ff00, #32cd32); color: black; font-size: 1.7rem; font-weight: bold;
+  padding: 15px 45px; border: none; border-radius: 35px; cursor: pointer;
+  box-shadow: 0 0 30px #00ff00, inset 0 0 15px rgba(255,255,255,0.4);
+  transition: all 0.3s; min-width: 100px;
+}
+.spin-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px #00ff00; }
+.spin-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (max-width: 480px) { .controls { flex-direction: column; gap: 15px; } }
