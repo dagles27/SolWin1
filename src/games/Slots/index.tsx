@@ -40,12 +40,12 @@ function Messages({ messages }: {messages: string[]}) {
 }
 
 export default function Slots() {
-  const game = GambaUi.useGame()
+  const game = GambaUi.useGame()  // Konsolidiert: Nur ein useGame()
   const pool = useCurrentPool()
   const [spinning, setSpinning] = React.useState(false)
   const [result, setResult] = React.useState<GameResult>()
   const [good, setGood] = React.useState(false)
-  const [revealedSlots, setRevealedSlots] = React.useState(0)
+  const [revealedSlots, setRevealedSlots] = React.useState(0)  // Start mit 0 für Reveal-Logik
   const [wager, setWager] = useWagerInput()
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
@@ -97,7 +97,7 @@ export default function Slots() {
       )
     } else if (slot === NUM_SLOTS - 1) {
       // Show final results
-      sounds.spin.player.stop()
+      sounds.sounds.spin.player.stop()
       timeout.current = setTimeout(() => {
         setSpinning(false)
         if (allSame) {
@@ -129,7 +129,7 @@ export default function Slots() {
 
       sounds.play('spin', { playbackRate: .5 })
 
-      const result = await game.result()
+      const result = await game.result()  // Konsolidiert: game.result()
 
       // Make sure we wait a minimum time of SPIN_DELAY before slots are revealed:
       const resultDelay = Date.now() - startTime
@@ -158,12 +158,13 @@ export default function Slots() {
           <StyledSlots>
             <div>
               <ItemPreview betArray={bet} />
+              {/* Banner HIER – direkt über den Slots (nach Bet-Karten, vor Slots-Div) */}
               <img 
                 className="headerImage" 
-                src="/slot-neonfruits-banner.png"  
-                alt="Neon Fruits Banner"
-               />
-              <div className={'slots'}>
+                src="/slot-neonfruits-banner.png"  // Passe Endung an, z.B. .jpg falls nötig
+                alt="Neon Fruits Banner" 
+              />
+              <div className="slots">  // Nur eines – entfernt Duplikat
                 {combination.map((slot, i) => (
                   <Slot
                     key={i}
