@@ -201,15 +201,34 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
-        <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <button
-          className="spin-btn"
-          disabled={!isValid || spinning}
-          onClick={play}
-        >
-         {spinning ? 'Spinning...' : 'Spin Me!'}
-       </button>
-      </GambaUi.Portal>
+  {/* MANUELLER EINGABE */}
+  <GambaUi.WagerInput value={wager} onChange={setWager} />
+  
+  {/* SPARSAME x0.5 / x2 BUTTONS */}
+  <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
+    <button 
+      className="multi-btn" 
+      onClick={() => setWager(wager * 0.5)}
+    >
+      x0.5
+    </button>
+    <button 
+      className="multi-btn green" 
+      onClick={() => setWager(wager * 2)}
+    >
+      x2
+    </button>
+  </div>
+  
+  {/* DEIN SPIN BUTTON */}
+  <button
+    className="spin-btn"
+    disabled={!isValid || spinning}
+    onClick={play}
+  >
+    {spinning ? 'SPINNING...' : 'SPIN'}
+  </button>
+</GambaUi.Portal>
     </>
   )
 }
