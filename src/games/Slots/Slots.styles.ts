@@ -130,7 +130,7 @@ export const StyledSlots = styled.div`
 
   @keyframes bannerSlide {
     0% {
-      transform: translateY(-50px);
+      transform: translateY(50px);
       opacity: 0;
     }
     100% {
