@@ -34,5 +34,12 @@ export const StyledSpinner = styled.div`
     position: relative;
     padding: 15px;
   }
-
+  .headerImage {
+    width: 100%;           /* Bild füllt die Breite */
+    max-width: 400px;      /* optional: max. Breite */
+    margin: 0 auto 20px;   /* zentriert und Abstand zu Slots */
+    display: block;        /* Bild als Block-Element */
+    border-radius: 10px;   /* optional: abgerundete Ecken */
+    object-fit: cover;     /* Bild bleibt proportional */
+}
 `
