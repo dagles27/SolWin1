@@ -1,3 +1,4 @@
+import './style.css';  // ← MUSS OBEN STEHEN!
 import { GameResult } from 'gamba-core-v2'
 import { EffectTest, GambaUi, TokenValue, useCurrentPool, useSound, useWagerInput } from 'gamba-react-ui-v2'
 import React, { useEffect, useRef } from 'react'
