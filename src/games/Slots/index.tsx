@@ -40,13 +40,12 @@ function Messages({ messages }: {messages: string[]}) {
 }
 
 export default function Slots() {
-  const gamba = GambaUi.useGame()
   const game = GambaUi.useGame()
   const pool = useCurrentPool()
   const [spinning, setSpinning] = React.useState(false)
   const [result, setResult] = React.useState<GameResult>()
   const [good, setGood] = React.useState(false)
-  const [revealedSlots, setRevealedSlots] = React.useState(NUM_SLOTS)
+  const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
@@ -98,7 +97,7 @@ export default function Slots() {
       )
     } else if (slot === NUM_SLOTS - 1) {
       // Show final results
-      sounds.sounds.spin.player.stop()
+      sounds.spin.player.stop()
       timeout.current = setTimeout(() => {
         setSpinning(false)
         if (allSame) {
@@ -130,7 +129,7 @@ export default function Slots() {
 
       sounds.play('spin', { playbackRate: .5 })
 
-      const result = await gamba.result()
+      const result = await game.result()
 
       // Make sure we wait a minimum time of SPIN_DELAY before slots are revealed:
       const resultDelay = Date.now() - startTime
@@ -158,21 +157,12 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
+              <ItemPreview betArray={bet} />
               <img 
                 className="headerImage" 
-                src="/slot-neonfruits-banner.png"  // Ersetze .png durch die tatsächliche Endung, falls nötig
+                src="/slot-neonfruits-banner.png"  
                 alt="Neon Fruits Banner"
                />
-              <ItemPreview betArray={bet} />
-              {/* NEUES BANNER – über den Slots! */}
-              <img
-                className="headerImage"
-                src="/slot-neonfruits-banner.png"
-                alt="Neon Fruits Banner"
-              />
-              <div className={'slots'}>
-                {/* Slots bleiben */}
-              </div>
               <div className={'slots'}>
                 {combination.map((slot, i) => (
                   <Slot
