@@ -69,7 +69,12 @@ export const StyledSlots = styled.div`
     width: 100%;
     border-radius: 10px;
     border-spacing: 10px;
-    border: 1px solid #ffec63;
+    border: 1px solid #00BFFF;
+    box-shadow:
+      0 0 6px #00BFFF,
+      0 0 12px #FF0040,
+      inset 0 0 6px #00BFFF,
+      inset 0 0 12px #FF0040;
     background-color: #ffec6311;
     color: #ffec63;
     font-size: 14px;
