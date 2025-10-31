@@ -201,9 +201,13 @@ export default function Slots() {
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <GambaUi.PlayButton disabled={!isValid} onClick={play}>
-          Spin
-        </GambaUi.PlayButton>
+        <button
+          className="spin-btn"
+          disabled={!isValid || spinning}
+          onClick={play}
+        >
+         {spinning ? 'Spinning...' : 'Spin Me!'}
+       </button>
       </GambaUi.Portal>
     </>
   )
