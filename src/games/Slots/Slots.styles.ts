@@ -118,4 +118,24 @@ export const StyledSlots = styled.div`
     max-width: 100%;
     max-height: 100%;
   }
+  .headerImage {
+    width: 100%;             /* füllt die Breite */
+    max-width: 400px;        /* optional: max. Breite */
+    margin: 0 auto 20px;     /* zentriert + Abstand nach unten */
+    display: block;
+    border-radius: 10px;     /* optional: abgerundete Ecken */
+    object-fit: cover;
+    animation: bannerSlide 0.8s ease-out;  /* Animation hinzufügen */
+  }
+
+  @keyframes bannerSlide {
+    0% {
+      transform: translateY(-50px);
+      opacity: 0;
+   }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+   }
+  
 `
