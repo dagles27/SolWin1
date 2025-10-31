@@ -164,6 +164,15 @@ export default function Slots() {
                 alt="Neon Fruits Banner"
                />
               <ItemPreview betArray={bet} />
+              {/* NEUES BANNER – über den Slots! */}
+              <img
+                className="headerImage"
+                src="/slot-neonfruits-banner.png"
+                alt="Neon Fruits Banner"
+              />
+              <div className={'slots'}>
+                {/* Slots bleiben */}
+              </div>
               <div className={'slots'}>
                 {combination.map((slot, i) => (
                   <Slot
