@@ -34,5 +34,4 @@ export const StyledSpinner = styled.div`
     position: relative;
     padding: 15px;
   }
-  .
-  
+`
