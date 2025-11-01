@@ -80,7 +80,7 @@ body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
 
 /* 2. NEON FRUITS LOGO HÖHER RÜCKEN */
 .headerImage {
-  margin-top: -180px !important;
+  margin-top: -160px !important;
   margin-bottom: 10px !important;
 }
 
