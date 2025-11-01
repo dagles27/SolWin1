@@ -183,6 +183,6 @@ export default function Slots() {
               </div>
 {/* RESULT + SPIN BUTTON NEBENEINANDER */}
 <div className="neon-result-container">
-  <div className="neon-result-box" data-good={good}
+  <div className="neon-result-box" data-good={good}>
 
 
