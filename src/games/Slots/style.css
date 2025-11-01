@@ -102,33 +102,37 @@ body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
 
 .GambaUi.Portal[target="controls"] {
   display: flex !important;
+  flex-direction: row !important;
   justify-content: space-between !important;
   align-items: center !important;
   gap: 15px !important;
-  padding: 10px !important;
-  background: rgba(0,0,0,0.8) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 0 20px #00ff00 !important;
+  padding: 15px !important;
+  background: rgba(0,0,0,0.9) !important;
+  border-radius: 25px !important;
+  box-shadow: 0 0 25px #00ff00 !important;
+  margin-top: 10px !important;
+  min-height: 60px !important;
 }
 
-/* PAYOUT ANZEIGE: LINKS BIS MITTE (flex: 1) */
 .GambaUi.Portal[target="controls"] .gamba-wager-input,
 .GambaUi.Portal[target="controls"] input,
 .result {
-  flex: 1 !important;
-  text-align: left !important;
-  font-size: 1.2rem !important;
+  flex: 0 1 140px !important;  /* FIXED BREITE – KEIN STRETCH! */
+  text-align: center !important;
+  font-size: 1.3rem !important;
   color: #ffff00 !important;
-  text-shadow: 0 0 10px #ffff00 !important;
+  text-shadow: 0 0 12px #ffff00 !important;
+  background: none !important;
+  border: none !important;
   min-width: 120px !important;
+  max-width: 140px !important;
 }
-
 /* SPIN BUTTON: RECHTS DANEBEN (flex-shrink: 0) */
 .spin-btn {
-  flex-shrink: 0 !important;
-  margin-left: auto !important;
-  min-width: 100px !important;
-  padding: 12px 30px !important;
+  flex: 0 0 auto !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+  padding: 14px 20px !important;
   font-size: 1.4rem !important;
 }
 
