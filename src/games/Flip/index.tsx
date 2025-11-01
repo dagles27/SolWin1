@@ -70,7 +70,7 @@ function Flip() {
         <div
           style={{
             width: '220px',           // Gesamtgröße des Spielfelds
-            height: '220px',
+            height: 'auto',
             margin: 'auto',
             display: 'flex',
             justifyContent: 'center',
