@@ -49,15 +49,14 @@ export default function Slots() {
   const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
 
-  // NEU: Auto-reduce wager nach Gewinn, wenn not valid
-  React.useEffect(() => {
-    const currentBet = generateBetArray(pool.maxPayout, wager)
-    if (!getIsValid(currentBet) && wager > 0.01) {
-      setWager(wager * 0.5)  // Reduziere wager um 50%, bis valid
-    } else {
-      setBet(currentBet)  // Setze bet nur, wenn valid
-    }
-  }, [pool.maxPayout])
+React.useEffect(() => {
+  const currentBet = generateBetArray(pool.maxPayout, wager)
+  if (!getIsValid(currentBet) && wager > 0.01) {
+    setWager(wager * 0.5)
+  } else {
+    setBet(currentBet)
+  }
+}, [pool.maxPayout])
 
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
@@ -184,5 +183,6 @@ export default function Slots() {
 {/* RESULT + SPIN BUTTON NEBENEINANDER */}
 <div className="neon-result-container">
   <div className="neon-result-box" data-good={good}>
+    
 
 
