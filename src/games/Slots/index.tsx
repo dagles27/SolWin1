@@ -218,15 +218,6 @@ export default function Slots() {
       x2
     </button>
     </div>
-  
-     {/* DEIN SPIN BUTTON */}
-    <button
-      className="spin-btn"
-      disabled={!isValid || spinning}
-      onClick={play}
-  >
-    {spinning ? 'SPINNING...' : 'SPIN'}
-    </button>
 </GambaUi.Portal>
     </>
   )
