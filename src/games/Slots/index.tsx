@@ -67,8 +67,7 @@ React.useEffect(() => {
   )
   const timeout = useRef<any>()
 
-  const isValid = bet.some((x) => x > 1)
-
+  const isValid = React.useMemo(() => bet.some((x) => x > 1), [bet])
   useEffect(
     () => {
       return () => {
