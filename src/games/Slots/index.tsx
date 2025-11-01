@@ -122,6 +122,7 @@ const play = async () => {
       wager,
       bet: newBet,  // ← NEU: mit aktuellem bet spielen!
     })
+    setBet(newBet) // ← WICHTIG: State aktualisieren!
 
     sounds.play('play')
 
@@ -134,7 +135,7 @@ const play = async () => {
 
     const result = await game.result()
 
-    const resultDelay = Date.Now() - startTime
+    const resultDelay = Date.now() - startTime
     const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
 // newBet wurde schon vorher berechnet!
