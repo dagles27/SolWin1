@@ -14,7 +14,9 @@ function CoinModel() {
   const [heads, tails] = useTexture([TEXTURE_HEADS, TEXTURE_TAILS])
   return (
     <>
-      <primitive object={model.nodes.Coin}>
+      <mesh geometry={model.nodes.Coin.geometry}>
+        <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
+      </mesh>
       </primitive>
       <mesh position-z={.3}>
         <planeGeometry args={[2.1, 2.1, 2.1]} />
