@@ -10,7 +10,7 @@ import {
   LEGENDARY_THRESHOLD,
   NUM_SLOTS,
   REVEAL_SLOT_DELAY,
-  SLOT_ITEMS,
+  SLOT_ITEMS,l
   SOUND_LOSE,
   SOUND_PLAY,
   SOUND_REVEAL,
@@ -176,9 +176,7 @@ export default function Slots() {
     {spinning ? (
       <Messages messages={['Spinning!', 'Good luck']} />
     ) : result ? (
-      <>
-        Payout: <TokenValue mint={result.token} amount={result.payout} />
-      </>
+      <>Payout: <TokenValue mint={result.token} amount={result.payout} /></>
     ) : isValid ? (
       <Messages messages={['SPIN ME!', 'LETS WIN!']} />
     ) : (
@@ -186,7 +184,6 @@ export default function Slots() {
     )}
   </div>
 
-  {/* SPIN BUTTON – direkt daneben! */}
   <button
     className="spin-btn-inline"
     disabled={!isValid || spinning}
