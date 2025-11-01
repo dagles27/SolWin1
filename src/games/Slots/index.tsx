@@ -171,31 +171,30 @@ export default function Slots() {
                   />
                 ))}
               </div>
-              <div className="result" data-good={good}>
-                {spinning ? (
-                  <Messages
-                    messages={[
-                      'Spinning!',
-                      'Good luck',
-                    ]}
-                  />
-                ) : result ? (
-                  <>
-                    Payout: <TokenValue mint={result.token} amount={result.payout} />
-                  </>
-                ) : isValid ? (
-                  <Messages
-                    messages={[
-                      'SPIN ME!',
-                      'LETS WIN!',
-                    ]}
-                  />
-                ) : (
-                  <>
-                    ❌ Choose a lower wager!
-                  </>
-                )}
-              </div>
+<div className="result-container">
+  <div className="result-box" data-good={good}>
+    {spinning ? (
+      <Messages messages={['Spinning!', 'Good luck']} />
+    ) : result ? (
+      <>
+        Payout: <TokenValue mint={result.token} amount={result.payout} />
+      </>
+    ) : isValid ? (
+      <Messages messages={['SPIN ME!', 'LETS WIN!']} />
+    ) : (
+      <>Choose a lower wager!</>
+    )}
+  </div>
+
+  {/* SPIN BUTTON – direkt daneben! */}
+  <button
+    className="spin-btn-inline"
+    disabled={!isValid || spinning}
+    onClick={play}
+  >
+    {spinning ? 'SPINNING...' : 'SPIN'}
+  </button>
+</div>
             </div>
           </StyledSlots>
         </GambaUi.Responsive>
