@@ -66,7 +66,7 @@ React.useEffect(() => {
 }, [pool.maxPayout, wager])
   const timeout = useRef<any>()
 
-  const isValid = React.useMemo(() => bet.some((x) => x > 1), [bet])
+  const getIsValid = (betArray: number[]) => betArray.some((x) => x > 1)
   useEffect(
     () => {
       return () => {
@@ -191,9 +191,10 @@ const play = async () => {
   </div>
 
   <button
-    className="neon-spin-btn-inline"
-    disabled={!isValid || spinning}
-    onClick={play}
+  className="neon-spin-btn-inline"
+  disabled={!getIsValid(bet) || spinning}
+  onClick={play}
+>
   >
     {spinning ? 'SPINNING...' : 'SPIN'}
   </button>
