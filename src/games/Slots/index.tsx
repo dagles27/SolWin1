@@ -117,8 +117,9 @@ const play = async () => {
     setSpinning(true)
     setResult(undefined)
 
-    // 1. Nur berechnen – nicht setzen!
+    // 1. bet vorher berechnen UND setzen!
     const newBet = generateBetArray(pool.maxPayout, wager)
+    setBet(newBet)  // ← Sofort State aktualisieren!
 
     // 2. Mit neuem bet spielen
     await game.play({
@@ -135,9 +136,6 @@ const play = async () => {
 
     // 3. Warten auf Ergebnis
     const result = await game.result()
-
-    // 4. Jetzt: pool.maxPayout ist aktualisiert!
-    setBet(generateBetArray(pool.maxPayout, wager))
 
     const resultDelay = Date.now() - startTime
     const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
