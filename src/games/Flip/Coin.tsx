@@ -17,20 +17,20 @@ function CoinModel() {
     <>
       {/* Der silberne Coin */}
       <mesh geometry={model.nodes.Coin.geometry}>
-        <meshStandardMaterial color="#C5C5C5"/>
+        <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
       </mesh>
 
-      {/* Vorderseite (Heads) – leicht nach vorne verschoben */}
-      <mesh position-z={0.320}>
+      {/* Vorderseite (Heads) */}
+      <mesh position-z={0.32}>
         <planeGeometry args={[2.1, 2.1, 2.1]} />
-        <meshStandardMaterial transparent map={heads} />
+        <meshStandardMaterial transparent map={heads} depthTest={false} />
       </mesh>
 
-      {/* Rückseite (Tails) – leicht nach hinten verschoben */}
+      {/* Rückseite (Tails) */}
       <group rotation-y={Math.PI}>
-        <mesh position-z={0.320}>
+        <mesh position-z={0.32}>
           <planeGeometry args={[2.1, 2.1, 2.1]} />
-          <meshStandardMaterial transparent map={tails} />
+          <meshStandardMaterial transparent map={tails} depthTest={false} />
         </mesh>
       </group>
     </>
