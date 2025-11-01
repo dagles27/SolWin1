@@ -127,16 +127,17 @@ const play = async () => {
 
     sounds.play('spin', { playbackRate: .5 })
 
-    const result = await game.result()
-
-    // NEU: bet neu berechnen nach jedem Spin!
-    setBet(generateBetArray(pool.maxPayout, wager))
+        const result = await game.result()
 
     const resultDelay = Date.now() - startTime
     const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
-    const combination = getSlotCombination(NUM_SLOTS, result.multiplier, bet)
+    // NEU: Zuerst bet berechnen!
+    const newBet = generateBetArray(pool.maxPayout, wager)
+    setBet(newBet)
 
+    // Dann mit newBet arbeiten!
+    const combination = getSlotCombination(NUM_SLOTS, result.multiplier, newBet)
     setCombination(combination)
     setResult(result)
 
