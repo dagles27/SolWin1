@@ -21,14 +21,14 @@ function CoinModel() {
       </mesh>
 
       {/* Vorderseite (Heads) – leicht nach vorne verschoben */}
-      <mesh position-z={0.305}>
+      <mesh position-z={0.320}>
         <planeGeometry args={[2.1, 2.1, 2.1]} />
         <meshStandardMaterial transparent map={heads} />
       </mesh>
 
       {/* Rückseite (Tails) – leicht nach hinten verschoben */}
       <group rotation-y={Math.PI}>
-        <mesh position-z={0.305}>
+        <mesh position-z={0.320}>
           <planeGeometry args={[2.1, 2.1, 2.1]} />
           <meshStandardMaterial transparent map={tails} />
         </mesh>
