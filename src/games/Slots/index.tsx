@@ -59,9 +59,11 @@ export default function Slots() {
     spin: SOUND_SPIN,
     play: SOUND_PLAY,
   })
-  const bet = React.useMemo(
-    () => generateBetArray(pool.maxPayout, wager),
-    [pool.maxPayout, wager],
+ const [bet, setBet] = React.useState<number[]>([])
+
+React.useEffect(() => {
+  setBet(generateBetArray(pool.maxPayout, wager))
+}, [pool.maxPayout, wager])"
   )
   const timeout = useRef<any>()
 
