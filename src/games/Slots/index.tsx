@@ -63,7 +63,7 @@ export default function Slots() {
 
 React.useEffect(() => {
   setBet(generateBetArray(pool.maxPayout, wager))
-}, [pool.maxPayout, wager])"
+}, [pool.maxPayout, wager])
   )
   const timeout = useRef<any>()
 
