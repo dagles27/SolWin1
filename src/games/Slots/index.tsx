@@ -198,7 +198,7 @@ const play = async () => {
   className="neon-spin-btn-inline"
   disabled={!getIsValid(bet) || spinning}
   onClick={play}
->
+  >
     {spinning ? 'SPINNING...' : 'SPIN'}
   </button>
 </div>
