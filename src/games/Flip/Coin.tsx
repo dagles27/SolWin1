@@ -17,12 +17,12 @@ function CoinModel() {
       <primitive object={model.nodes.Coin}>
       </primitive>
       <mesh position-z={.3}>
-        <planeGeometry args={[1.9, 1.9, 1.9]} />
+        <planeGeometry args={[2.1, 2.1, 2.1]} />
         <meshStandardMaterial transparent map={heads} />
       </mesh>
       <group rotation-y={Math.PI}>
         <mesh position-z={.3}>
-          <planeGeometry args={[1.9, 1.9, 1.9]} />
+          <planeGeometry args={[2.1, 2.1, 2.1]} />
           <meshStandardMaterial transparent map={tails} />
         </mesh>
       </group>
