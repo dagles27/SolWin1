@@ -68,20 +68,33 @@ function Flip() {
   return (
     <>
 <GambaUi.Portal target="screen">
-  <div style={{ width: '200px', height: '200px', margin: 'auto' }}>
-    <Canvas
-      linear
-      flat
-      orthographic
-      camera={{
-        zoom: 100,
-        position: [0, 0, 100],
-      }}
-    >
-      <React.Suspense fallback={null}>
-        <Coin result={resultIndex} flipping={flipping} />
-      </React.Suspense>
-      ...
+   <Canvas
+  linear
+  flat
+  orthographic
+  camera={{
+    zoom: 130,
+    position: [0, 0, 100],
+  }}
+>
+  <React.Suspense fallback={null}>
+    <group scale={0.7}>
+      <Coin result={resultIndex} flipping={flipping} />
+    </group>
+  </React.Suspense>
+  <Effect color="white" />
+  {flipping && <Effect color="white" />}
+  {win && <Effect color="#42ff78" />}
+  <ambientLight intensity={3} />
+  <directionalLight position-z={1} position-y={1} castShadow color="#CCCCCC" />
+  <hemisphereLight
+    intensity={.5}
+    position={[0, 1, 0]}
+    scale={[1, 1, 1]}
+    color="#ffadad"
+    groundColor="#6666fe"
+  />
+</Canvas>
     </Canvas>
   </div>
 </GambaUi.Portal>
