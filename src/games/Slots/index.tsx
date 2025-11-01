@@ -187,7 +187,7 @@ export default function Slots() {
                   <Messages
                     messages={[
                       'SPIN ME!',
-                      'FEELING LUCKY?',
+                      'LETS WIN!',
                     ]}
                   />
                 ) : (
