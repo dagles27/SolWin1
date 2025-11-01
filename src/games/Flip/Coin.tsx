@@ -17,7 +17,7 @@ function CoinModel() {
     <>
       {/* Der silberne Coin */}
       <mesh geometry={model.nodes.Coin.geometry}>
-        <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
+        <meshStandardMaterial color="#C5C5C5"/>
       </mesh>
 
       {/* Vorderseite (Heads) – leicht nach vorne verschoben */}
