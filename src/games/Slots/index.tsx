@@ -117,29 +117,31 @@ const play = async () => {
     setSpinning(true)
     setResult(undefined)
 
+    // 1. Nur berechnen – nicht setzen!
     const newBet = generateBetArray(pool.maxPayout, wager)
+
+    // 2. Mit neuem bet spielen
     await game.play({
       wager,
-      bet: newBet,  // ← NEU: mit aktuellem bet spielen!
+      bet: newBet,
     })
-    setBet(newBet) // ← WICHTIG: State aktualisieren!
 
     sounds.play('play')
-
     setRevealedSlots(0)
     setGood(false)
 
     const startTime = Date.now()
+    sounds.play('spin', { playbackRate: 0.5 })
 
-    sounds.play('spin', { playbackRate: .5 })
-
+    // 3. Warten auf Ergebnis
     const result = await game.result()
+
+    // 4. Jetzt: pool.maxPayout ist aktualisiert!
+    setBet(generateBetArray(pool.maxPayout, wager))
 
     const resultDelay = Date.now() - startTime
     const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
-// newBet wurde schon vorher berechnet!
-    // Dann mit newBet arbeiten!
     const combination = getSlotCombination(NUM_SLOTS, result.multiplier, newBet)
     setCombination(combination)
     setResult(result)
