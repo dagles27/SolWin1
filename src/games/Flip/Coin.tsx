@@ -12,16 +12,21 @@ export { TEXTURE_HEADS, TEXTURE_TAILS }
 function CoinModel() {
   const model = useGLTF(MODEL_COIN)
   const [heads, tails] = useTexture([TEXTURE_HEADS, TEXTURE_TAILS])
+
   return (
     <>
+      {/* Der eigentliche Coin in silber */}
       <mesh geometry={model.nodes.Coin.geometry}>
-        <meshStandardMaterial color="#C5C5C5"/>
+        <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
       </mesh>
-    
+
+      {/* Kopfseite (Heads) */}
       <mesh position-z={.3}>
         <planeGeometry args={[2.1, 2.1, 2.1]} />
         <meshStandardMaterial transparent map={heads} />
       </mesh>
+
+      {/* Rückseite (Tails) */}
       <group rotation-y={Math.PI}>
         <mesh position-z={.3}>
           <planeGeometry args={[2.1, 2.1, 2.1]} />
