@@ -71,11 +71,11 @@ function Flip() {
           style={{
             width: '220px',           // Gesamtgröße des Spielfelds
             height: '220px',
-            margin: 'auto',
+            margin: '10px 0 10px 0',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#C5C5C5', // Hintergrundfarbe angepasst
+            backgroundColor: '#transparent', // Hintergrundfarbe angepasst
             borderRadius: '12px',
             boxShadow: '0 0 20px rgba(0,0,0,0.25)',
           }}
@@ -85,7 +85,7 @@ function Flip() {
             flat
             orthographic
             camera={{
-              zoom: 130,              // 👈 kleinerer Sichtbereich (vorher 80)
+              zoom: 80,              // 👈 kleinerer Sichtbereich (vorher 80)
               position: [0, 0, 100],
             }}
           >
