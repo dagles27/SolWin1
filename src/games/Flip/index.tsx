@@ -86,11 +86,11 @@ function Flip() {
             orthographic
             camera={{
               zoom: 80,              // 👈 kleinerer Sichtbereich (vorher 80)
-              position: [0, 0, 100],
+              position: [0, 0, 0],
             }}
           >
             <React.Suspense fallback={null}>
-              <group scale={0.7}>     {/* 👈 Coin verkleinert */}
+              <group scale={0.5}>     {/* 👈 Coin verkleinert */}
                 <Coin result={resultIndex} flipping={flipping} />
               </group>
             </React.Suspense>
