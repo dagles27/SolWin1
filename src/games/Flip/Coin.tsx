@@ -15,20 +15,20 @@ function CoinModel() {
 
   return (
     <>
-      {/* Der eigentliche Coin in silber */}
+      {/* Der silberne Coin */}
       <mesh geometry={model.nodes.Coin.geometry}>
         <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
       </mesh>
 
-      {/* Kopfseite (Heads) */}
-      <mesh position-z={.3}>
+      {/* Vorderseite (Heads) – leicht nach vorne verschoben */}
+      <mesh position-z={0.305}>
         <planeGeometry args={[2.1, 2.1, 2.1]} />
         <meshStandardMaterial transparent map={heads} />
       </mesh>
 
-      {/* Rückseite (Tails) */}
+      {/* Rückseite (Tails) – leicht nach hinten verschoben */}
       <group rotation-y={Math.PI}>
-        <mesh position-z={.3}>
+        <mesh position-z={0.305}>
           <planeGeometry args={[2.1, 2.1, 2.1]} />
           <meshStandardMaterial transparent map={tails} />
         </mesh>
@@ -36,7 +36,6 @@ function CoinModel() {
     </>
   )
 }
-
 interface CoinFlipProps {
   flipping: boolean
   result: number
