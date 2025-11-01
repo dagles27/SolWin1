@@ -125,8 +125,8 @@ function Flip() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '8px',
-            marginTop: '8px',
+            gap: '6px',
+            marginTop: '0px',
           }}
         >
           <GambaUi.WagerInput
