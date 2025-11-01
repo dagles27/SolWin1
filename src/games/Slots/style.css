@@ -220,52 +220,58 @@ body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
   .button-group { width: 100% !important; justify-content: center !important; }
 }
 /* Result-Box + Spin-Button nebeneinander */
+/* RESULT + SPIN BUTTON: IMMER NEBENEINANDER */
 .result-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   margin-top: 20px;
-  flex-wrap: wrap;
+  flex-direction: row !important; /* ZWINGT nebeneinander */
+  flex-wrap: nowrap !important;   /* KEIN Umbruch! */
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .result-box {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 16px 24px;
+  padding: 14px 20px;
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: bold;
   text-align: center;
-  min-width: 200px;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   flex: 1;
-  max-width: 300px;
+  min-width: 180px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Spin-Button direkt daneben */
 .spin-btn-inline {
   background: linear-gradient(135deg, #00d1ff, #00aaff);
   color: white;
   border: none;
   border-radius: 12px;
-  padding: 16px 32px;
-  font-size: 1.2rem;
+  padding: 16px 28px;
+  font-size: 1.15rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 140px;
-  box-shadow: 0 4px 15px rgba(0, 209, 255, 0.3);
+  min-width: 120px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 209, 255, 0.4);
 }
 
 .spin-btn-inline:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 209, 255, 0.5);
+  box-shadow: 0 8px 20px rgba(0, 209, 255, 0.6);
 }
 
 .spin-btn-inline:active:not(:disabled) {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.97);
 }
 
 .spin-btn-inline:disabled {
@@ -274,13 +280,20 @@ body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
   transform: none;
 }
 
-/* Mobile: untereinander */
+/* AUF HANDY: kleiner, aber IMMER nebeneinander */
 @media (max-width: 640px) {
   .result-container {
-    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
   }
-  .result-box, .spin-btn-inline {
-    width: 100%;
-    max-width: 280px;
+  .result-box {
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    min-width: 140px;
+  }
+  .spin-btn-inline {
+    padding: 14px 20px;
+    font-size: 1rem;
+    min-width: 100px;
   }
 }
