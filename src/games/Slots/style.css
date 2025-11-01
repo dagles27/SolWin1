@@ -69,3 +69,32 @@ body { background: #000; color: #fff; font-family: 'Arial Black', sans-serif; }
 }
 .multi-btn.green { background: rgba(0,255,0,0.3); color: #00ff00; border-color: #00ff00; box-shadow: 0 0 12px #00ff00; }
 .multi-btn:hover { transform: scale(1.05); }
+
+/* **COPY-PASTE in style.css (GANZ UNTEN einfügen)** - GEKENNZEICHNETES FELD WEG + Neon Fruits HÖHER! */
+
+/* 1. GEKENNZEICHNETES FELD (WagerInput/Controls) WEG */
+.GambaUi.Portal[target="controls"] .gamba-wager-input,
+.GambaUi.Portal[target="controls"] input {
+  display: none !important;
+}
+
+/* 2. NEON FRUITS LOGO HÖHER RÜCKEN */
+.headerImage {
+  margin-top: -80px !important;
+  margin-bottom: 10px !important;
+}
+
+.Sty ledSlots > div {
+  padding-top: 0 !important;
+  margin-top: -60px !important;
+}
+
+/* 3. ABSTAND ZU REELS REDUZIEREN */
+.paytable, .slots {
+  margin-top: -20px !important;
+}
+
+/* 4. SPIN BUTTON NACH OBEN */
+.spin-btn {
+  margin-top: -10px !important;
+}
