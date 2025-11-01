@@ -62,7 +62,11 @@ export default function Slots() {
  const [bet, setBet] = React.useState<number[]>([])
 
 React.useEffect(() => {
-  setBet(generateBetArray(pool.maxPayout, wager))
+  if (pool.maxPayout > 0 && wager > 0) {
+    setBet(generateBetArray(pool.maxPayout, wager))
+  } else {
+    setBet([]) // Sicherer Fallback
+  }
 }, [pool.maxPayout, wager])
   const timeout = useRef<any>()
 
