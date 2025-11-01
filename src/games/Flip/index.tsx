@@ -75,7 +75,7 @@ function Flip() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#C5C5C5', // Hintergrundfarbe angepasst
+            backgroundColor: '#transparent', // Hintergrundfarbe angepasst
             borderRadius: '12px',
             boxShadow: '0 0 20px rgba(0,0,0,0.25)',
           }}
