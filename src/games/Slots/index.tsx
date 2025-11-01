@@ -129,7 +129,6 @@ React.useEffect(() => {
       sounds.play('spin', { playbackRate: .5 })
 
       const result = await game.result()
-      setBet(generateBetArray(pool.maxPayout,wager))
       
       const resultDelay = Date.now() - startTime
       const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
