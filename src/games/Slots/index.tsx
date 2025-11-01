@@ -195,7 +195,6 @@ const play = async () => {
   disabled={!getIsValid(bet) || spinning}
   onClick={play}
 >
-  >
     {spinning ? 'SPINNING...' : 'SPIN'}
   </button>
 </div>
