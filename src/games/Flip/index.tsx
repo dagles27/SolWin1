@@ -65,17 +65,18 @@ function Flip() {
 
   return (
     <>
-      {/* 🎮 Coin Canvas Bereich */}
+      {/* 🪙 Coin-Bereich */}
       <GambaUi.Portal target="screen">
         <div
           style={{
-            width: '330px',           // Gesamtgröße des Spielfelds
+            width: '330px',
             height: '330px',
             margin: 'auto',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#transparent', // Hintergrundfarbe angepasst
+            position: 'relative', // 👈 wichtig für Überlappung
+            top: '10px',          // 👈 Coin etwas nach unten geschoben
             borderRadius: '12px',
             boxShadow: '0 0 20px rgba(0,0,0,0.25)',
           }}
@@ -85,12 +86,12 @@ function Flip() {
             flat
             orthographic
             camera={{
-              zoom: 130,              // 👈 kleinerer Sichtbereich (vorher 80)
+              zoom: 130,
               position: [0, 0, 100],
             }}
           >
             <React.Suspense fallback={null}>
-              <group scale={0.7}>     {/* 👈 Coin verkleinert */}
+              <group scale={0.7}>
                 <Coin result={resultIndex} flipping={flipping} />
               </group>
             </React.Suspense>
@@ -118,15 +119,15 @@ function Flip() {
         </div>
       </GambaUi.Portal>
 
-      {/* 🎛️ Steuerung unten */}
+      {/* 🎛️ Buttons (überlappend am Coin) */}
       <GambaUi.Portal target="controls">
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '6px',
-            marginTop: '0px',
+            gap: '6px',       // 👈 enger Abstand zwischen Buttons
+            marginTop: '-8px', // 👈 zieht Buttons nach oben — Coin überlappt leicht
           }}
         >
           <GambaUi.WagerInput
