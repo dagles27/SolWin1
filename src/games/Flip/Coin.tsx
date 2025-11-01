@@ -15,7 +15,7 @@ function CoinModel() {
   return (
     <>
       <mesh geometry={model.nodes.Coin.geometry}>
-        <meshStandardMaterial color="#C5C5C5" metalness={1} roughness={0.3} />
+        <meshStandardMaterial color="#C5C5C5"/>
       </mesh>
     
       <mesh position-z={.3}>
