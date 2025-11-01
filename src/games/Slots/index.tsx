@@ -48,6 +48,17 @@ export default function Slots() {
   const [good, setGood] = React.useState(false)
   const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
+
+  // NEU: Auto-reduce wager nach Gewinn, wenn not valid
+  React.useEffect(() => {
+    const currentBet = generateBetArray(pool.maxPayout, wager)
+    if (!getIsValid(currentBet) && wager > 0.01) {
+      setWager(wager * 0.5)  // Reduziere wager um 50%, bis valid
+    } else {
+      setBet(currentBet)  // Setze bet nur, wenn valid
+    }
+  }, [pool.maxPayout])
+
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
   )
@@ -59,15 +70,8 @@ export default function Slots() {
     spin: SOUND_SPIN,
     play: SOUND_PLAY,
   })
- const [bet, setBet] = React.useState<number[]>([])
+  const [bet, setBet] = React.useState<number[]>([])
 
-React.useEffect(() => {
-  if (pool.maxPayout > 0 && wager > 0) {
-    setBet(generateBetArray(pool.maxPayout, wager))
-  } else {
-    setBet([]) // Sicherer Fallback
-  }
-}, [pool.maxPayout, wager])
   const timeout = useRef<any>()
 
   const getIsValid = (betArray: number[]) => betArray.some((x) => x > 1)
@@ -112,45 +116,45 @@ React.useEffect(() => {
     }
   }
 
-const play = async () => {
-  try {
-    setSpinning(true)
-    setResult(undefined)
+  const play = async () => {
+    try {
+      setSpinning(true)
+      setResult(undefined)
 
-    const newBet = generateBetArray(pool.maxPayout, wager)
-    await game.play({
-      wager,
-      bet: newBet,  // ← NEU: mit aktuellem bet spielen!
-    })
-    setBet(newBet) // ← WICHTIG: State aktualisieren!
+      const newBet = generateBetArray(pool.maxPayout, wager)
+      setBet(newBet)  // ← Sofort State aktualisieren!
 
-    sounds.play('play')
+      await game.play({
+        wager,
+        bet: newBet,
+      })
 
-    setRevealedSlots(0)
-    setGood(false)
+      sounds.play('play')
 
-    const startTime = Date.now()
+      setRevealedSlots(0)
+      setGood(false)
 
-    sounds.play('spin', { playbackRate: .5 })
+      const startTime = Date.now()
 
-    const result = await game.result()
+      sounds.play('spin', { playbackRate: .5 })
 
-    const resultDelay = Date.now() - startTime
-    const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
+      const result = await game.result()
+
+      const resultDelay = Date.now() - startTime
+      const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
 // newBet wurde schon vorher berechnet!
-    // Dann mit newBet arbeiten!
-    const combination = getSlotCombination(NUM_SLOTS, result.multiplier, newBet)
-    setCombination(combination)
-    setResult(result)
+      const combination = getSlotCombination(NUM_SLOTS, result.multiplier, newBet)
+      setCombination(combination)
+      setResult(result)
 
-    timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
-  } catch (err) {
-    setSpinning(false)
-    setRevealedSlots(NUM_SLOTS)
-    throw err
+      timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
+    } catch (err) {
+      setSpinning(false)
+      setRevealedSlots(NUM_SLOTS)
+      throw err
+    }
   }
-}
 
   return (
     <>
@@ -179,52 +183,4 @@ const play = async () => {
               </div>
 {/* RESULT + SPIN BUTTON NEBENEINANDER */}
 <div className="neon-result-container">
-  <div className="neon-result-box" data-good={good}>
-    {spinning ? (
-      <Messages messages={['Spinning!', 'Good luck']} />
-    ) : result ? (
-      <>
-        Payout: <TokenValue mint={result.token} amount={result.payout} />
-      </>
-    ) : getIsValid(bet) ? (
-      <Messages messages={['SPIN ME!', 'LETS WIN!']} />
-    ) : (
-      <>Choose a lower wager!</>
-    )}
-  </div>
-
-  <button
-    className="neon-spin-btn-inline"
-    disabled={!getIsValid(bet) || spinning}
-    onClick={play}
-  >
-    {spinning ? 'SPINNING...' : 'SPIN'}
-  </button>
-</div>
-            </div>
-          </StyledSlots>
-        </GambaUi.Responsive>
-      </GambaUi.Portal>
-      <GambaUi.Portal target="controls">
-       {/* MANUELLER EINGABE */}
-       <GambaUi.WagerInput value={wager} onChange={setWager} />
-  
-  {/* SPARSAME x0.5 / x2 BUTTONS */}
-  <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
-    <button 
-      className="multi-btn" 
-      onClick={() => setWager(wager * 0.5)}
-    >
-      x0.5
-    </button>
-    <button 
-      className="multi-btn green" 
-      onClick={() => setWager(wager * 2)}
-    >
-      x2
-    </button>
-    </div>
-</GambaUi.Portal>
-    </>
-  )
-}
+  <div className="neon-result-box" data-good={good
