@@ -171,12 +171,15 @@ export default function Slots() {
                   />
                 ))}
               </div>
-<div className="result-container">
-  <div className="result-box" data-good={good}>
+{/* RESULT + SPIN BUTTON NEBENEINANDER */}
+<div className="neon-result-container">
+  <div className="neon-result-box" data-good={good}>
     {spinning ? (
       <Messages messages={['Spinning!', 'Good luck']} />
     ) : result ? (
-      <>Payout: <TokenValue mint={result.token} amount={result.payout} /></>
+      <>
+        Payout: <TokenValue mint={result.token} amount={result.payout} />
+      </>
     ) : isValid ? (
       <Messages messages={['SPIN ME!', 'LETS WIN!']} />
     ) : (
@@ -185,7 +188,7 @@ export default function Slots() {
   </div>
 
   <button
-    className="spin-btn-inline"
+    className="neon-spin-btn-inline"
     disabled={!isValid || spinning}
     onClick={play}
   >
