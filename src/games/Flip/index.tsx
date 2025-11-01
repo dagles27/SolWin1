@@ -69,8 +69,8 @@ function Flip() {
       <GambaUi.Portal target="screen">
         <div
           style={{
-            width: '110px',           // Gesamtgröße des Spielfelds
-            height: '110px',
+            width: '80px',           // Gesamtgröße des Spielfelds
+            height: '80px',
             margin: 'auto',
             display: 'flex',
             justifyContent: 'center',
