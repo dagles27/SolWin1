@@ -64,7 +64,6 @@ export default function Slots() {
 React.useEffect(() => {
   setBet(generateBetArray(pool.maxPayout, wager))
 }, [pool.maxPayout, wager])
-  
   const timeout = useRef<any>()
 
   const isValid = React.useMemo(() => bet.some((x) => x > 1), [bet])
@@ -109,43 +108,45 @@ React.useEffect(() => {
     }
   }
 
-  const play = async () => {
-    try {
-      setSpinning(true)
-      setResult(undefined)
+const play = async () => {
+  try {
+    setSpinning(true)
+    setResult(undefined)
 
-      await game.play({
-        wager,
-        bet,
-      })
+    await game.play({
+      wager,
+      bet,
+    })
 
-      sounds.play('play')
+    sounds.play('play')
 
-      setRevealedSlots(0)
-      setGood(false)
+    setRevealedSlots(0)
+    setGood(false)
 
-      const startTime = Date.now()
+    const startTime = Date.now()
 
-      sounds.play('spin', { playbackRate: .5 })
+    sounds.play('spin', { playbackRate: .5 })
 
-      const result = await game.result()
-      
-      const resultDelay = Date.now() - startTime
-      const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
+    const result = await game.result()
 
-      const combination = getSlotCombination(NUM_SLOTS, result.multiplier, bet)
+    // NEU: bet neu berechnen nach jedem Spin!
+    setBet(generateBetArray(pool.maxPayout, wager))
 
-      setCombination(combination)
+    const resultDelay = Date.now() - startTime
+    const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
 
-      setResult(result)
+    const combination = getSlotCombination(NUM_SLOTS, result.multiplier, bet)
 
-      timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
-    } catch (err) {
-      setSpinning(false)
-      setRevealedSlots(NUM_SLOTS)
-      throw err
-    }
+    setCombination(combination)
+    setResult(result)
+
+    timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
+  } catch (err) {
+    setSpinning(false)
+    setRevealedSlots(NUM_SLOTS)
+    throw err
   }
+}
 
   return (
     <>
