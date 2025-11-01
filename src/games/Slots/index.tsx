@@ -187,7 +187,7 @@ const play = async () => {
       <>
         Payout: <TokenValue mint={result.token} amount={result.payout} />
       </>
-    ) : isValid ? (
+    ) : getIsValid(bet) ? (
       <Messages messages={['SPIN ME!', 'LETS WIN!']} />
     ) : (
       <>Choose a lower wager!</>
@@ -195,9 +195,9 @@ const play = async () => {
   </div>
 
   <button
-  className="neon-spin-btn-inline"
-  disabled={!getIsValid(bet) || spinning}
-  onClick={play}
+    className="neon-spin-btn-inline"
+    disabled={!getIsValid(bet) || spinning}
+    onClick={play}
   >
     {spinning ? 'SPINNING...' : 'SPIN'}
   </button>
