@@ -61,3 +61,67 @@ body::-webkit-scrollbar-thumb {
   background: rgb(55, 57, 82);
   border-radius: 10px;
 }
+.home-header {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Banner-Bild */
+.banner-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Buttons unter Banner */
+.banner-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: -40px; /* leicht überlappend, falls gewünscht */
+  z-index: 10;
+}
+
+.banner-buttons .btn {
+  font-size: 1rem;
+  padding: 12px 28px;
+  border-radius: 12px;
+}
+
+/* Neon und Ghost sind aus global.css – hier leicht anpassen */
+.banner-buttons .btn.neon {
+  background: linear-gradient(90deg, var(--brand-500), var(--accent));
+  box-shadow: 0 0 22px rgba(7, 168, 107, 0.3);
+}
+
+.banner-buttons .btn.ghost {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--brand-400);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Responsive Anpassung */
+@media (max-width: 768px) {
+  .banner-buttons {
+    margin-top: -24px;
+    gap: 12px;
+  }
+
+  .banner-buttons .btn {
+    width: 80%;
+    max-width: 280px;
+    justify-content: center;
+  }
+}
