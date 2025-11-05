@@ -8,8 +8,9 @@ const WelcomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  animation: fadeIn 0.5s ease;
+  gap: 24px;
+  width: 100%;
+  animation: fadeIn 0.6s ease;
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
@@ -19,27 +20,28 @@ const WelcomeWrapper = styled.div`
 
 const BannerImage = styled.img`
   width: 100%;
-  max-width: 100%;
-  border-radius: 12px;
+  max-width: 1200px;
+  border-radius: 14px;
   display: block;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   justify-content: center;
 `;
 
 const ActionButton = styled.button`
   border: none;
   border-radius: 10px;
-  padding: 12px 20px;
-  font-size: 0.9rem;
+  padding: 12px 22px;
+  font-size: 0.95rem;
   font-weight: 600;
   background: #00d596;
-  color: black;
+  color: #000;
   cursor: pointer;
   transition: all 0.2s ease;
 
@@ -58,7 +60,7 @@ export function WelcomeBanner() {
 
   return (
     <WelcomeWrapper>
-      <BannerImage src="/games-banner.png" alt="Welcome Banner" />
+      <BannerImage src="/WelcomeBanner-Home.png" alt="Welcome Banner" />
 
       <ButtonGroup>
         <ActionButton onClick={openLink('https://www.x.com/SolWin_Casino')}>
