@@ -36,7 +36,7 @@ const ButtonGroup = styled.div`
 
 const ActionButton = styled.button`
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 12px 22px;
   font-size: 0.95rem;
   font-weight: 600;
