@@ -4,107 +4,71 @@ import React from 'react';
 import styled from 'styled-components';
 import { useUserStore } from '../../hooks/useUserStore';
 
-const WelcomeWrapper = styled.div`
-  /* Animations */
-  @keyframes welcome-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes backgroundGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* Styling */
-  background: linear-gradient(-45deg, #063015, #088f44, #009866, #01cb82, #00d596);
-  background-size: 300% 300%;
-  animation: welcome-fade-in 0.5s ease, backgroundGradient 30s ease infinite;
-  border-radius: 12px; /* Slightly larger radius for a modern look */
-  padding: 24px; /* Consistent padding */
-  display: flex;
-  flex-direction: column;
-  gap: 24px; /* Consistent gap */
+const BannerWrapper = styled.section`
+  width: 100%;
+  position: relative;
+  overflow: hidden;
   text-align: center;
-  filter: drop-shadow(0 4px 3px rgba(0,0,0,.07)) drop-shadow(0 2px 2px rgba(0,0,0,.06));
-
-  /* Desktop styles using a min-width media query */
-  @media (min-width: 800px) {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    align-items: center;
-    text-align: left;
-    padding: 40px;
-    gap: 40px;
-  }
+  margin-top: 70px; /* Abstand unter der fixierten Navbar */
 `;
 
-const WelcomeContent = styled.div`
-  h1 {
-    font-size: 1.75rem; /* Responsive font size */
-    margin: 0 0 8px 0;
-    color: #ffffff;
-  }
+const BannerImage = styled.img`
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+`;
 
-  p {
-    font-size: 1rem;
-    color: #ffffffd1;
-    margin: 0;
-  }
-
-  @media (min-width: 800px) {
-    h1 {
-      font-size: 2.25rem;
-    }
-    p {
-      font-size: 1.125rem;
-    }
-  }
+const ContentOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  flex-wrap: wrap; /* Allows buttons to wrap onto the next line */
-  gap: 12px; /* Space between buttons */
-  justify-content: center; /* Center buttons on mobile */
-
-  @media (min-width: 800px) {
-    flex-direction: column;
-    justify-content: flex-start;
-  }
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 25px;
 `;
 
 const ActionButton = styled.button`
-  /* Base styles */
   border: none;
   border-radius: 10px;
   padding: 12px 20px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   background: #ffffffdf;
   color: black;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  flex-grow: 1; /* Allows buttons to share space on mobile */
+  flex-grow: 1;
   text-align: center;
 
   &:hover {
     background: white;
-    transform: translateY(-2px); /* Subtle hover effect */
+    transform: translateY(-2px);
   }
 
-  /* On desktop, buttons take full width of their container */
   @media (min-width: 800px) {
-    width: 100%;
-    flex-grow: 0; /* Reset flex-grow */
+    flex-grow: 0;
   }
 `;
 
 export function WelcomeBanner() {
   const wallet = useWallet();
   const walletModal = useWalletModal();
-  const { set: setUserModal } = useUserStore(); // Destructure for cleaner access
+  const { set: setUserModal } = useUserStore();
 
   const handleCopyInvite = () => {
     setUserModal({ userModal: true });
@@ -116,22 +80,29 @@ export function WelcomeBanner() {
   const openLink = (url) => () => window.open(url, '_blank', 'noopener,noreferrer');
 
   return (
-    <WelcomeWrapper>
-      <WelcomeContent>
-        <h1>Welcome to SOL-WIN</h1>
-        <p>Your fair, simple and decentralized casino on Solana.</p>
-      </WelcomeContent>
-      <ButtonGroup>
-        <ActionButton onClick={openLink('https://www.x.com//')}>
-          Follow us on X
-        </ActionButton>
-        <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
-          Join Telegram
-        </ActionButton>
-        <ActionButton onClick={openLink('https://linktr.ee/Solwin_Casino')}>
-          How to LinkTree
-        </ActionButton>
-      </ButtonGroup>
-    </WelcomeWrapper>
+    <BannerWrapper>
+      {/* Dein Bannerbild */}
+      <BannerImage src="/WelcomeBanner-Home.png" alt="Welcome Banner" />
+
+      {/* Text und Buttons im Overlay */}
+      <ContentOverlay>
+        <h1 style={{ fontSize: '2.5rem', margin: '0' }}>Welcome to SOL-WIN</h1>
+        <p style={{ fontSize: '1.25rem', marginTop: '10px' }}>
+          Your fair, simple and decentralized casino on Solana.
+        </p>
+
+        <ButtonGroup>
+          <ActionButton onClick={openLink('https://x.com/solwin_casino')}>
+            Follow us on X
+          </ActionButton>
+          <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
+            Join Telegram
+          </ActionButton>
+          <ActionButton onClick={openLink('https://linktr.ee/Solwin_Casino')}>
+            How to Start
+          </ActionButton>
+        </ButtonGroup>
+      </ContentOverlay>
+    </BannerWrapper>
   );
 }
