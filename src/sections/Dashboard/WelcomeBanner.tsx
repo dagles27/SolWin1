@@ -4,64 +4,48 @@ import React from 'react';
 import styled from 'styled-components';
 import { useUserStore } from '../../hooks/useUserStore';
 
-const BannerWrapper = styled.section`
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  margin-top: 70px; /* Abstand unter der fixierten Navbar */
+const WelcomeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: fadeIn 0.5s ease;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 `;
 
 const BannerImage = styled.img`
   width: 100%;
-  height: auto;
-  object-fit: cover;
-  display: block;
+  max-width: 100%;
   border-radius: 12px;
-`;
-
-const ContentOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  display: block;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 16px;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-top: 25px;
+  gap: 12px;
+  justify-content: center;
 `;
 
 const ActionButton = styled.button`
   border: none;
   border-radius: 10px;
   padding: 12px 20px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  background: #ffffffdf;
+  background: #00d596;
   color: black;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  flex-grow: 1;
-  text-align: center;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: white;
+    background: #00f5b1;
     transform: translateY(-2px);
-  }
-
-  @media (min-width: 800px) {
-    flex-grow: 0;
   }
 `;
 
@@ -70,39 +54,23 @@ export function WelcomeBanner() {
   const walletModal = useWalletModal();
   const { set: setUserModal } = useUserStore();
 
-  const handleCopyInvite = () => {
-    setUserModal({ userModal: true });
-    if (!wallet.connected) {
-      walletModal.setVisible(true);
-    }
-  };
-
-  const openLink = (url) => () => window.open(url, '_blank', 'noopener,noreferrer');
+  const openLink = (url: string) => () => window.open(url, '_blank', 'noopener,noreferrer');
 
   return (
-    <BannerWrapper>
-      {/* Dein Bannerbild */}
-      <BannerImage src="/WelcomeBanner-Home.png" alt="Welcome Banner" />
+    <WelcomeWrapper>
+      <BannerImage src="/games-banner.png" alt="Welcome Banner" />
 
-      {/* Text und Buttons im Overlay */}
-      <ContentOverlay>
-        <h1 style={{ fontSize: '2.5rem', margin: '0' }}></h1>
-        <p style={{ fontSize: '1.25rem', marginTop: '10px' }}>
-    
-        </p>
-
-        <ButtonGroup>
-          <ActionButton onClick={openLink('https://x.com/solwin_casino')}>
-            Follow us on X
-          </ActionButton>
-          <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
-            Join Telegram
-          </ActionButton>
-          <ActionButton onClick={openLink('https://linktr.ee/Solwin_Casino')}>
-            How to Start
-          </ActionButton>
-        </ButtonGroup>
-      </ContentOverlay>
-    </BannerWrapper>
+      <ButtonGroup>
+        <ActionButton onClick={openLink('https://www.x.com/SolWin_Casino')}>
+          Follow us on X
+        </ActionButton>
+        <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
+          Join Telegram
+        </ActionButton>
+        <ActionButton onClick={openLink('https://linktr.ee/Solwin_Casino')}>
+          How to LinkTree
+        </ActionButton>
+      </ButtonGroup>
+    </WelcomeWrapper>
   );
 }
