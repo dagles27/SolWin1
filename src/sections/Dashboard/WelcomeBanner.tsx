@@ -63,8 +63,8 @@ export function WelcomeBanner() {
       <BannerImage src="/WelcomeBanner-Home.png" alt="Welcome Banner" />
 
       <ButtonGroup>
-        <ActionButton onClick={openLink('https://www.x.com/SolWin_Casino')}>
-          Follow us on X
+        <ActionButton onClick={openLink('https://www.instagram.com/solwincasino?igsh=aDh5ZHV5dXV6MnBk&utm_source=qr')}>
+          Instagram
         </ActionButton>
         <ActionButton onClick={openLink('https://t.me/SOL_WIN_Casino')}>
           Join Telegram
