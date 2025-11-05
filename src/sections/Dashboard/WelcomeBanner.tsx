@@ -88,7 +88,7 @@ export function WelcomeBanner() {
       <ContentOverlay>
         <h1 style={{ fontSize: '2.5rem', margin: '0' }}>Welcome to SOL-WIN</h1>
         <p style={{ fontSize: '1.25rem', marginTop: '10px' }}>
-          Your fair, simple and decentralized casino on Solana.
+    
         </p>
 
         <ButtonGroup>
