@@ -129,7 +129,11 @@ export default function Flip() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <img height="18" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
+                <img
+                  height="18"
+                  src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS}
+                  alt={side}
+                />
                 {side === 'heads' ? 'Heads' : 'Tails'}
               </div>
             </GambaUi.Button>
@@ -162,5 +166,3 @@ export default function Flip() {
     </>
   )
 }
-
-export default Flip
