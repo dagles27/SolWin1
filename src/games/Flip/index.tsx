@@ -162,3 +162,5 @@ export default function Flip() {
     </>
   )
 }
+
+export default Flip
