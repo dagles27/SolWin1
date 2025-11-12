@@ -67,57 +67,55 @@ function Flip() {
     <>
       {/* 🪙 Coin-Bereich */}
       <GambaUi.Portal target="screen">
-        <div
-          style={{
-            width: '330px',
-            height: '330px',
-            margin: 'auto',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'relative', // 👈 wichtig für Überlappung
-            top: '10px',          // 👈 Coin etwas nach unten geschoben
-            borderRadius: '12px',
-            boxShadow: '0 0 20px rgba(0,0,0,0.25)',
-          }}
-        >
-          <Canvas
-            linear
-            flat
-            orthographic
-            camera={{
-              zoom: 130,
-              position: [0, 0, 100],
-            }}
-          >
-            <React.Suspense fallback={null}>
-              <group scale={0.7}>
-                <Coin result={resultIndex} flipping={flipping} />
-              </group>
-            </React.Suspense>
+  <div
+    style={{
+      width: '260px',                // 👈 kleinerer Container
+      height: '260px',               // 👈 Coin-Bereich reduziert
+      margin: '40px auto 0 auto',    // 👈 oben etwas Abstand, unten automatisch
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',          // 👈 Coin exakt mittig
+      position: 'relative',
+      borderRadius: '12px',
+      boxShadow: '0 0 20px rgba(0,0,0,0.25)',
+    }}
+  >
+    <Canvas
+      linear
+      flat
+      orthographic
+      camera={{
+        zoom: 130,
+        position: [0, 0, 100],
+      }}
+      style={{
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <React.Suspense fallback={null}>
+        <group scale={0.65}> {/* 👈 Coin leicht verkleinert */}
+          <Coin result={resultIndex} flipping={flipping} />
+        </group>
+      </React.Suspense>
 
-            {/* ✨ Effekte */}
-            <Effect color="white" />
-            {flipping && <Effect color="white" />}
-            {win && <Effect color="#42ff78" />}
+      {/* ✨ Effekte */}
+      <Effect color="white" />
+      {flipping && <Effect color="white" />}
+      {win && <Effect color="#42ff78" />}
 
-            {/* 💡 Lichtsetup */}
-            <ambientLight intensity={2.5} />
-            <directionalLight
-              position-z={1}
-              position-y={1}
-              castShadow
-              color="#CCCCCC"
-            />
-            <hemisphereLight
-              intensity={0.5}
-              position={[0, 1, 0]}
-              color="#ffadad"
-              groundColor="#6666fe"
-            />
-          </Canvas>
-        </div>
-      </GambaUi.Portal>
+      {/* 💡 Lichtsetup */}
+      <ambientLight intensity={2.5} />
+      <directionalLight position-z={1} position-y={1} castShadow color="#CCCCCC" />
+      <hemisphereLight
+        intensity={0.5}
+        position={[0, 1, 0]}
+        color="#ffadad"
+        groundColor="#6666fe"
+      />
+    </Canvas>
+  </div>
+</GambaUi.Portal>
 
       {/* 🎛️ Buttons (überlappend am Coin) */}
       <GambaUi.Portal target="controls">
