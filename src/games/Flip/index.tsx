@@ -65,102 +65,68 @@ function Flip() {
 
   return (
     <>
-      {/* 🪙 Coin-Bereich */}
-      {/* 🪙 Coin-Bereich */}
-<GambaUi.Portal target="screen">
-  <div
-    style={{
-      width: '220px',           // kleinerer Bereich
-      height: '220px',          // weniger Höhe
-      margin: '0 auto',         // zentriert
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
-    }}
-  >
-    <Canvas
-      linear
-      flat
-      orthographic
-      camera={{
-        zoom: 130,
-        position: [0, 0, 100],
-      }}
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <React.Suspense fallback={null}>
-        <group scale={0.55}> {/* Coin etwas kleiner */}
-          <Coin result={resultIndex} flipping={flipping} />
-        </group>
-      </React.Suspense>
+      {/* 🪙 Coin Bereich */}
+      <GambaUi.Portal target="screen">
+        <div
+          style={{
+            width: '330px',
+            height: '330px',
+            margin: 'auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            top: '0px',
+          }}
+        >
+          <Canvas
+            linear
+            flat
+            orthographic
+            camera={{
+              zoom: 130,
+              position: [0, 0, 100],
+            }}
+          >
+            <React.Suspense fallback={null}>
+              <group scale={0.7}>
+                <Coin result={resultIndex} flipping={flipping} />
+              </group>
+            </React.Suspense>
 
-      <Effect color="white" />
-      {flipping && <Effect color="white" />}
-      {win && <Effect color="#42ff78" />}
+            {/* ✨ Effekte */}
+            <Effect color="white" />
+            {flipping && <Effect color="white" />}
+            {win && <Effect color="#42ff78" />}
 
-      <ambientLight intensity={2.5} />
-      <directionalLight position-z={1} position-y={1} castShadow color="#CCCCCC" />
-      <hemisphereLight
-        intensity={0.5}
-        position={[0, 1, 0]}
-        color="#ffadad"
-        groundColor="#6666fe"
-      />
-    </Canvas>
-  </div>
-</GambaUi.Portal>
+            {/* 💡 Lichtsetup */}
+            <ambientLight intensity={2.5} />
+            <directionalLight
+              position-z={1}
+              position-y={1}
+              castShadow
+              color="#CCCCCC"
+            />
+            <hemisphereLight
+              intensity={0.5}
+              position={[0, 1, 0]}
+              color="#ffadad"
+              groundColor="#6666fe"
+            />
+          </Canvas>
+        </div>
+      </GambaUi.Portal>
 
-{/* 🎛️ Buttons */}
-<GambaUi.Portal target="controls">
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '6px',
-      marginTop: '-40px', // 👈 zieht die Buttons deutlich nach oben
-      zIndex: 10,
-    }}
-  >
-    <GambaUi.WagerInput
-      options={WAGER_OPTIONS}
-      value={wager}
-      onChange={setWager}
-    />
-
-    <GambaUi.Button
-      disabled={gamba.isPlaying}
-      onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <img
-          height="20px"
-          src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS}
-          alt={side}
-        />
-        {side === 'heads' ? 'Heads' : 'Tails'}
-      </div>
-    </GambaUi.Button>
-
-    <GambaUi.PlayButton onClick={play}>
-      Flip
-    </GambaUi.PlayButton>
-  </div>
-</GambaUi.Portal>
-
-      {/* 🎛️ Buttons (überlappend am Coin) */}
+      {/* 🎛️ Buttons direkt unter dem Coin */}
       <GambaUi.Portal target="controls">
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '6px',       // 👈 enger Abstand zwischen Buttons
-            marginTop: '-8px', // 👈 zieht Buttons nach oben — Coin überlappt leicht
+            gap: '8px',
+            marginTop: '-40px', // 👈 zieht Buttons optisch hoch – direkt unter den Coin
+            zIndex: 10,
           }}
         >
           <GambaUi.WagerInput
