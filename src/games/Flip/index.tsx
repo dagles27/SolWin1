@@ -66,94 +66,97 @@ function Flip() {
   return (
     <>
       {/* 🪙 Coin Bereich */}
-      <GambaUi.Portal target="screen">
-        <div
-          style={{
-            width: '330px',
-            height: '330px',
-            margin: 'auto',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'relative',
-            top: '0px',
-          }}
-        >
-          <Canvas
-            linear
-            flat
-            orthographic
-            camera={{
-              zoom: 130,
-              position: [0, 0, 100],
-            }}
-          >
-            <React.Suspense fallback={null}>
-              <group scale={0.7}>
-                <Coin result={resultIndex} flipping={flipping} />
-              </group>
-            </React.Suspense>
+<GambaUi.Portal target="screen">
+  <div
+    style={{
+      width: '330px',
+      height: '330px',
+      margin: 'auto',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative',
+      pointerEvents: 'none', // Damit Klicks durchgehen
+    }}
+  >
+    <Canvas
+      linear
+      flat
+      orthographic
+      camera={{
+        zoom: 130,
+        position: [0, 0, 100],
+      }}
+      style={{ pointerEvents: 'auto' }} // Canvas bleibt klickbar
+    >
+      <React.Suspense fallback={null}>
+        <group scale={0.7}>
+          <Coin result={resultIndex} flipping={flipping} />
+        </group>
+      </React.Suspense>
 
-            {/* ✨ Effekte */}
-            <Effect color="white" />
-            {flipping && <Effect color="white" />}
-            {win && <Effect color="#42ff78" />}
+        {/* ✨ Effekte */}
+        <Effect color="white" />
+        {flipping && <Effect color="white" />}
+        {win && <Effect color="#42ff78" />}
 
-            {/* 💡 Lichtsetup */}
-            <ambientLight intensity={2.5} />
-            <directionalLight
-              position-z={1}
-              position-y={1}
-              castShadow
-              color="#CCCCCC"
-            />
-            <hemisphereLight
-              intensity={0.5}
-              position={[0, 1, 0]}
-              color="#ffadad"
-              groundColor="#6666fe"
-            />
-          </Canvas>
-        </div>
-      </GambaUi.Portal>
+        {/* 💡 Lichtsetup */}
+        <ambientLight intensity={2.5} />
+        <directionalLight
+          position-z={1}
+          position-y={1}
+          castShadow
+          color="#CCCCCC"
+        />
+        <hemisphereLight
+          intensity={0.5}
+          position={[0, 1, 0]}
+          color="#ffadad"
+          groundColor="#6666fe"
+        />
+      </Canvas>
+    </div>
+  </GambaUi.Portal>
 
-      {/* 🎛️ Buttons direkt unter dem Coin */}
-      <GambaUi.Portal target="controls">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-            marginTop: '-40px', // 👈 zieht Buttons optisch hoch – direkt unter den Coin
-            zIndex: 10,
-          }}
-        >
-          <GambaUi.WagerInput
-            options={WAGER_OPTIONS}
-            value={wager}
-            onChange={setWager}
+  {/* 🎛️ Buttons direkt unter dem Coin – ohne Spalt */}
+  <GambaUi.Portal target="controls">
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+        marginTop: '-50px', // Überlappt stärker mit dem Coin
+        position: 'relative',
+        zIndex: 10,
+        pointerEvents: 'auto',
+      }}
+    >
+      <GambaUi.WagerInput
+        options={WAGER_OPTIONS}
+        value={wager}
+        onChange={setWager}
+      />
+
+      <GambaUi.Button
+        disabled={gamba.isPlaying}
+        onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            height="20px"
+            src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS}
+            alt={side}
           />
-
-          <GambaUi.Button
-            disabled={gamba.isPlaying}
-            onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <img
-                height="20px"
-                src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS}
-                alt={side}
-              />
-              {side === 'heads' ? 'Heads' : 'Tails'}
-            </div>
-          </GambaUi.Button>
-
-          <GambaUi.PlayButton onClick={play}>
-            Flip
-          </GambaUi.PlayButton>
+          {side === 'heads' ? 'Heads' : 'Tails'}
         </div>
-      </GambaUi.Portal>
+      </GambaUi.Button>
+
+      <GambaUi.PlayButton onClick={play}>
+        Flip
+      </GambaUi.PlayButton>
+    </div>
+  </GambaUi.Portal>
     </>
   )
 }
