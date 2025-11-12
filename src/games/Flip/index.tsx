@@ -15,7 +15,7 @@ type Side = keyof typeof SIDES
 
 // Grün-Töne (passend zu SOL-WIN)
 const GREEN = '#00ff88'
- const GREEN_DARK = '#00cc66'
+const GREEN_DARK = '#00cc66'
 
 export default function Flip() {
   const game = GambaUi.useGame()
@@ -155,12 +155,4 @@ export default function Flip() {
         </div>
       </GambaUi.Portal>
 
-      {/* Controls leeren → kein schwarzer Balken */}
-      <GambaUi.Portal target="controls">
-        <div style={{ height: 0, overflow: 'hidden' }} />
-      </GambaUi.Portal>
-    </>
-  )
-}
-
-export default Flip
+      {/* Controls leeren → kein schwarzer Balken
