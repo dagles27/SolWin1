@@ -112,14 +112,40 @@ export default function Plinko() {
                 (body, i) => {
                   const { label, position } = body
                   if (label === 'Peg') {
-                    ctx.save()
-                    ctx.translate(position.x, position.y)
+  ctx.save()
+  ctx.translate(position.x, position.y)
 
-                    const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-                    if (pegAnimations.current[body.plugin.pegIndex]) {
-                      pegAnimations.current[body.plugin.pegIndex] *= .9
-                    }
+  // Nach jedem Frame Animation etwas verringern
+  if (pegAnimations.current[body.plugin.pegIndex]) {
+    pegAnimations.current[body.plugin.pegIndex] *= 0.9
+  }
+
+  // Grundfarbe: Schwarz
+  const baseColor = 'rgba(0, 0, 0, 0.9)'
+
+  // Wenn getroffen: Helligkeit auf Basis der Animation
+  const glow = Math.min(1, animation)
+  const glowColor = `rgba(255, 255, 255, ${glow})`
+
+  // Außenleuchten (Glow)
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+  ctx.fillStyle = glowColor
+  ctx.shadowColor = glowColor
+  ctx.shadowBlur = 15 * glow
+  ctx.fill()
+
+  // Innerer Kreis (Grundfarbe)
+  ctx.shadowBlur = 0
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+  ctx.fillStyle = baseColor
+  ctx.fill()
+
+  ctx.restore()
+}
                     ctx.scale(1 + animation * .4, 1 + animation * .4)
                     const pegHue = (position.y + position.x + Date.now() * .05) % 360
                     ctx.fillStyle = 'hsla(' + pegHue + ', 75%, 60%, ' + (1 + animation * 2) * .2 + ')'
