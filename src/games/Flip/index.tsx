@@ -9,16 +9,15 @@ import SOUND_COIN from './coin.mp3'
 import SOUND_LOSE from './lose.mp3'
 import SOUND_WIN from './win.mp3'
 
-const SIDES = {
-  heads: [2, 0],
-  tails: [0, 2],
-} as const
-
+const SIDES = { heads: [2, 0], tails: [0, 2] } as const
 const WAGER_OPTIONS = [1, 5, 10, 50, 100]
-
 type Side = keyof typeof SIDES
 
-function Flip() {
+// Grün-Töne (passend zu SOL-WIN)
+const GREEN = '#00ff88'
+ const GREEN_DARK = '#00cc66'
+
+export default function Flip() {
   const game = GambaUi.useGame()
   const gamba = useGamba()
   const [flipping, setFlipping] = React.useState(false)
@@ -27,39 +26,21 @@ function Flip() {
   const [side, setSide] = React.useState<Side>('heads')
   const [wager, setWager] = React.useState(WAGER_OPTIONS[0])
 
-  const sounds = useSound({
-    coin: SOUND_COIN,
-    win: SOUND_WIN,
-    lose: SOUND_LOSE,
-  })
+  const sounds = useSound({ coin: SOUND_COIN, win: SOUND_WIN, lose: SOUND_LOSE })
 
   const play = async () => {
     try {
       setWin(false)
       setFlipping(true)
       sounds.play('coin', { playbackRate: 0.5 })
-
-      await game.play({
-        bet: SIDES[side],
-        wager,
-        metadata: [side],
-      })
-
+      await game.play({ bet: SIDES[side], wager, metadata: [side] })
       sounds.play('coin')
-
       const result = await game.result()
-      const win = result.payout > 0
-
       setResultIndex(result.resultIndex)
-      setWin(win)
-
-      if (win) {
-        sounds.play('win')
-      } else {
-        sounds.play('lose')
-      }
-    } catch (error) {
-      console.error('Play failed:', error)
+      setWin(result.payout > 0)
+      sounds.play(result.payout > 0 ? 'win' : 'lose')
+    } catch (err) {
+      console.error(err)
     } finally {
       setFlipping(false)
     }
@@ -67,79 +48,59 @@ function Flip() {
 
   return (
     <>
-      {/* Hauptbereich: Coin + Buttons zentriert, absolut positioniert */}
+      {/* ZENTRIERT, KOMPAKT, HÖHER */}
       <GambaUi.Portal target="screen">
         <div
           style={{
             position: 'absolute',
-            top: '50%',
+            top: '48%', // Etwas höher als 50%
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '330px',
+            width: '300px',
             pointerEvents: 'none',
             zIndex: 10,
           }}
         >
-          {/* Coin Canvas */}
+          {/* Coin */}
           <div
             style={{
-              width: '330px',
-              height: '330px',
+              width: '300px',
+              height: '300px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               pointerEvents: 'auto',
-              filter: 'drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4))',
+              filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.4))',
             }}
           >
             <Canvas
               linear
               flat
               orthographic
-              camera={{
-                zoom: 130,
-                position: [0, 0, 100],
-              }}
-              style={{
-                borderRadius: '50%',
-                overflow: 'hidden',
-                background: 'transparent',
-              }}
+              camera={{ zoom: 140, position: [0, 0, 100] }}
+              style={{ borderRadius: '50%', background: 'transparent' }}
             >
               <React.Suspense fallback={null}>
-                <group scale={0.7}>
+                <group scale={0.68}>
                   <Coin result={resultIndex} flipping={flipping} />
                 </group>
               </React.Suspense>
-
-              {/* Effekte */}
               <Effect color="white" />
               {flipping && <Effect color="white" />}
-              {win && <Effect color="#42ff78" />}
-
-              {/* Licht */}
+              {win && <Effect color={GREEN} />}
               <ambientLight intensity={2.5} />
-              <directionalLight
-                position={[0, 1, 1]}
-                intensity={1}
-                color="#CCCCCC"
-              />
-              <hemisphereLight
-                intensity={0.5}
-                color="#ffadad"
-                groundColor="#6666fe"
-              />
+              <directionalLight position={[0, 1, 1]} color="#ccc" />
             </Canvas>
           </div>
 
-          {/* Buttons direkt unter dem Coin */}
+          {/* Buttons – kompakt, grün, direkt drunter */}
           <div
             style={{
               display: 'flex',
-               flexDirection: 'column',
+              flexDirection: 'column',
               alignItems: 'center',
-              gap: '12px',
-              marginTop: '-15px',
+              gap: '10px',
+              marginTop: '-18px', // Sehr eng an Coin
               pointerEvents: 'auto',
             }}
           >
@@ -147,26 +108,46 @@ function Flip() {
               options={WAGER_OPTIONS}
               value={wager}
               onChange={setWager}
+              style={{
+                background: GREEN_DARK,
+                color: 'white',
+                borderRadius: '12px',
+                fontWeight: 'bold',
+              }}
             />
 
             <GambaUi.Button
               disabled={gamba.isPlaying || flipping}
               onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
+              style={{
+                background: GREEN,
+                color: '#000',
+                fontWeight: 'bold',
+                borderRadius: '12px',
+                padding: '10px 16px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <img
-                  height="20"
-                  src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS}
-                  alt={side}
-                  style={{ filter: 'brightness(1.2)' }}
-                />
-                {side.charAt(0).toUpperCase() + side.slice(1)}
+                <img height="18" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
+                {side === 'heads' ? 'Heads' : 'Tails'}
               </div>
             </GambaUi.Button>
 
             <GambaUi.PlayButton
               onClick={play}
               disabled={gamba.isPlaying || flipping}
+              style={{
+                background: `linear-gradient(135deg, ${GREEN}, #00cc66)`,
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                padding: '14px 32px',
+                borderRadius: '16px',
+                boxShadow: '0 6px 12px rgba(0,255,136,0.3)',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }}
             >
               Flip
             </GambaUi.PlayButton>
@@ -174,9 +155,9 @@ function Flip() {
         </div>
       </GambaUi.Portal>
 
-      {/* Controls-Portal leeren → verhindert schwarzen Balken */}
+      {/* Controls leeren → kein schwarzer Balken */}
       <GambaUi.Portal target="controls">
-        <div style={{ height: 0, overflow: 'hidden', padding: 0, margin: 0 }} />
+        <div style={{ height: 0, overflow: 'hidden' }} />
       </GambaUi.Portal>
     </>
   )
