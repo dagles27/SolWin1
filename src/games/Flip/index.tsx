@@ -155,4 +155,10 @@ export default function Flip() {
         </div>
       </GambaUi.Portal>
 
-      {/* Controls leeren → kein schwarzer Balken
+{/* Controls leeren → kein schwarzer Balken */}
+
+</div>
+)
+}
+
+export default Flip
