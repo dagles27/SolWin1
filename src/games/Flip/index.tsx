@@ -70,7 +70,7 @@ function Flip() {
   <div
     style={{
       width: '330px',
-      height: '330px',
+      height: '165px',
       margin: 'auto',
       display: 'flex',
       justifyContent: 'center',
