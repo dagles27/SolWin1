@@ -84,7 +84,11 @@ export default function Plinko() {
             const s = Math.min(xx, yy)
 
             ctx.clearRect(0, 0, size.width, size.height)
-            ctx.fillStyle = '#0b0b13'
+            ctx.clearRect(0, 0, size.width, size.height)
+            const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
+            gradient.addColorStop(0, '#00ff99')
+            gradient.addColorStop(1, '#000000')
+            ctx.fillStyle = gradient
             ctx.fillRect(0, 0, size.width, size.height)
             ctx.save()
             ctx.translate(size.width / 2 - plinko.width / 2 * s, size.height / 2 - plinko.height / 2 * s)
