@@ -86,8 +86,8 @@ export default function Plinko() {
             ctx.clearRect(0, 0, size.width, size.height)
             ctx.clearRect(0, 0, size.width, size.height)
             const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
-            gradient.addColorStop(0, '#00ff99')
-            gradient.addColorStop(1, '#000000')
+            gradient.addColorStop(0, '#000000')
+            gradient.addColorStop(1, '#00ff99')
             ctx.fillStyle = gradient
             ctx.fillRect(0, 0, size.width, size.height)
             ctx.save()
