@@ -9,25 +9,35 @@ import { Table } from './Table'
 import { CHIPS, SOUND_LOSE, SOUND_PLAY, SOUND_WIN } from './constants'
 import { addResult, bet, clearChips, results, selectedChip, totalChipValue } from './signals'
 
-const Wrapper = styled.div`
+// 🎨 Hintergrund Wrapper mit Roulette-Background
+const BackgroundWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: url('/roulette-bg.png') center center / cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+`
+
+const ContentWrapper = styled.div`
   display: grid;
   gap: 20px;
   align-items: center;
   user-select: none;
   -webkit-user-select: none;
-  color: white;
+  z-index: 2;
 `
+
 function Results() {
   const _results = computed(() => [...results.value].reverse())
   return (
     <StyledResults>
-      {_results.value.map((index, i) => {
-        return (
-          <div key={i}>
-            {index + 1}
-          </div>
-        )
-      })}
+      {_results.value.map((index, i) => (
+        <div key={i}>{index + 1}</div>
+      ))}
     </StyledResults>
   )
 }
@@ -37,7 +47,6 @@ function Stats() {
   const token = useCurrentToken()
   const balance = useUserBalance()
   const wager = totalChipValue.value * token.baseWager / 10_000
-
   const multiplier = Math.max(...bet.value)
   const maxPayout = multiplier * wager
   const maxPayoutExceeded = maxPayout > pool.maxPayout
@@ -47,29 +56,20 @@ function Stats() {
     <div style={{ textAlign: 'center', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
       <div>
         {balanceExceeded ? (
-          <span style={{ color: '#ff0066' }}>
-            TOO HIGH
-          </span>
+          <span style={{ color: '#ff0066' }}>TOO HIGH</span>
         ) : (
-          <>
-            <TokenValue amount={wager} />
-          </>
+          <TokenValue amount={wager} />
         )}
         <div>Wager</div>
       </div>
       <div>
-        <div>
-          {maxPayoutExceeded ? (
-            <span style={{ color: '#ff0066' }}>
-              TOO HIGH
-            </span>
-          ) : (
-            <>
-              <TokenValue amount={maxPayout} />
-              ({multiplier.toFixed(2)}x)
-            </>
-          )}
-        </div>
+        {maxPayoutExceeded ? (
+          <span style={{ color: '#ff0066' }}>TOO HIGH</span>
+        ) : (
+          <>
+            <TokenValue amount={maxPayout} /> ({multiplier.toFixed(2)}x)
+          </>
+        )}
         <div>Potential win</div>
       </div>
     </div>
@@ -90,7 +90,6 @@ export default function Roulette() {
   })
 
   const wager = totalChipValue.value * token.baseWager / 10_000
-
   const multiplier = Math.max(...bet.value)
   const maxPayout = multiplier * wager
   const maxPayoutExceeded = maxPayout > pool.maxPayout
@@ -104,39 +103,35 @@ export default function Roulette() {
     sounds.play('play')
     const result = await game.result()
     addResult(result.resultIndex)
-    if (result.payout > 0) {
-      sounds.play('win')
-    } else {
-      sounds.play('lose')
-    }
+    sounds.play(result.payout > 0 ? 'win' : 'lose')
   }
 
   return (
     <>
       <GambaUi.Portal target="screen">
         <GambaUi.Responsive>
-          <Wrapper onContextMenu={(e) => e.preventDefault()}>
-            <Stats />
-            <Results />
-            <Table />
-          </Wrapper>
+          <BackgroundWrapper>
+            <ContentWrapper onContextMenu={(e) => e.preventDefault()}>
+              <Stats />
+              <Results />
+              <Table />
+            </ContentWrapper>
+          </BackgroundWrapper>
         </GambaUi.Responsive>
       </GambaUi.Portal>
+
       <GambaUi.Portal target="controls">
         <GambaUi.Select
           options={CHIPS}
           value={selectedChip.value}
-          onChange={(value) => selectedChip.value = value}
+          onChange={(value) => (selectedChip.value = value)}
           label={(value) => (
             <>
               <Chip value={value} /> = <TokenValue amount={token.baseWager * value} />
             </>
           )}
         />
-        <GambaUi.Button
-          disabled={!wager || gamba.isPlaying}
-          onClick={clearChips}
-        >
+        <GambaUi.Button disabled={!wager || gamba.isPlaying} onClick={clearChips}>
           Clear
         </GambaUi.Button>
         <GambaUi.PlayButton disabled={!wager || balanceExceeded || maxPayoutExceeded} onClick={play}>
