@@ -161,22 +161,41 @@ export default function Plinko() {
 
                     ctx.restore()
                   }
-                  if (label === 'Plinko') {
-                    ctx.save()
-                    ctx.translate(position.x, position.y)
+                  if (label === 'Peg') {
+  ctx.save()
+  ctx.translate(position.x, position.y)
 
-                    ctx.fillStyle = 'hsla(' + (i * 420 % 360) + ', 75%, 90%, .2)'
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PLINKO_RAIUS * 1.5, 0, Math.PI * 2)
-                    ctx.fill()
+  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-                    ctx.fillStyle = 'hsla(' + (i * 420 % 360) + ', 75%, 75%, 1)'
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
-                    ctx.fill()
+  // Nach jedem Frame Animation etwas verringern
+  if (pegAnimations.current[body.plugin.pegIndex]) {
+    pegAnimations.current[body.plugin.pegIndex] *= 0.9
+  }
 
-                    ctx.restore()
-                  }
+  // Grundfarbe: Schwarz
+  const baseColor = 'rgba(0, 0, 0, 0.9)'
+
+  // Wenn getroffen: Helligkeit auf Basis der Animation
+  const glow = Math.min(1, animation)
+  const glowColor = `rgba(255, 255, 255, ${glow})`
+
+  // Außenleuchten (Glow)
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+  ctx.fillStyle = glowColor
+  ctx.shadowColor = glowColor
+  ctx.shadowBlur = 15 * glow
+  ctx.fill()
+
+  // Innerer Kreis (Grundfarbe)
+  ctx.shadowBlur = 0
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+  ctx.fillStyle = baseColor
+  ctx.fill()
+
+  ctx.restore()
+}
                   if (label === 'Bucket') {
                     const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
 
