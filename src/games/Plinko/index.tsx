@@ -108,109 +108,114 @@ export default function Plinko() {
               ctx.strokeStyle = '#fff'
               ctx.stroke()
             } else {
-              bodies.forEach(
-                (body, i) => {
-                  const { label, position } = body
-                  if (label === 'Peg') {
-  ctx.save()
-  ctx.translate(position.x, position.y)
+              // --- replace existing bodies.forEach(...) with this block ---
+bodies.forEach((body, i) => {
+  const { label, position } = body
 
-  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+  // -----------------------
+  // Pegs (stationary small circles)
+  // -----------------------
+  if (label === 'Peg') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
 
-  // Animation pro Frame verringern
-  if (pegAnimations.current[body.plugin.pegIndex]) {
-    pegAnimations.current[body.plugin.pegIndex] *= 0.9
+    const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+    // decay animation
+    if (pegAnimations.current[body.plugin.pegIndex]) {
+      pegAnimations.current[body.plugin.pegIndex] *= 0.9
+    }
+
+    // draw base (black)
+    ctx.beginPath()
+    ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(0,0,0,0.95)'
+    ctx.fill()
+
+    // if hit -> white glow
+    if (animation > 0.02) {
+      const alpha = Math.min(1, animation)
+      ctx.beginPath()
+      ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`
+      ctx.shadowColor = `rgba(255,255,255,${alpha})`
+      ctx.shadowBlur = 20 * alpha
+      ctx.fill()
+      // reset shadow so it doesn't affect others
+      ctx.shadowBlur = 0
+    }
+
+    ctx.restore()
+    return
   }
 
-  // Grundfarbe: Schwarz
-  const baseColor = 'rgba(0, 0, 0, 0.9)'
+  // -----------------------
+  // Plinko (the moving balls) — draw them on top (visible)
+  // -----------------------
+  if (label === 'Plinko') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
 
-  // Wenn getroffen: Leuchteffekt auf Basis der Animation
-  const glow = Math.min(1, animation)
-  const glowColor = `rgba(255, 255, 255, ${glow})`
+    // ball appearance — white with slight glow
+    ctx.beginPath()
+    ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
+    ctx.fillStyle = '#ffffff'
+    ctx.shadowColor = 'rgba(255,255,255,0.9)'
+    ctx.shadowBlur = 18
+    ctx.fill()
 
-  // Äußerer Glow
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-  ctx.fillStyle = glowColor
-  ctx.shadowColor = glowColor
-  ctx.shadowBlur = 15 * glow
-  ctx.fill()
+    // small stroke to increase contrast
+    ctx.lineWidth = 1
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+    ctx.stroke()
 
-  // Innerer Kreis (Basis-Schwarz)
-  ctx.shadowBlur = 0
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fillStyle = baseColor
-  ctx.fill()
+    ctx.shadowBlur = 0
+    ctx.restore()
+    return
+  }
 
-  // Farbiger Akzent
-  ctx.scale(1 + animation * .4, 1 + animation * .4)
-  const pegHue = (position.y + position.x + Date.now() * .05) % 360
-  ctx.fillStyle = 'hsla(' + pegHue + ', 75%, 60%, ' + (1 + animation * 2) * .2 + ')'
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
-  ctx.fill()
+  // -----------------------
+  // Bucket (bottom multipliers)
+  // -----------------------
+  if (label === 'Bucket') {
+    const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
+    if (bucketAnimations.current[body.plugin.bucketIndex]) {
+      bucketAnimations.current[body.plugin.bucketIndex] *= 0.9
+    }
 
-  // Lichtkern
-  const light = 75 + animation * 25
-  ctx.fillStyle = 'hsla(' + pegHue + ', 85%, ' + light + '%, 1)'
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fill()
+    ctx.save()
+    ctx.translate(position.x, position.y)
+    const bucketHue = 25 + (multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length) * 125
+    const bucketAlpha = 0.05 + animation
 
-  ctx.restore()
-}
-                  if (label === 'Bucket') {
-                    const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
+    ctx.save()
+    ctx.translate(0, bucketHeight / 2)
+    ctx.scale(1, 1 + animation * 2)
+    ctx.fillStyle = `hsla(${bucketHue}, 75%, 75%, ${bucketAlpha})`
+    ctx.fillRect(-25, -bucketHeight, 50, bucketHeight)
+    ctx.restore()
 
-                    if (bucketAnimations.current[body.plugin.bucketIndex]) {
-                      bucketAnimations.current[body.plugin.bucketIndex] *= .9
-                    }
+    ctx.font = '20px Arial'
+    ctx.textAlign = 'center'
+    const brightness = 75 + animation * 25
+    ctx.fillStyle = `hsla(${bucketHue}, 75%, ${brightness}%, 1)`
+    ctx.fillText('x' + body.plugin.bucketMultiplier, 0, 0)
+    ctx.restore()
+    return
+  }
 
-                    ctx.save()
-                    ctx.translate(position.x, position.y)
-                    const bucketHue = 25 + multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length * 125
-                    const bucketAlpha = .05 + animation
-
-                    ctx.save()
-                    ctx.translate(0, bucketHeight / 2)
-                    ctx.scale(1, 1 + animation * 2)
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 75%, 75%, ' + bucketAlpha + ')'
-                    ctx.fillRect(-25, -bucketHeight, 50, bucketHeight)
-                    ctx.restore()
-
-                    ctx.font = '20px Arial'
-                    ctx.textAlign = 'center'
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 50%, 75%, 1)'
-                    ctx.lineWidth = 5
-                    ctx.lineJoin = 'miter'
-                    ctx.miterLimit = 2
-                    const brightness = 75 + animation * 25
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 75%, ' + brightness + '%, 1)'
-                    ctx.beginPath()
-                    ctx.strokeText('x' + body.plugin.bucketMultiplier, 0, 0)
-                    ctx.stroke()
-                    ctx.fillText('x' + body.plugin.bucketMultiplier, 0, 0)
-                    ctx.fill()
-
-                    ctx.restore()
-                  }
-                  if (label === 'Barrier') {
-                    ctx.save()
-                    ctx.translate(position.x, position.y)
-
-                    ctx.fillStyle = '#cccccc22'
-                    ctx.fillRect(-barrierWidth / 2, -barrierHeight / 2, barrierWidth, barrierHeight)
-
-                    ctx.restore()
-                  }
-                },
-              )
-            }
-            ctx.restore()
-          }}
-        />
+  // -----------------------
+  // Barrier (rectangles)
+  // -----------------------
+  if (label === 'Barrier') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
+    ctx.fillStyle = '#cccccc22'
+    ctx.fillRect(-barrierWidth / 2, -barrierHeight / 2, barrierWidth, barrierHeight)
+    ctx.restore()
+    return
+  }
+})
+// --- end replacement ---
       </GambaUi.Portal>
       <GambaUi.Portal target="controls">
         <GambaUi.WagerInput value={wager} onChange={setWager} />
