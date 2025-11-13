@@ -201,29 +201,73 @@ export default function Plinko() {
 
                     ctx.save()
                     ctx.translate(position.x, position.y)
-                    const bucketHue = 25 + multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length * 125
-                    const bucketAlpha = .05 + animation
 
+                    const bucketHue = 25 + multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length * 125
+                    const bucketAlpha = 0.25 + animation * 0.3  // Stark höher für bessere Sichtbarkeit!
+
+                    // Glow-Effekt um den Bucket (weiß, pulsiert bei Hit)
+                    const glowIntensity = animation * 0.8
+                    ctx.shadowColor = `hsla(${bucketHue}, 100%, 100%, ${glowIntensity})`
+                    ctx.shadowBlur = 20 + glowIntensity * 10
+
+                    // Bucket-Hintergrund (stärker gefüllt, abgerundet für besseren Look)
                     ctx.save()
                     ctx.translate(0, bucketHeight / 2)
-                    ctx.scale(1, 1 + animation * 2)
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 75%, 75%, ' + bucketAlpha + ')'
-                    ctx.fillRect(-25, -bucketHeight, 50, bucketHeight)
+                    ctx.scale(1 + animation * 0.1, 1 + animation * 2)  // Leichtes Idle-Scale + Hit-Puls
+                    ctx.shadowBlur = 0  // Glow nur außen
+
+                    // Hauptfill: Dunklerer, satterer Ton für Kontrast
+                    ctx.fillStyle = `hsla(${bucketHue}, 85%, 45%, ${bucketAlpha})`
+                    ctx.beginPath()
+                    ctx.roundRect(-25, -bucketHeight, 50, bucketHeight, 8)  // Abgerundete Ecken!
+                    ctx.fill()
+
+                    // Innerer Gradient für 3D-Look
+                    const innerGradient = ctx.createLinearGradient(0, -bucketHeight / 2, 0, bucketHeight / 2)
+                    innerGradient.addColorStop(0, `hsla(${bucketHue}, 90%, 55%, ${bucketAlpha * 0.8})`)
+                    innerGradient.addColorStop(1, `hsla(${bucketHue}, 80%, 35%, ${bucketAlpha * 1.2})`)
+                    ctx.fillStyle = innerGradient
+                    ctx.fill()
+
                     ctx.restore()
 
-                    ctx.font = '20px Arial'
-                    ctx.textAlign = 'center'
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 50%, 75%, 1)'
-                    ctx.lineWidth = 5
-                    ctx.lineJoin = 'miter'
-                    ctx.miterLimit = 2
-                    const brightness = 75 + animation * 25
-                    ctx.fillStyle = 'hsla(' + bucketHue + ', 75%, ' + brightness + '%, 1)'
+                    // Weißer Outline für starken Kontrast
+                    ctx.lineWidth = 3
+                    ctx.strokeStyle = `rgba(255, 255, 255, 0.8)`
+                    ctx.lineJoin = 'round'
+                    ctx.lineCap = 'round'
+                    ctx.shadowBlur = 8
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.6)'
                     ctx.beginPath()
-                    ctx.strokeText('x' + body.plugin.bucketMultiplier, 0, 0)
+                    ctx.roundRect(-25, 0, 50, bucketHeight, 8)
                     ctx.stroke()
-                    ctx.fillText('x' + body.plugin.bucketMultiplier, 0, 0)
-                    ctx.fill()
+
+                    // Obere "Eingangs"-Linie (dick, weiß) – markiert wo Kugel reinfällt!
+                    ctx.lineWidth = 4
+                    ctx.strokeStyle = `rgba(255, 255, 255, 1)`
+                    ctx.beginPath()
+                    ctx.moveTo(-25, 0)
+                    ctx.lineTo(25, 0)
+                    ctx.stroke()
+
+                    // Text: Größer, mit Glow und besserem Outline
+                    ctx.font = 'bold 28px Arial'  // Größer!
+                    ctx.textAlign = 'center'
+                    ctx.textBaseline = 'middle'
+                    ctx.shadowBlur = 10 + animation * 10
+                    ctx.shadowColor = `hsla(${bucketHue}, 100%, 100%, 1)`
+
+                    // Outline (dunkel)
+                    ctx.lineWidth = 6
+                    ctx.strokeStyle = `hsla(${bucketHue}, 70%, 30%, 1)`
+                    ctx.lineJoin = 'round'
+                    ctx.miterLimit = 2
+                    ctx.strokeText('x' + body.plugin.bucketMultiplier.toFixed(1), 0, 5)
+
+                    // Fill (hell, animiert)
+                    const textBrightness = 85 + animation * 20
+                    ctx.fillStyle = `hsla(${bucketHue}, 90%, ${textBrightness}%, 1)`
+                    ctx.fillText('x' + body.plugin.bucketMultiplier.toFixed(1), 0, 5)
 
                     ctx.restore()
                   }
