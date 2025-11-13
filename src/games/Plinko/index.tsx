@@ -214,31 +214,59 @@ bodies.forEach((body, i) => {
     ctx.restore()
     return
   }
-})
-// --- end replacement ---
+  }) // end of bodies.forEach
+
+  // --- end replacement ---
+
+  // Draw UI elements on top (controls etc.)
+  return (
+    <>
+      <canvas
+        ref={canvasRef}
+        width={size.width}
+        height={size.height}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          background: 'linear-gradient(180deg, #0e0e0e 0%, #000000 100%)',
+        }}
+      />
+
+      {/* Gamba UI Portals */}
+      <GambaUi.Portal target="screen">
+        <div
+          style={{
+            position: 'absolute',
+            top: '16px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+          }}
+        >
+          <h2 style={{ color: '#fff', fontWeight: 600, fontSize: '1.2rem' }}>
+            Plinko
+          </h2>
+        </div>
       </GambaUi.Portal>
+
       <GambaUi.Portal target="controls">
-        <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <div>Degen:</div>
-        <GambaUi.Switch
-          disabled={gamba.isPlaying}
-          checked={degen}
-          onChange={setDegen}
-        />
-        {window.location.origin.includes('localhost') && (
-          <>
-            <GambaUi.Switch checked={debug} onChange={setDebug}  />
-            <GambaUi.Button onClick={() => plinko.single()}>
-              Test
-            </GambaUi.Button>
-            <GambaUi.Button onClick={() => plinko.runAll()}>
-              Simulate
-            </GambaUi.Button>
-          </>
-        )}
-        <GambaUi.PlayButton onClick={() => play()}>
-          Play
-        </GambaUi.PlayButton>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginTop: '1rem',
+          }}
+        >
+          <GambaUi.WagerInput value={wager} onChange={setWager} />
+          <GambaUi.PlayButton
+            disabled={isPlaying}
+            onClick={() => handlePlay()}
+          >
+            Play
+          </GambaUi.PlayButton>
+        </div>
       </GambaUi.Portal>
     </>
   )
