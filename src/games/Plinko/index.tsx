@@ -268,6 +268,9 @@ bodies.forEach((body, i) => {
           </GambaUi.PlayButton>
         </div>
       </GambaUi.Portal>
-    </>
-  )
+         </>
+    )
+  }
 }
+
+export default Plinko
