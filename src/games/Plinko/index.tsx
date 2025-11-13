@@ -84,7 +84,6 @@ export default function Plinko() {
             const s = Math.min(xx, yy)
 
             ctx.clearRect(0, 0, size.width, size.height)
-            ctx.clearRect(0, 0, size.width, size.height)
             const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
             gradient.addColorStop(0, '#000000')
             gradient.addColorStop(1, '#00ff99')
@@ -112,55 +111,87 @@ export default function Plinko() {
                 (body, i) => {
                   const { label, position } = body
                   if (label === 'Peg') {
-  ctx.save()
-  ctx.translate(position.x, position.y)
+                    ctx.save()
+                    ctx.translate(position.x, position.y)
 
-  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+                    const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-  // Animation pro Frame verringern
-  if (pegAnimations.current[body.plugin.pegIndex]) {
-    pegAnimations.current[body.plugin.pegIndex] *= 0.9
-  }
+                    // Animation pro Frame verringern
+                    if (pegAnimations.current[body.plugin.pegIndex]) {
+                      pegAnimations.current[body.plugin.pegIndex] *= 0.9
+                    }
 
-  // Grundfarbe: Schwarz
-  const baseColor = 'rgba(0, 0, 0, 0.9)'
+                    // Grundfarbe: Schwarz
+                    const baseColor = 'rgba(0, 0, 0, 0.9)'
 
-  // Wenn getroffen: Leuchteffekt auf Basis der Animation
-  const glow = Math.min(1, animation)
-  const glowColor = `rgba(255, 255, 255, ${glow})`
+                    // Wenn getroffen: Leuchteffekt auf Basis der Animation
+                    const glow = Math.min(1, animation)
+                    const glowColor = `rgba(255, 255, 255, ${glow})`
 
-  // Äußerer Glow
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-  ctx.fillStyle = glowColor
-  ctx.shadowColor = glowColor
-  ctx.shadowBlur = 15 * glow
-  ctx.fill()
+                    // Äußerer Glow
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+                    ctx.fillStyle = glowColor
+                    ctx.shadowColor = glowColor
+                    ctx.shadowBlur = 15 * glow
+                    ctx.fill()
 
-  // Innerer Kreis (Basis-Schwarz)
-  ctx.shadowBlur = 0
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fillStyle = baseColor
-  ctx.fill()
+                    // Innerer Kreis (Basis-Schwarz)
+                    ctx.shadowBlur = 0
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+                    ctx.fillStyle = baseColor
+                    ctx.fill()
 
-  // Farbiger Akzent
-  ctx.scale(1 + animation * .4, 1 + animation * .4)
-  const pegHue = (position.y + position.x + Date.now() * .05) % 360
-  ctx.fillStyle = 'hsla(' + pegHue + ', 75%, 60%, ' + (1 + animation * 2) * .2 + ')'
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
-  ctx.fill()
+                    // Weißer Shine-Effekt statt Farbe
+                    ctx.save()
+                    ctx.scale(1 + animation * .4, 1 + animation * .4)
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PEG_RADIUS * 0.6, 0, Math.PI * 2)
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, animation * 2)})`
+                    ctx.fill()
+                    ctx.restore()
 
-  // Lichtkern
-  const light = 75 + animation * 25
-  ctx.fillStyle = 'hsla(' + pegHue + ', 85%, ' + light + '%, 1)'
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fill()
+                    ctx.restore()
+                  }
+                  if (label === 'Plinko') {
+                    ctx.save()
+                    ctx.translate(position.x, position.y)
 
-  ctx.restore()
-}
+                    // Äußerer Glow
+                    ctx.shadowColor = '#ffffff'
+                    ctx.shadowBlur = 25
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PLINKO_RAIUS + 8, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
+                    ctx.fill()
+
+                    // Mittlerer Glow
+                    ctx.shadowBlur = 10
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PLINKO_RAIUS + 3, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+                    ctx.fill()
+
+                    // Hauptball: Radial-Gradient für metallischen Look (Silber)
+                    const ballGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, PLINKO_RAIUS)
+                    ballGradient.addColorStop(0, '#ffffff')
+                    ballGradient.addColorStop(0.7, '#dddddd')
+                    ballGradient.addColorStop(1, '#888888')
+                    ctx.shadowBlur = 0
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
+                    ctx.fillStyle = ballGradient
+                    ctx.fill()
+
+                    // Glanz-Highlight oben links
+                    ctx.beginPath()
+                    ctx.arc(-PLINKO_RAIUS * 0.3, -PLINKO_RAIUS * 0.3, PLINKO_RAIUS * 0.4, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+                    ctx.fill()
+
+                    ctx.restore()
+                  }
                   if (label === 'Bucket') {
                     const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
 
@@ -237,4 +268,4 @@ export default function Plinko() {
       </GambaUi.Portal>
     </>
   )
-} 
+}
