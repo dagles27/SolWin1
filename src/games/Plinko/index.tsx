@@ -238,5 +238,3 @@ export default function Plinko() {
     </>
   )
 } 
-
-So sieht der Code jetzt aus. Aber beim Spielen sehe ich keinen Ball mehr und die die Bälle sind immer noch uunt
