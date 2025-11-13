@@ -112,53 +112,55 @@ export default function Plinko() {
                 (body, i) => {
                   const { label, position } = body
                   if (label === 'Peg') {
-                    ctx.save()
-                    ctx.translate(position.x, position.y)
+  ctx.save()
+  ctx.translate(position.x, position.y)
 
-                    const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-                    // Nach jedem Frame Animation etwas verringern
-                    if (pegAnimations.current[body.plugin.pegIndex]) {
-                      pegAnimations.current[body.plugin.pegIndex] *= 0.9
-                    }
+  // Animation pro Frame verringern
+  if (pegAnimations.current[body.plugin.pegIndex]) {
+    pegAnimations.current[body.plugin.pegIndex] *= 0.9
+  }
 
-                    // Grundfarbe: Schwarz
-                    const baseColor = 'rgba(0, 0, 0, 0.9)'
+  // Grundfarbe: Schwarz
+  const baseColor = 'rgba(0, 0, 0, 0.9)'
 
-                    // Wenn getroffen: Helligkeit auf Basis der Animation
-                    const glow = Math.min(1, animation)
-                    const glowColor = `rgba(255, 255, 255, ${glow})`
+  // Wenn getroffen: Leuchteffekt auf Basis der Animation
+  const glow = Math.min(1, animation)
+  const glowColor = `rgba(255, 255, 255, ${glow})`
 
-                    // Außenleuchten (Glow)
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-                    ctx.fillStyle = glowColor
-                    ctx.shadowColor = glowColor
-                    ctx.shadowBlur = 15 * glow
-                    ctx.fill()
+  // Äußerer Glow
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+  ctx.fillStyle = glowColor
+  ctx.shadowColor = glowColor
+  ctx.shadowBlur = 15 * glow
+  ctx.fill()
 
-                    // Innerer Kreis (Grundfarbe)
-                    ctx.shadowBlur = 0
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-                    ctx.fillStyle = baseColor
-                    ctx.fill()
+  // Innerer Kreis (Basis-Schwarz)
+  ctx.shadowBlur = 0
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+  ctx.fillStyle = baseColor
+  ctx.fill()
 
-                    ctx.scale(1 + animation * .4, 1 + animation * .4)
-                    const pegHue = (position.y + position.x + Date.now() * .05) % 360
-                    ctx.fillStyle = 'hsla(' + pegHue + ', 75%, 60%, ' + (1 + animation * 2) * .2 + ')'
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
-                    ctx.fill()
+  // Farbiger Akzent
+  ctx.scale(1 + animation * .4, 1 + animation * .4)
+  const pegHue = (position.y + position.x + Date.now() * .05) % 360
+  ctx.fillStyle = 'hsla(' + pegHue + ', 75%, 60%, ' + (1 + animation * 2) * .2 + ')'
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
+  ctx.fill()
 
-                    const light = 75 + animation * 25
-                    ctx.fillStyle = 'hsla(' + pegHue + ', 85%, ' + light + '%, 1)'
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-                    ctx.fill()
+  // Lichtkern
+  const light = 75 + animation * 25
+  ctx.fillStyle = 'hsla(' + pegHue + ', 85%, ' + light + '%, 1)'
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+  ctx.fill()
 
-                    ctx.restore()
-                  }
+  ctx.restore()
+}
                   if (label === 'Bucket') {
                     const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
 
