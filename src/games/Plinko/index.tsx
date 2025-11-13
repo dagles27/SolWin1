@@ -85,10 +85,18 @@ export default function Plinko() {
 
             ctx.clearRect(0, 0, size.width, size.height)
             const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
-            gradient.addColorStop(0, '#000000')
+            gradient.addColorStop(0, '#001100')  // Dunkleres Grün oben für Tiefe
             gradient.addColorStop(1, '#00ff99')
             ctx.fillStyle = gradient
             ctx.fillRect(0, 0, size.width, size.height)
+
+            // Leichter Nebel-Overlay für Atmosphäre
+            const fogGradient = ctx.createLinearGradient(0, 0, 0, size.height)
+            fogGradient.addColorStop(0, 'rgba(0, 0, 0, 0.3)')
+            fogGradient.addColorStop(1, 'rgba(0, 255, 153, 0.1)')
+            ctx.fillStyle = fogGradient
+            ctx.fillRect(0, 0, size.width, size.height)
+
             ctx.save()
             ctx.translate(size.width / 2 - plinko.width / 2 * s, size.height / 2 - plinko.height / 2 * s)
             ctx.scale(s, s)
@@ -116,39 +124,38 @@ export default function Plinko() {
 
                     const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-                    // Animation pro Frame verringern
                     if (pegAnimations.current[body.plugin.pegIndex]) {
                       pegAnimations.current[body.plugin.pegIndex] *= 0.9
                     }
 
-                    // Grundfarbe: Schwarz
-                    const baseColor = 'rgba(0, 0, 0, 0.9)'
+                    // Schatten für 3D-Effekt
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.6)'
+                    ctx.shadowBlur = 5
+                    ctx.shadowOffsetX = 2
+                    ctx.shadowOffsetY = 2
 
-                    // Wenn getroffen: Leuchteffekt auf Basis der Animation
-                    const glow = Math.min(1, animation)
-                    const glowColor = `rgba(255, 255, 255, ${glow})`
-
-                    // Äußerer Glow
-                    ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-                    ctx.fillStyle = glowColor
-                    ctx.shadowColor = glowColor
-                    ctx.shadowBlur = 15 * glow
-                    ctx.fill()
-
-                    // Innerer Kreis (Basis-Schwarz)
-                    ctx.shadowBlur = 0
+                    // Basis: Dunkler Kreis
                     ctx.beginPath()
                     ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-                    ctx.fillStyle = baseColor
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.95)'
                     ctx.fill()
 
-                    // Weißer Shine-Effekt statt Farbe
-                    ctx.save()
-                    ctx.scale(1 + animation * .4, 1 + animation * .4)
+                    // Glow bei Hit (grünlich für Theme)
+                    const glow = Math.min(1, animation)
+                    ctx.shadowColor = `rgba(0, 255, 153, ${glow})`
+                    ctx.shadowBlur = 20 * glow
                     ctx.beginPath()
-                    ctx.arc(0, 0, PEG_RADIUS * 0.6, 0, Math.PI * 2)
-                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, animation * 2)})`
+                    ctx.arc(0, 0, PEG_RADIUS + 2, 0, Math.PI * 2)
+                    ctx.fillStyle = `rgba(0, 255, 153, ${glow * 0.3})`
+                    ctx.fill()
+
+                    // Innerer Shine
+                    ctx.shadowBlur = 0
+                    ctx.save()
+                    ctx.scale(1 + animation * 0.3, 1 + animation * 0.3)
+                    ctx.beginPath()
+                    ctx.arc(0, 0, PEG_RADIUS * 0.5, 0, Math.PI * 2)
+                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, animation * 1.5)})`
                     ctx.fill()
                     ctx.restore()
 
@@ -158,36 +165,35 @@ export default function Plinko() {
                     ctx.save()
                     ctx.translate(position.x, position.y)
 
-                    // Äußerer Glow
-                    ctx.shadowColor = '#ffffff'
-                    ctx.shadowBlur = 25
+                    // Trail-Effekt (leichte Spur hinter dem Ball)
                     ctx.beginPath()
-                    ctx.arc(0, 0, PLINKO_RAIUS + 8, 0, Math.PI * 2)
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
+                    ctx.arc(0, 0, PLINKO_RAIUS + 15, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'
                     ctx.fill()
 
-                    // Mittlerer Glow
-                    ctx.shadowBlur = 10
+                    // Äußerer Glow (stärker, grün-tinted)
+                    ctx.shadowColor = '#00ff99'
+                    ctx.shadowBlur = 30
                     ctx.beginPath()
-                    ctx.arc(0, 0, PLINKO_RAIUS + 3, 0, Math.PI * 2)
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+                    ctx.arc(0, 0, PLINKO_RAIUS + 10, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
                     ctx.fill()
 
-                    // Hauptball: Radial-Gradient für metallischen Look (Silber)
+                    // Hauptball: Metallisch mit grünem Tint
                     const ballGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, PLINKO_RAIUS)
                     ballGradient.addColorStop(0, '#ffffff')
-                    ballGradient.addColorStop(0.7, '#dddddd')
-                    ballGradient.addColorStop(1, '#888888')
+                    ballGradient.addColorStop(0.5, '#ccffdd')
+                    ballGradient.addColorStop(1, '#008855')
                     ctx.shadowBlur = 0
                     ctx.beginPath()
                     ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
                     ctx.fillStyle = ballGradient
                     ctx.fill()
 
-                    // Glanz-Highlight oben links
+                    // Glanz-Highlight (stärker, versetzt)
                     ctx.beginPath()
-                    ctx.arc(-PLINKO_RAIUS * 0.3, -PLINKO_RAIUS * 0.3, PLINKO_RAIUS * 0.4, 0, Math.PI * 2)
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+                    ctx.arc(-PLINKO_RAIUS * 0.4, -PLINKO_RAIUS * 0.4, PLINKO_RAIUS * 0.5, 0, Math.PI * 2)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
                     ctx.fill()
 
                     ctx.restore()
@@ -202,72 +208,72 @@ export default function Plinko() {
                     ctx.save()
                     ctx.translate(position.x, position.y)
 
-                    const bucketHue = 25 + multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length * 125
-                    const bucketAlpha = 0.25 + animation * 0.3  // Stark höher für bessere Sichtbarkeit!
+                    const multiplier = body.plugin.bucketMultiplier
+                    let bucketHue = 120  // Basis Grün
+                    if (multiplier < 1) bucketHue = 0;   // Rot für Verlust
+                    else if (multiplier < 2) bucketHue = 60;  // Gelb für niedrig
+                    else bucketHue = 120;  // Grün für hoch
 
-                    // Glow-Effekt um den Bucket (weiß, pulsiert bei Hit)
-                    const glowIntensity = animation * 0.8
-                    ctx.shadowColor = `hsla(${bucketHue}, 100%, 100%, ${glowIntensity})`
-                    ctx.shadowBlur = 20 + glowIntensity * 10
+                    const bucketAlpha = 0.4 + animation * 0.4  // Höher für Sichtbarkeit
 
-                    // Bucket-Hintergrund (stärker gefüllt, abgerundet für besseren Look)
+                    // Glow-Effekt (stärker, passend zur Farbe)
+                    const glowIntensity = 0.2 + animation * 0.8
+                    ctx.shadowColor = `hsla(${bucketHue}, 100%, 50%, ${glowIntensity})`
+                    ctx.shadowBlur = 25 + glowIntensity * 15
+
+                    // Bucket-Form: Trapez für "Eimer"-Look
                     ctx.save()
                     ctx.translate(0, bucketHeight / 2)
-                    ctx.scale(1 + animation * 0.1, 1 + animation * 2)  // Leichtes Idle-Scale + Hit-Puls
-                    ctx.shadowBlur = 0  // Glow nur außen
-
-                    // Hauptfill: Dunklerer, satterer Ton für Kontrast
-                    ctx.fillStyle = `hsla(${bucketHue}, 85%, 45%, ${bucketAlpha})`
+                    ctx.scale(1 + animation * 0.15, 1 + animation * 2.5)  // Stärkeres Puls bei Hit
                     ctx.beginPath()
-                    ctx.roundRect(-25, -bucketHeight, 50, bucketHeight, 8)  // Abgerundete Ecken!
-                    ctx.fill()
+                    ctx.moveTo(-30, -bucketHeight)  // Breiter oben
+                    ctx.lineTo(30, -bucketHeight)
+                    ctx.lineTo(25, 0)
+                    ctx.lineTo(-25, 0)
+                    ctx.closePath()
 
-                    // Innerer Gradient für 3D-Look
-                    const innerGradient = ctx.createLinearGradient(0, -bucketHeight / 2, 0, bucketHeight / 2)
-                    innerGradient.addColorStop(0, `hsla(${bucketHue}, 90%, 55%, ${bucketAlpha * 0.8})`)
-                    innerGradient.addColorStop(1, `hsla(${bucketHue}, 80%, 35%, ${bucketAlpha * 1.2})`)
+                    // Fill mit Gradient (tiefer Look)
+                    const innerGradient = ctx.createLinearGradient(0, -bucketHeight, 0, 0)
+                    innerGradient.addColorStop(0, `hsla(${bucketHue}, 90%, 60%, ${bucketAlpha})`)
+                    innerGradient.addColorStop(1, `hsla(${bucketHue}, 80%, 30%, ${bucketAlpha})`)
                     ctx.fillStyle = innerGradient
                     ctx.fill()
 
                     ctx.restore()
 
-                    // Weißer Outline für starken Kontrast
-                    ctx.lineWidth = 3
-                    ctx.strokeStyle = `rgba(255, 255, 255, 0.8)`
-                    ctx.lineJoin = 'round'
-                    ctx.lineCap = 'round'
-                    ctx.shadowBlur = 8
-                    ctx.shadowColor = 'rgba(255, 255, 255, 0.6)'
-                    ctx.beginPath()
-                    ctx.roundRect(-25, 0, 50, bucketHeight, 8)
-                    ctx.stroke()
-
-                    // Obere "Eingangs"-Linie (dick, weiß) – markiert wo Kugel reinfällt!
+                    // Weißer Outline (dicker, glowy)
                     ctx.lineWidth = 4
-                    ctx.strokeStyle = `rgba(255, 255, 255, 1)`
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)'
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.7)'
+                    ctx.shadowBlur = 10
                     ctx.beginPath()
-                    ctx.moveTo(-25, 0)
-                    ctx.lineTo(25, 0)
+                    ctx.roundRect(-30, -10, 60, bucketHeight + 10, 10)  // Etwas höher für Visibility
                     ctx.stroke()
 
-                    // Text: Größer, mit Glow und besserem Outline
-                    ctx.font = 'bold 28px Arial'  // Größer!
+                    // Obere Eingangs-Linie (dick, leuchtend)
+                    ctx.lineWidth = 5
+                    ctx.strokeStyle = `hsla(${bucketHue}, 100%, 80%, 1)`
+                    ctx.beginPath()
+                    ctx.moveTo(-30, -10)
+                    ctx.lineTo(30, -10)
+                    ctx.stroke()
+
+                    // Text: Größer, fett, mit starkem Glow
+                    ctx.font = 'bold 32px Arial'
                     ctx.textAlign = 'center'
                     ctx.textBaseline = 'middle'
-                    ctx.shadowBlur = 10 + animation * 10
+                    ctx.shadowBlur = 15 + animation * 15
                     ctx.shadowColor = `hsla(${bucketHue}, 100%, 100%, 1)`
 
-                    // Outline (dunkel)
-                    ctx.lineWidth = 6
-                    ctx.strokeStyle = `hsla(${bucketHue}, 70%, 30%, 1)`
-                    ctx.lineJoin = 'round'
-                    ctx.miterLimit = 2
-                    ctx.strokeText('x' + body.plugin.bucketMultiplier.toFixed(1), 0, 5)
+                    // Outline
+                    ctx.lineWidth = 7
+                    ctx.strokeStyle = `hsla(${bucketHue}, 70%, 20%, 1)`
+                    ctx.strokeText('x' + multiplier.toFixed(1), 0, 10)
 
-                    // Fill (hell, animiert)
-                    const textBrightness = 85 + animation * 20
+                    // Fill
+                    const textBrightness = 90 + animation * 15
                     ctx.fillStyle = `hsla(${bucketHue}, 90%, ${textBrightness}%, 1)`
-                    ctx.fillText('x' + body.plugin.bucketMultiplier.toFixed(1), 0, 5)
+                    ctx.fillText('x' + multiplier.toFixed(1), 0, 10)
 
                     ctx.restore()
                   }
@@ -275,7 +281,7 @@ export default function Plinko() {
                     ctx.save()
                     ctx.translate(position.x, position.y)
 
-                    ctx.fillStyle = '#cccccc22'
+                    ctx.fillStyle = 'rgba(204, 204, 204, 0.15)'  // Leichter transparent
                     ctx.fillRect(-barrierWidth / 2, -barrierHeight / 2, barrierWidth, barrierHeight)
 
                     ctx.restore()
