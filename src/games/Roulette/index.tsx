@@ -14,7 +14,7 @@ const BackgroundWrapper = styled.div`
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: url('/roulette-bg.png') center center / cover no-repeat;
+  background: url('public/roulette-bg.png') center center / cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
