@@ -14,12 +14,14 @@ const BackgroundWrapper = styled.div`
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: url('public/roulette-bg.png') center center / cover no-repeat;
+  background: url('/roulette-bg.png') center center / cover no-repeat;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   color: white;
   overflow: hidden;
+  padding-top: 80px; /* 👈 Verschiebt Inhalt etwas nach unten, kannst du anpassen */
 `
 
 const ContentWrapper = styled.div`
@@ -29,6 +31,7 @@ const ContentWrapper = styled.div`
   user-select: none;
   -webkit-user-select: none;
   z-index: 2;
+  margin-top: 100px; /* 👈 optional, falls du mehr Abstand zum oberen Rand willst */
 `
 
 function Results() {
