@@ -166,32 +166,24 @@ export default function Plinko() {
   ctx.translate(position.x, position.y)
 
   const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
-
-  // Nach jedem Frame Animation etwas verringern
   if (pegAnimations.current[body.plugin.pegIndex]) {
     pegAnimations.current[body.plugin.pegIndex] *= 0.9
   }
 
-  // Grundfarbe: Schwarz
-  const baseColor = 'rgba(0, 0, 0, 0.9)'
+  const pegHue = (position.y + position.x + Date.now() * .05) % 360
+  ctx.scale(1 + animation * .4, 1 + animation * .4)
 
-  // Wenn getroffen: Helligkeit auf Basis der Animation
-  const glow = Math.min(1, animation)
-  const glowColor = `rgba(255, 255, 255, ${glow})`
-
-  // Außenleuchten (Glow)
+  // Außen-Glow
   ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-  ctx.fillStyle = glowColor
-  ctx.shadowColor = glowColor
-  ctx.shadowBlur = 15 * glow
+  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
+  ctx.fillStyle = `hsla(${pegHue}, 75%, 60%, ${(1 + animation * 2) * .2})`
   ctx.fill()
 
-  // Innerer Kreis (Grundfarbe)
-  ctx.shadowBlur = 0
+  // Innerer Kreis
+  const light = 75 + animation * 25
+  ctx.fillStyle = `hsla(${pegHue}, 85%, ${light}%, 1)`
   ctx.beginPath()
   ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fillStyle = baseColor
   ctx.fill()
 
   ctx.restore()
