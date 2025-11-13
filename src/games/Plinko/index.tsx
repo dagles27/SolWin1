@@ -10,11 +10,14 @@ import WIN from './win.mp3'
 function usePlinko(props: PlinkoProps, deps: React.DependencyList) {
   const [plinko, set] = React.useState<PlinkoGame>(null!)
 
-  React.useEffect(() => {
-    const p = new PlinkoGame(props)
-    set(p)
-    return () => p.cleanup()
-  }, deps)
+  React.useEffect(
+    () => {
+      const p = new PlinkoGame(props)
+      set(p)
+      return () => p.cleanup()
+    },
+    deps,
+  )
 
   return plinko
 }
@@ -30,16 +33,16 @@ export default function Plinko() {
   const [degen, setDegen] = React.useState(false)
   const sounds = useSound({
     bump: BUMP,
-    win: WIN,
+    win: WIN,l
     fall: FALL,
   })
 
   const pegAnimations = React.useRef<Record<number, number>>({})
   const bucketAnimations = React.useRef<Record<number, number>>({})
-  const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   const bet = degen ? DEGEN_BET : BET
   const rows = degen ? 12 : 14
+
   const multipliers = React.useMemo(() => Array.from(new Set(bet)), [bet])
 
   const plinko = usePlinko({
@@ -69,109 +72,183 @@ export default function Plinko() {
 
   return (
     <>
-      <GambaUi.Canvas
-        render={({ ctx, size }, clock) => {
-          if (!plinko) return
+      <GambaUi.Portal target="screen">
+        <GambaUi.Canvas
+          render={({ ctx, size }, clock) => {
+            if (!plinko) return
 
-          const bodies = plinko.getBodies()
-          const xx = size.width / plinko.width
-          const yy = size.height / plinko.height
-          const s = Math.min(xx, yy)
+            const bodies = plinko.getBodies()
 
-          ctx.clearRect(0, 0, size.width, size.height)
-          const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
-          gradient.addColorStop(0, '#000000')
-          gradient.addColorStop(1, '#00ff99')
-          ctx.fillStyle = gradient
-          ctx.fillRect(0, 0, size.width, size.height)
+            const xx = size.width / plinko.width
+            const yy = size.height / plinko.height
+            const s = Math.min(xx, yy)
 
-          ctx.save()
-          ctx.translate(size.width / 2 - plinko.width / 2 * s, size.height / 2 - plinko.height / 2 * s)
-          ctx.scale(s, s)
-
-          // --- draw bodies ---
-          bodies.forEach((body) => {
-            const { label, position } = body
-
-            if (label === 'Peg') {
-              ctx.save()
-              ctx.translate(position.x, position.y)
-              const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
-              if (pegAnimations.current[body.plugin.pegIndex]) {
-                pegAnimations.current[body.plugin.pegIndex] *= 0.9
-              }
+            ctx.clearRect(0, 0, size.width, size.height)
+            ctx.clearRect(0, 0, size.width, size.height)
+            const gradient = ctx.createLinearGradient(0, 0, 0, size.height)
+            gradient.addColorStop(0, '#000000')
+            gradient.addColorStop(1, '#00ff99')
+            ctx.fillStyle = gradient
+            ctx.fillRect(0, 0, size.width, size.height)
+            ctx.save()
+            ctx.translate(size.width / 2 - plinko.width / 2 * s, size.height / 2 - plinko.height / 2 * s)
+            ctx.scale(s, s)
+            if (debug) {
               ctx.beginPath()
-              ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-              ctx.fillStyle = 'rgba(0,0,0,0.95)'
-              ctx.fill()
-              if (animation > 0.02) {
-                const alpha = Math.min(1, animation)
-                ctx.beginPath()
-                ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
-                ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`
-                ctx.shadowColor = `rgba(255,255,255,${alpha})`
-                ctx.shadowBlur = 20 * alpha
-                ctx.fill()
-                ctx.shadowBlur = 0
-              }
-              ctx.restore()
-              return
-            }
-
-            if (label === 'Plinko') {
-              ctx.save()
-              ctx.translate(position.x, position.y)
-              ctx.beginPath()
-              ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
-              ctx.fillStyle = '#ffffff'
-              ctx.shadowColor = 'rgba(255,255,255,0.9)'
-              ctx.shadowBlur = 18
-              ctx.fill()
+              bodies.forEach(
+                ({ vertices }, i) => {
+                  ctx.moveTo(vertices[0].x, vertices[0].y)
+                  for (let j = 1; j < vertices.length; j += 1) {
+                    ctx.lineTo(vertices[j].x, vertices[j].y)
+                  }
+                  ctx.lineTo(vertices[0].x, vertices[0].y)
+                },
+              )
               ctx.lineWidth = 1
-              ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+              ctx.strokeStyle = '#fff'
               ctx.stroke()
-              ctx.shadowBlur = 0
-              ctx.restore()
-              return
-            }
+            } else {
+              // --- replace existing bodies.forEach(...) with this block ---
+bodies.forEach((body, i) => {
+  const { label, position } = body
 
-            if (label === 'Bucket') {
-              const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
-              if (bucketAnimations.current[body.plugin.bucketIndex]) {
-                bucketAnimations.current[body.plugin.bucketIndex] *= 0.9
-              }
-              ctx.save()
-              ctx.translate(position.x, position.y)
-              const bucketHue = 25 + (multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length) * 125
-              const bucketAlpha = 0.05 + animation
-              ctx.save()
-              ctx.translate(0, bucketHeight / 2)
-              ctx.scale(1, 1 + animation * 2)
-              ctx.fillStyle = `hsla(${bucketHue}, 75%, 75%, ${bucketAlpha})`
-              ctx.fillRect(-25, -bucketHeight, 50, bucketHeight)
-              ctx.restore()
-              ctx.font = '20px Arial'
-              ctx.textAlign = 'center'
-              const brightness = 75 + animation * 25
-              ctx.fillStyle = `hsla(${bucketHue}, 75%, ${brightness}%, 1)`
-              ctx.fillText('x' + body.plugin.bucketMultiplier, 0, 0)
-              ctx.restore()
-              return
-            }
+  // -----------------------
+  // Pegs (stationary small circles)
+  // -----------------------
+  if (label === 'Peg') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
 
-            if (label === 'Barrier') {
-              ctx.save()
-              ctx.translate(position.x, position.y)
-              ctx.fillStyle = '#cccccc22'
-              ctx.fillRect(-barrierWidth / 2, -barrierHeight / 2, barrierWidth, barrierHeight)
-              ctx.restore()
-              return
-            }
-          })
+    const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
+    // decay animation
+    if (pegAnimations.current[body.plugin.pegIndex]) {
+      pegAnimations.current[body.plugin.pegIndex] *= 0.9
+    }
 
-          ctx.restore()
+    // draw base (black)
+    ctx.beginPath()
+    ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(0,0,0,0.95)'
+    ctx.fill()
+
+    // if hit -> white glow
+    if (animation > 0.02) {
+      const alpha = Math.min(1, animation)
+      ctx.beginPath()
+      ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,255,255,${alpha * 0.9})`
+      ctx.shadowColor = `rgba(255,255,255,${alpha})`
+      ctx.shadowBlur = 20 * alpha
+      ctx.fill()
+      // reset shadow so it doesn't affect others
+      ctx.shadowBlur = 0
+    }
+
+    ctx.restore()
+    return
+  }
+
+  // -----------------------
+  // Plinko (the moving balls) — draw them on top (visible)
+  // -----------------------
+  if (label === 'Plinko') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
+
+    // ball appearance — white with slight glow
+    ctx.beginPath()
+    ctx.arc(0, 0, PLINKO_RAIUS, 0, Math.PI * 2)
+    ctx.fillStyle = '#ffffff'
+    ctx.shadowColor = 'rgba(255,255,255,0.9)'
+    ctx.shadowBlur = 18
+    ctx.fill()
+
+    // small stroke to increase contrast
+    ctx.lineWidth = 1
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+    ctx.stroke()
+
+    ctx.shadowBlur = 0
+    ctx.restore()
+    return
+  }
+
+  // -----------------------
+  // Bucket (bottom multipliers)
+  // -----------------------
+  if (label === 'Bucket') {
+    const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
+    if (bucketAnimations.current[body.plugin.bucketIndex]) {
+      bucketAnimations.current[body.plugin.bucketIndex] *= 0.9
+    }
+
+    ctx.save()
+    ctx.translate(position.x, position.y)
+    const bucketHue = 25 + (multipliers.indexOf(body.plugin.bucketMultiplier) / multipliers.length) * 125
+    const bucketAlpha = 0.05 + animation
+
+    ctx.save()
+    ctx.translate(0, bucketHeight / 2)
+    ctx.scale(1, 1 + animation * 2)
+    ctx.fillStyle = `hsla(${bucketHue}, 75%, 75%, ${bucketAlpha})`
+    ctx.fillRect(-25, -bucketHeight, 50, bucketHeight)
+    ctx.restore()
+
+    ctx.font = '20px Arial'
+    ctx.textAlign = 'center'
+    const brightness = 75 + animation * 25
+    ctx.fillStyle = `hsla(${bucketHue}, 75%, ${brightness}%, 1)`
+    ctx.fillText('x' + body.plugin.bucketMultiplier, 0, 0)
+    ctx.restore()
+    return
+  }
+
+  // -----------------------
+  // Barrier (rectangles)
+  // -----------------------
+  if (label === 'Barrier') {
+    ctx.save()
+    ctx.translate(position.x, position.y)
+    ctx.fillStyle = '#cccccc22'
+    ctx.fillRect(-barrierWidth / 2, -barrierHeight / 2, barrierWidth, barrierHeight)
+    ctx.restore()
+    return
+  }
+  }) // end of bodies.forEach
+
+  // --- end replacement ---
+
+  // Draw UI elements on top (controls etc.)
+  return (
+    <>
+      <canvas
+        ref={canvasRef}
+        width={size.width}
+        height={size.height}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          background: 'linear-gradient(180deg, #0e0e0e 0%, #000000 100%)',
         }}
       />
+
+      {/* Gamba UI Portals */}
+      <GambaUi.Portal target="screen">
+        <div
+          style={{
+            position: 'absolute',
+            top: '16px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+          }}
+        >
+          <h2 style={{ color: '#fff', fontWeight: 600, fontSize: '1.2rem' }}>
+            Plinko
+          </h2>
+        </div>
+      </GambaUi.Portal>
 
       <GambaUi.Portal target="controls">
         <div
@@ -183,11 +260,15 @@ export default function Plinko() {
           }}
         >
           <GambaUi.WagerInput value={wager} onChange={setWager} />
-          <GambaUi.PlayButton onClick={play}>
+          <GambaUi.PlayButton
+            disabled={isPlaying}
+            onClick={() => handlePlay()}
+          >
             Play
           </GambaUi.PlayButton>
         </div>
       </GambaUi.Portal>
-    </>
-  )
+                     </>
+    )
 }
+export default Plinko
