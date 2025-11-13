@@ -117,19 +117,17 @@ export default function Plinko() {
 
   const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
 
-  // Nach jedem Frame Animation etwas verringern
   if (pegAnimations.current[body.plugin.pegIndex]) {
     pegAnimations.current[body.plugin.pegIndex] *= 0.9
   }
 
-  // Grundfarbe: Schwarz
-  const baseColor = 'rgba(0, 0, 0, 0.9)'
+  const pegHue = (position.y + position.x + Date.now() * .05) % 360
+  ctx.scale(1 + animation * .4, 1 + animation * .4)
 
-  // Wenn getroffen: Helligkeit auf Basis der Animation
+  // Außen-Glow (schwarz mit weißem Glühen)
   const glow = Math.min(1, animation)
   const glowColor = `rgba(255, 255, 255, ${glow})`
 
-  // Außenleuchten (Glow)
   ctx.beginPath()
   ctx.arc(0, 0, PEG_RADIUS + 6, 0, Math.PI * 2)
   ctx.fillStyle = glowColor
@@ -137,11 +135,24 @@ export default function Plinko() {
   ctx.shadowBlur = 15 * glow
   ctx.fill()
 
-  // Innerer Kreis (Grundfarbe)
+  // Innerer Kreis (schwarz)
   ctx.shadowBlur = 0
   ctx.beginPath()
   ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fillStyle = baseColor
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.9)'
+  ctx.fill()
+
+  // Bunter äußerer Ring
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
+  ctx.fillStyle = `hsla(${pegHue}, 75%, 60%, ${(1 + animation * 2) * .2})`
+  ctx.fill()
+
+  // Heller Kern
+  const light = 75 + animation * 25
+  ctx.beginPath()
+  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
+  ctx.fillStyle = `hsla(${pegHue}, 85%, ${light}%, 1)`
   ctx.fill()
 
   ctx.restore()
@@ -161,33 +172,7 @@ export default function Plinko() {
 
                     ctx.restore()
                   }
-                  if (label === 'Peg') {
-  ctx.save()
-  ctx.translate(position.x, position.y)
-
-  const animation = pegAnimations.current[body.plugin.pegIndex] ?? 0
-  if (pegAnimations.current[body.plugin.pegIndex]) {
-    pegAnimations.current[body.plugin.pegIndex] *= 0.9
-  }
-
-  const pegHue = (position.y + position.x + Date.now() * .05) % 360
-  ctx.scale(1 + animation * .4, 1 + animation * .4)
-
-  // Außen-Glow
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS + 4, 0, Math.PI * 2)
-  ctx.fillStyle = `hsla(${pegHue}, 75%, 60%, ${(1 + animation * 2) * .2})`
-  ctx.fill()
-
-  // Innerer Kreis
-  const light = 75 + animation * 25
-  ctx.fillStyle = `hsla(${pegHue}, 85%, ${light}%, 1)`
-  ctx.beginPath()
-  ctx.arc(0, 0, PEG_RADIUS, 0, Math.PI * 2)
-  ctx.fill()
-
-  ctx.restore()
-}
+                  
                   if (label === 'Bucket') {
                     const animation = bucketAnimations.current[body.plugin.bucketIndex] ?? 0
 
