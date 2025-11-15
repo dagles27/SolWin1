@@ -1,7 +1,7 @@
 import './style.css'; // ← MUSS OBEN STEHEN!
 import { GameResult } from 'gamba-core-v2'
 import { EffectTest, GambaUi, TokenValue, useCurrentPool, useSound, useWagerInput } from 'gamba-react-ui-v2'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ItemPreview } from './ItemPreview'
 import { Slot } from './Slot'
 import { StyledSlots } from './Slots.styles'
@@ -51,6 +51,8 @@ export default function Slots() {
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
   )
+  const [showResult, setShowResult] = useState(false) // Für Fade-In Animation
+
   const sounds = useSound({
     win: SOUND_WIN,
     lose: SOUND_LOSE,
@@ -74,6 +76,13 @@ export default function Slots() {
     },
     [],
   )
+
+  // Reset Animation beim neuen Spiel
+  useEffect(() => {
+    if (spinning) {
+      setShowResult(false)
+    }
+  }, [spinning])
 
   const revealSlot = (combination: SlotItem[], slot = 0) => {
     sounds.play('reveal', { playbackRate: 1.1 })
@@ -99,6 +108,8 @@ export default function Slots() {
         } else {
           sounds.play('lose')
         }
+        // Starte Fade-In Animation nach Spin-Ende
+        setTimeout(() => setShowResult(true), 100)
       }, FINAL_DELAY)
     }
   }
@@ -107,6 +118,7 @@ export default function Slots() {
     try {
       setSpinning(true)
       setResult(undefined)
+      setShowResult(false)
       await game.play({
         wager,
         bet,
@@ -156,9 +168,9 @@ export default function Slots() {
                 ))}
               </div>
 
-              {/* RESULT-BOX – jetzt vollbreit, zentriert und symmetrisch unter den Slots */}
+              {/* RESULT-BOX – mit Animationen */}
               <div
-                className="result"
+                className={`result ${showResult ? 'animate' : ''}`}
                 data-good={good}
                 style={{
                   width: '100%',
@@ -178,9 +190,27 @@ export default function Slots() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   minHeight: '60px',
-                  transition: 'all 0.3s ease',
+                  opacity: showResult ? 1 : 0,
+                  transform: showResult ? 'translateY(0)' : 'translateY(20px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease, box-shadow 0.4s ease',
+                  position: 'relative',
+                  overflow: 'hidden',
                 }}
               >
+                {/* Pulsierender Glow-Effekt bei Gewinn */}
+                {good && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'radial-gradient(circle, rgba(0,255,157,0.6), transparent 70%)',
+                      animation: 'pulseGlow 1.5s infinite',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                )}
+
+                {/* Inhalt */}
                 {spinning ? (
                   <Messages
                     messages={[
@@ -239,6 +269,47 @@ export default function Slots() {
           {spinning ? 'SPINNING...' : 'SPIN'}
         </button>
       </GambaUi.Portal>
+
+      {/* Globale Keyframes für Animationen */}
+      <style jsx>{`
+        @keyframes pulseGlow {
+          0% {
+            transform: scale(1);
+            opacity: 0.6;
+          }
+          50% {
+            transform: scale(1.3);
+            opacity: 0.3;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0.6;
+          }
+        }
+
+        .result.animate {
+          animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (max-width: 480px) {
+          .result {
+            font-size: 1.2rem !important;
+            padding: 14px !important;
+            min-height: 56px !important;
+          }
+        }
+      `}</style>
     </>
   )
 }
