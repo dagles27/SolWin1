@@ -160,8 +160,8 @@ export default function Slots() {
 
         <GambaUi.Responsive>
           <StyledSlots>
-            <div style={{ position: 'relative', paddingTop: 'env(safe-area-inset-top, 0px)', overflow: 'hidden' }}>
-              {/* HEADER – NOCH TIEFER, ÜBERLAPPEND */}
+            <div style={{ position: 'relative', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+              {/* HEADER – ALTE GRÖßE, ÜBERLAPPEND NACH UNTEN */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
@@ -171,37 +171,33 @@ export default function Slots() {
                   height: 'auto',
                   maxHeight: 'none',
                   objectFit: 'cover',
-                  borderRadius: '0 0 24px 24px',
-                  marginTop: '-35px',
-                  marginBottom: '-110px',        // ← EXTREM nach unten → fast bis ItemPreview
-                  boxShadow: '0 16px 40px rgba(0,0,0,0.7)',
+                  borderRadius: '0 0 20px 20px',
+                  marginTop: '-30px',
+                  marginBottom: '-70px',         // ← Tiefer, aber nicht abgeschnitten
+                  boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
                   zIndex: 1,
-                  position: 'relative',
                 }}
               />
 
-              {/* Payout-Box – ÜBER DEM HEADER (zIndex höher) */}
+              {/* Payout-Box – RESPONSIVE POSITION */}
               <div
                 className={`result-inline ${showResult ? 'animate' : ''}`}
                 data-good={good}
                 style={{
-                  position: 'absolute',
-                  top: 'calc(100% - 120px)',     // ← Fixiert über Header-Ende
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  zIndex: 10,                    // ← ÜBER Header
+                  position: 'relative',
+                  zIndex: 2,
                   width: '100%',
-                  maxWidth: '320px',
-                  margin: 0,
-                  padding: '10px 16px',
+                  maxWidth: '300px',
+                  margin: '0 auto 8px',
+                  padding: '8px 14px',
                   fontSize: '1rem',
                   fontWeight: 'bold',
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   background: good
                     ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
                     : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
                   color: '#fff',
-                  boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 16px rgba(0,0,0,0.5)',
+                  boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 12px rgba(0,0,0,0.4)',
                   border: '2px solid transparent',
                   backgroundClip: 'padding-box',
                   display: 'flex',
@@ -210,7 +206,7 @@ export default function Slots() {
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   opacity: showResult ? 1 : 0,
-                  transform: showResult ? 'translateX(-50%) scale(1)' : 'translateX(-50%) scale(0.95)',
+                  transform: showResult ? 'scale(1)' : 'scale(0.95)',
                   transition: 'all 0.4s ease',
                 }}
               >
@@ -218,7 +214,7 @@ export default function Slots() {
                   style={{
                     position: 'absolute',
                     inset: -2,
-                    borderRadius: '12px',
+                    borderRadius: '10px',
                     padding: '2px',
                     background: good
                       ? 'linear-gradient(45deg, #00ff9d, #00b86e, #00ff9d)'
@@ -244,8 +240,8 @@ export default function Slots() {
                 )}
               </div>
 
-              {/* ItemPreview – direkt unter Header */}
-              <div style={{ width: '100%', margin: '12px 0', position: 'relative', zIndex: 2 }}>
+              {/* ItemPreview */}
+              <div style={{ width: '100%', marginBottom: '12px', position: 'relative', zIndex: 2 }}>
                 <ItemPreview betArray={bet} />
               </div>
 
@@ -280,7 +276,7 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING – MOBILE: 75%/25% MIT MAX SPEZIFITÄT + !IMPORTANT */}
+      {/* STYLING – MOBILE 75%/25%, DESKTOP NORMAL, SPIN NICHT ZU KLEIN */}
       <style jsx>{`
         .slots-container {
           display: flex;
@@ -301,7 +297,7 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* BASE STYLES */
+        /* BASE: DESKTOP – 60/40 */
         .wager-spin-row {
           display: flex;
           align-items: center;
@@ -310,48 +306,9 @@ export default function Slots() {
           max-width: 400px;
         }
 
-        /* WAGER INPUT – MOBILE OVERRIDE */
-        @media (max-width: 768px) {
-          .wager-spin-row :global(.wager-input),
-          .wager-spin-row :global(.wager-input > div),
-          .wager-spin-row :global(.wager-input *) {
-            flex: 0 0 75% !important;
-            max-width: 75% !important;
-            min-width: 0 !important;
-            box-sizing: border-box !important;
-          }
-
-          .wager-spin-row .spin-btn-inline {
-            flex: 0 0 25% !important;
-            max-width: 25% !important;
-            font-size: 0.85rem !important;
-            padding: 0 4px !important;
-            letter-spacing: 0.5px !important;
-          }
-        }
-
-        /* STAPELN ERST <380PX */
-        @media (max-width: 380px) {
-          .wager-spin-row {
-            flex-direction: column;
-            gap: 10px;
-          }
-          .wager-spin-row :global(.wager-input),
-          .wager-spin-row :global(.wager-input *) {
-            flex: 1 1 100% !important;
-            max-width: 100% !important;
-            height: 48px !important;
-          }
-          .wager-spin-row .spin-btn-inline {
-            flex: 1 1 100% !important;
-            max-width: 100% !important;
-            height: 48px !important;
-            font-size: 0.95rem !important;
-          }
-        }
-
-        /* WAGER INPUT BASE */
         .wager-spin-row :global(.wager-input) {
+          flex: 1 1 60%;
+          min-width: 0;
           height: 52px;
           font-size: 1rem;
           padding: 0 14px;
@@ -363,9 +320,10 @@ export default function Slots() {
           backdrop-filter: blur(10px);
         }
 
-        /* SPIN BUTTON */
         .spin-btn-inline {
+          flex: 1 1 40%;
           height: 52px;
+          font-size: 1.05rem;
           font-weight: bold;
           border-radius: 14px;
           border: none;
@@ -375,6 +333,7 @@ export default function Slots() {
           box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 4px 16px rgba(255,107,107,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
+          letter-spacing: 1.2px;
           position: relative;
           overflow: hidden;
           white-space: nowrap;
@@ -394,6 +353,35 @@ export default function Slots() {
         .spin-btn-inline:hover:not(:disabled)::before { left: 100%; }
         .spin-btn-inline:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 6px 24px rgba(255,107,107,0.7); }
         .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
+
+        /* MOBILE: 75%/25% – NUR MOBILE, SPIN GRÖßER */
+        @media (max-width: 768px) {
+          .wager-spin-row :global(.wager-input) {
+            flex: 1 1 75% !important;
+            min-width: 0 !important;
+          }
+          .wager-spin-row .spin-btn-inline {
+            flex: 1 1 25% !important;
+            font-size: 1rem !important;     // ← Größer als vorher
+            letter-spacing: 1px !important;
+            padding: 0 6px !important;
+          }
+        }
+
+        /* STAPELN ERST <380PX */
+        @media (max-width: 380px) {
+          .wager-spin-row {
+            flex-direction: column;
+            gap: 10px;
+          }
+          .wager-spin-row :global(.wager-input),
+          .wager-spin-row .spin-btn-inline {
+            flex: 1 1 100% !important;
+            width: 100% !important;
+            height: 48px !important;
+            font-size: 1rem !important;
+          }
+        }
 
         @keyframes neonPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
