@@ -44,7 +44,7 @@ export default function Slots() {
   const game = GambaUi.useGame()
   const pool = useCurrentPool()
   const [spinning, setSpinning] = React.useState(false)
-  const [result, setResult] = React.useState<GameResult | null>(null) // ← null statt undefined
+  const [result, setResult] = React.useState<GameResult>()
   const [good, setGood] = React.useState(false)
   const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
@@ -115,12 +115,10 @@ export default function Slots() {
   const play = async () => {
     try {
       setSpinning(true)
-      setResult(null)           // ← Reset Result
+      setResult(undefined)
       setShowResult(false)
-      setGood(false)            // ← Reset Gewinn
-      setRevealedSlots(0)       // ← Reset Slots
-      setCombination(Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0])) // ← Reset Kombination
-
+      setGood(false)           // ← Reset Gewinn-Effekt sofort
+      setRevealedSlots(0)      // ← Reset Slots sofort
       await game.play({
         wager,
         bet,
@@ -138,7 +136,6 @@ export default function Slots() {
     } catch (err) {
       setSpinning(false)
       setRevealedSlots(NUM_SLOTS)
-      setResult(null)
       throw err
     }
   }
@@ -146,7 +143,21 @@ export default function Slots() {
   return (
     <>
       <GambaUi.Portal target="screen">
-        {good && <EffectTest src={combination[0].image} />}
+        {/* LEGENDARY WIN EFFECT – jetzt komplett durchklickbar! */}
+        {good && (
+          <div
+            style={{
+              pointerEvents: 'none',   // ← WICHTIG: Klicks gehen direkt durch auf Button & Wager
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9999,
+              userSelect: 'none',
+            }}
+          >
+            <EffectTest src={combination[0].image} />
+          </div>
+        )}
+
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
@@ -157,7 +168,7 @@ export default function Slots() {
                 alt="Neon Fruits Banner"
               />
 
-              {/* Payout-Box: Desktop = über ItemPreview, eng */}
+              {/* Payout-Box */}
               <div
                 className={`result-inline ${showResult ? 'animate' : ''}`}
                 data-good={good}
@@ -222,9 +233,8 @@ export default function Slots() {
                 <ItemPreview betArray={bet} />
               </div>
 
-              {/* SLOTS + WAGER + SPIN – ALLES KOMPAKT IM BLOCK */}
+              {/* SLOTS + WAGER + SPIN */}
               <div className="slots-container">
-                {/* Slots */}
                 <div className="slots">
                   {combination.map((slot, i) => (
                     <Slot
@@ -237,7 +247,6 @@ export default function Slots() {
                   ))}
                 </div>
 
-                {/* WAGER + SPIN NEBENEINANDER */}
                 <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
@@ -254,9 +263,8 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING – WAGER + SPIN NEBENEINANDER, SOL-WIN DESIGN */}
+      {/* STYLING (unverändert) */}
       <style jsx>{`
-        /* Kompakter Container um Slots + Controls */
         .slots-container {
           display: flex;
           flex-direction: column;
@@ -276,7 +284,6 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* WAGER + SPIN in einer Zeile */
         .wager-spin-row {
           display: flex;
           align-items: center;
@@ -285,7 +292,6 @@ export default function Slots() {
           max-width: 360px;
         }
 
-        /* Wager Input – flex, mit integrierten Buttons */
         .wager-spin-row :global(.wager-input) {
           flex: 1;
           height: 52px;
@@ -299,25 +305,6 @@ export default function Slots() {
           backdrop-filter: blur(10px);
         }
 
-        .wager-spin-row :global(.wager-input button) {
-          width: 48px;
-          height: 40px;
-          font-size: 0.85rem;
-          font-weight: bold;
-          border-radius: 10px;
-          border: 1px solid rgba(255,255,255,0.3);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .wager-spin-row :global(.wager-input button:first-child) {
-          background: linear-gradient(135deg, #6a11cb, #2575fc);
-        }
-
-        .wager-spin-row :global(.wager-input button:last-child) {
-          background: linear-gradient(135deg, #00b09b, #96c93d);
-        }
-
-        /* SPIN BUTTON – RECHTS, GLEICHE HÖHE, NEON GLOW */
         .spin-btn-inline {
           height: 52px;
           width: 120px;
@@ -328,10 +315,7 @@ export default function Slots() {
           background: linear-gradient(135deg, #ff6b6b, #f94d6a, #ff8e8e);
           color: #fff;
           cursor: pointer;
-          box-shadow: 
-            0 0 0 2px rgba(255,255,255,0.2),
-            0 4px 20px rgba(255,107,107,0.5),
-            inset 0 1px 0 rgba(255,255,255,0.2);
+          box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 4px 20px rgba(255,107,107,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
           letter-spacing: 1.2px;
@@ -351,80 +335,23 @@ export default function Slots() {
           transition: left 0.5s;
         }
 
-        .spin-btn-inline:hover:not(:disabled)::before {
-          left: 100%;
-        }
-
-        .spin-btn-inline:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 
-            0 0 0 2px rgba(255,255,255,0.3),
-            0 8px 30px rgba(255,107,107,0.7);
-        }
-
-        .spin-btn-inline:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-          background: linear-gradient(135deg, #666, #888);
-        }
-
-        /* Mobile: Stapeln bei kleinem Bildschirm */
-        @media (max-width: 480px) {
-          .wager-spin-row {
-            flex-direction: column;
-            gap: 10px;
-            max-width: 100%;
-          }
-
-          .wager-spin-row :global(.wager-input) {
-            width: 100%;
-            height: 48px;
-          }
-
-          .spin-btn-inline {
-            width: 100%;
-            height: 50px;
-            font-size: 1.05rem;
-          }
-        }
-
-        /* Animationen */
-        @keyframes neonPulse {
-          0%, 100% { opacity: 0.7; }
-          50% { opacity: 1; }
-        }
-
-        @keyframes fadeInScale {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        .result-inline.animate {
-          animation: fadeInScale 0.4s ease forwards;
-        }
-
-        @media (min-width: 769px) {
-          .result-inline {
-            max-width: 300px !important;
-            margin: 8px auto 4px !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .result-inline {
-            max-width: 100% !important;
-            margin: 12px auto 8px !important;
-            font-size: 0.95rem !important;
-            padding: 8px 12px !important;
-          }
-        }
+        .spin-btn-inline:hover:not(:disabled)::before { left: 100%; }
+        .spin-btn-inline:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 8px 30px rgba(255,107,107,0.7); }
+        .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
 
         @media (max-width: 480px) {
-          .result-inline {
-            font-size: 0.85rem !important;
-            padding: 7px 10px !important;
-          }
+          .wager-spin-row { flex-direction: column; gap: 10px; max-width: 100%; }
+          .wager-spin-row :global(.wager-input) { width: 100%; height: 48px; }
+          .spin-btn-inline { width: 100%; height: 50px; font-size: 1.05rem; }
         }
+
+        @keyframes neonPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .result-inline.animate { animation: fadeInScale 0.4s ease forwards; }
+
+        @media (min-width: 769px) { .result-inline { max-width: 300px !important; margin: 8px auto 4px !important; } }
+        @media (max-width: 768px) { .result-inline { max-width: 100% !important; margin: 12px auto 8px !important; font-size: 0.95rem !important; padding: 8px 12px !important; } }
+        @media (max-width: 480px) { .result-inline { font-size: 0.85rem !important; padding: 7px 10px !important; } }
       `}</style>
     </>
   )
