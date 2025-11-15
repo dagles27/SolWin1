@@ -154,14 +154,14 @@ export default function Slots() {
                 alt="Neon Fruits Banner"
               />
 
-              {/* Payout-Box: Desktop = direkt über ItemPreview, eng, zentriert */}
+              {/* Payout-Box: Desktop = über ItemPreview, eng */}
               <div
                 className={`result-inline ${showResult ? 'animate' : ''}`}
                 data-good={good}
                 style={{
                   width: '100%',
                   maxWidth: '300px',
-                  margin: '8px auto 4px', // Sehr eng an ItemPreview (nur 4px Abstand)
+                  margin: '8px auto 4px',
                   padding: '8px 14px',
                   fontSize: '1rem',
                   fontWeight: 'bold',
@@ -184,7 +184,6 @@ export default function Slots() {
                   transition: 'all 0.4s ease',
                 }}
               >
-                {/* Neon-Border Effekt */}
                 <div
                   style={{
                     position: 'absolute',
@@ -202,7 +201,6 @@ export default function Slots() {
                   }}
                 />
 
-                {/* Inhalt – alles in einer Zeile */}
                 {spinning ? (
                   <Messages messages={['Spinning!', 'Good luck']} />
                 ) : result ? (
@@ -216,7 +214,7 @@ export default function Slots() {
                 )}
               </div>
 
-              {/* ItemPreview direkt darunter */}
+              {/* ItemPreview */}
               <div style={{ width: '100%' }}>
                 <ItemPreview betArray={bet} />
               </div>
@@ -238,23 +236,131 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
+      {/* KOMPAKTE CONTROLS – EINHEITLICH AUF DESKTOP & MOBILE */}
       <GambaUi.Portal target="controls">
-        <GambaUi.WagerInput value={wager} onChange={setWager} />
-        <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
-          <button className="multi-btn" onClick={() => setWager(wager * 0.5)}>x0.5</button>
-          <button className="multi-btn green" onClick={() => setWager(wager * 2)}>x2</button>
+        <div className="controls-container">
+          {/* Wager Input + x0.5 / x2 in einer Zeile */}
+          <div className="wager-row">
+            <GambaUi.WagerInput value={wager} onChange={setWager} />
+            <div className="multi-btns">
+              <button className="multi-btn" onClick={() => setWager(wager * 0.5)}>x0.5</button>
+              <button className="multi-btn green" onClick={() => setWager(wager * 2)}>x2</button>
+            </div>
+          </div>
+
+          {/* Spin Button – volle Breite, zentriert */}
+          <button
+            className="spin-btn"
+            disabled={!isValid || spinning}
+            onClick={play}
+          >
+            {spinning ? 'SPINNING...' : 'SPIN'}
+          </button>
         </div>
-        <button
-          className="spin-btn"
-          disabled={!isValid || spinning}
-          onClick={play}
-        >
-          {spinning ? 'SPINNING...' : 'SPIN'}
-        </button>
       </GambaUi.Portal>
 
-      {/* Animationen & Responsive: Mobile = Box oben, Desktop = Box über ItemPreview */}
+      {/* EINHEITLICHES STYLING + RESPONSIVE */}
       <style jsx>{`
+        .controls-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          padding: 0 16px;
+          max-width: 100%;
+        }
+
+        .wager-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: nowrap;
+        }
+
+        .wager-row :global(.wager-input) {
+          flex: 1;
+          min-width: 0;
+          height: 48px;
+          font-size: 1rem;
+          padding: 0 12px;
+          border-radius: 8px;
+          border: 2px solid rgba(255,255,255,0.2);
+          background: rgba(0,0,0,0.3);
+          color: #fff;
+          box-shadow: 0 0 8px rgba(0,0,0,0.3);
+        }
+
+        .multi-btns {
+          display: flex;
+          gap: 6px;
+        }
+
+        .multi-btn {
+          width: 48px;
+          height: 48px;
+          font-size: 0.9rem;
+          font-weight: bold;
+          border-radius: 8px;
+          border: none;
+          background: linear-gradient(135deg, #6a11cb, #2575fc);
+          color: #fff;
+          cursor: pointer;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          transition: all 0.2s ease;
+        }
+
+        .multi-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .multi-btn.green {
+          background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+
+        .spin-btn {
+          height: 56px;
+          font-size: 1.2rem;
+          font-weight: bold;
+          border-radius: 12px;
+          border: none;
+          background: linear-gradient(135deg, #ff6b6b, #f94d6a);
+          color: #fff;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(255,107,107,0.4);
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .spin-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(255,107,107,0.6);
+        }
+
+        .spin-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        /* Mobile: Stapeln bei sehr kleinem Bildschirm */
+        @media (max-width: 480px) {
+          .wager-row {
+            flex-direction: column;
+            gap: 8px;
+          }
+          .wager-row :global(.wager-input) {
+            width: 100%;
+          }
+          .multi-btns {
+            width: 100%;
+            justify-content: center;
+          }
+          .multi-btn {
+            flex: 1;
+          }
+        }
+
+        /* Animationen */
         @keyframes neonPulse {
           0%, 100% { opacity: 0.7; }
           50% { opacity: 1; }
@@ -269,15 +375,13 @@ export default function Slots() {
           animation: fadeInScale 0.4s ease forwards;
         }
 
-        /* Desktop: Payout-Box über ItemPreview, eng, zentriert */
         @media (min-width: 769px) {
           .result-inline {
             max-width: 300px !important;
-            margin: 8px auto 4px !important; /* Sehr eng: nur 4px Abstand */
+            margin: 8px auto 4px !important;
           }
         }
 
-        /* Mobile: Payout-Box oben, 100% Breite, dann ItemPreview */
         @media (max-width: 768px) {
           .result-inline {
             max-width: 100% !important;
