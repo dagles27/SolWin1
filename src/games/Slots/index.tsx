@@ -1,4 +1,4 @@
-import './style.css';  // ← MUSS OBEN STEHEN!
+import './style.css'; // ← MUSS OBEN STEHEN!
 import { GameResult } from 'gamba-core-v2'
 import { EffectTest, GambaUi, TokenValue, useCurrentPool, useSound, useWagerInput } from 'gamba-react-ui-v2'
 import React, { useEffect, useRef } from 'react'
@@ -64,7 +64,6 @@ export default function Slots() {
     [pool.maxPayout, wager],
   )
   const timeout = useRef<any>()
-
   const isValid = bet.some((x) => x > 1)
 
   useEffect(
@@ -78,17 +77,13 @@ export default function Slots() {
 
   const revealSlot = (combination: SlotItem[], slot = 0) => {
     sounds.play('reveal', { playbackRate: 1.1 })
-
     const allSame = combination.slice(0, slot + 1).every((item, index, arr) => !index || item === arr[index - 1])
-
     if (combination[slot].multiplier >= LEGENDARY_THRESHOLD) {
       if (allSame) {
         sounds.play('revealLegendary')
       }
     }
-
     setRevealedSlots(slot + 1)
-
     if (slot < NUM_SLOTS - 1) {
       timeout.current = setTimeout(
         () => revealSlot(combination, slot + 1),
@@ -112,32 +107,21 @@ export default function Slots() {
     try {
       setSpinning(true)
       setResult(undefined)
-
       await game.play({
         wager,
         bet,
       })
-
       sounds.play('play')
-
       setRevealedSlots(0)
       setGood(false)
-
       const startTime = Date.now()
-
       sounds.play('spin', { playbackRate: .5 })
-
       const result = await game.result()
-
       const resultDelay = Date.now() - startTime
       const revealDelay = Math.max(0, SPIN_DELAY - resultDelay)
-
       const combination = getSlotCombination(NUM_SLOTS, result.multiplier, bet)
-
       setCombination(combination)
-
       setResult(result)
-
       timeout.current = setTimeout(() => revealSlot(combination), revealDelay)
     } catch (err) {
       setSpinning(false)
@@ -154,12 +138,12 @@ export default function Slots() {
           <StyledSlots>
             <div>
               {/* Banner HIER – über den 6 Boxen (vor ItemPreview) */}
-              <img 
-                className="headerImage" 
-                src="/slot-neonfruits-banner.png"  
-                alt="Neon Fruits Banner" 
+              <img
+                className="headerImage"
+                src="/slot-neonfruits-banner.png"
+                alt="Neon Fruits Banner"
               />
-              <ItemPreview betArray={bet} />  {/* Die 6 Boxen */}
+              <ItemPreview betArray={bet} /> {/* Die 6 Boxen */}
               <div className="slots">
                 {combination.map((slot, i) => (
                   <Slot
@@ -171,7 +155,32 @@ export default function Slots() {
                   />
                 ))}
               </div>
-              <div className="result" data-good={good}>
+
+              {/* RESULT-BOX – jetzt vollbreit, zentriert und symmetrisch unter den Slots */}
+              <div
+                className="result"
+                data-good={good}
+                style={{
+                  width: '100%',
+                  maxWidth: '100%',
+                  margin: '20px auto 0',
+                  padding: '16px',
+                  textAlign: 'center',
+                  fontSize: '1.4rem',
+                  fontWeight: 'bold',
+                  borderRadius: '12px',
+                  background: good
+                    ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
+                    : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
+                  color: '#fff',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '60px',
+                  transition: 'all 0.3s ease',
+                }}
+              >
                 {spinning ? (
                   <Messages
                     messages={[
@@ -200,35 +209,36 @@ export default function Slots() {
           </StyledSlots>
         </GambaUi.Responsive>
       </GambaUi.Portal>
+
       <GambaUi.Portal target="controls">
-       {/* MANUELLER EINGABE */}
-       <GambaUi.WagerInput value={wager} onChange={setWager} />
-  
-  {/* SPARSAME x0.5 / x2 BUTTONS */}
-  <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
-    <button 
-      className="multi-btn" 
-      onClick={() => setWager(wager * 0.5)}
-    >
-      x0.5
-    </button>
-    <button 
-      className="multi-btn green" 
-      onClick={() => setWager(wager * 2)}
-    >
-      x2
-    </button>
-    </div>
-  
-     {/* DEIN SPIN BUTTON */}
-    <button
-      className="spin-btn"
-      disabled={!isValid || spinning}
-      onClick={play}
-  >
-    {spinning ? 'SPINNING...' : 'SPIN'}
-    </button>
-</GambaUi.Portal>
+        {/* MANUELLER EINGABE */}
+        <GambaUi.WagerInput value={wager} onChange={setWager} />
+
+        {/* SPARSAME x0.5 / x2 BUTTONS */}
+        <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
+          <button
+            className="multi-btn"
+            onClick={() => setWager(wager * 0.5)}
+          >
+            x0.5
+          </button>
+          <button
+            className="multi-btn green"
+            onClick={() => setWager(wager * 2)}
+          >
+            x2
+          </button>
+        </div>
+
+        {/* DEIN SPIN BUTTON */}
+        <button
+          className="spin-btn"
+          disabled={!isValid || spinning}
+          onClick={play}
+        >
+          {spinning ? 'SPINNING...' : 'SPIN'}
+        </button>
+      </GambaUi.Portal>
     </>
   )
 }
