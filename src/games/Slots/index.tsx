@@ -51,7 +51,7 @@ export default function Slots() {
   const [combination, setCombination] = React.useState(
     Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0]),
   )
-  const [showResult, setShowResult] = useState(false) // Für Fade-In Animation
+  const [showResult, setShowResult] = useState(false)
 
   const sounds = useSound({
     win: SOUND_WIN,
@@ -77,7 +77,6 @@ export default function Slots() {
     [],
   )
 
-  // Reset Animation beim neuen Spiel
   useEffect(() => {
     if (spinning) {
       setShowResult(false)
@@ -108,7 +107,6 @@ export default function Slots() {
         } else {
           sounds.play('lose')
         }
-        // Starte Fade-In Animation nach Spin-Ende
         setTimeout(() => setShowResult(true), 100)
       }, FINAL_DELAY)
     }
@@ -149,14 +147,84 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div>
-              {/* Banner HIER – über den 6 Boxen (vor ItemPreview) */}
+              {/* Banner */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
                 alt="Neon Fruits Banner"
               />
-              <ItemPreview betArray={bet} /> {/* Die 6 Boxen */}
-              <div className="slots">
+
+              {/* ItemPreview + Result-Box in einer Zeile */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
+                {/* ItemPreview (6 Boxen) */}
+                <div style={{ flex: 1 }}>
+                  <ItemPreview betArray={bet} />
+                </div>
+
+                {/* Payout-Box – kompakt, länglich, stylisch, einzeilig */}
+                <div
+                  className={`result-inline ${showResult ? 'animate' : ''}`}
+                  data-good={good}
+                  style={{
+                    minWidth: '180px',
+                    maxWidth: '220px',
+                    padding: '8px 14px',
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    borderRadius: '8px',
+                    background: good
+                      ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
+                      : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
+                    color: '#fff',
+                    boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 12px rgba(0,0,0,0.4)',
+                    border: '2px solid transparent',
+                    backgroundClip: 'padding-box',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    opacity: showResult ? 1 : 0,
+                    transform: showResult ? 'scale(1)' : 'scale(0.95)',
+                    transition: 'all 0.4s ease',
+                  }}
+                >
+                  {/* Neon-Border Effekt */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: -2,
+                      borderRadius: '10px',
+                      padding: '2px',
+                      background: good
+                        ? 'linear-gradient(45deg, #00ff9d, #00b86e, #00ff9d)'
+                        : 'linear-gradient(45deg, #8e2de2, #4a00e0, #8e2de2)',
+                      mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+                      maskComposite: 'exclude',
+                      WebkitMaskComposite: 'destination-out',
+                      pointerEvents: 'none',
+                      animation: good ? 'neonPulse 1.8s infinite' : 'none',
+                    }}
+                  />
+
+                  {/* Inhalt – alles in einer Zeile */}
+                  {spinning ? (
+                    <Messages messages={['Spinning!', 'Good luck']} />
+                  ) : result ? (
+                    <>
+                      Payout: <TokenValue mint={result.token} amount={result.payout} />
+                    </>
+                  ) : isValid ? (
+                    <Messages messages={['SPIN ME!', 'LETS WIN!']} />
+                  ) : (
+                    <>❌ Lower wager!</>
+                  )}
+                </div>
+              </div>
+
+              {/* Slots */}
+              <div className="slots" style={{ marginTop: '20px' }}>
                 {combination.map((slot, i) => (
                   <Slot
                     key={i}
@@ -167,100 +235,17 @@ export default function Slots() {
                   />
                 ))}
               </div>
-
-              {/* RESULT-BOX – mit Animationen */}
-              <div
-                className={`result ${showResult ? 'animate' : ''}`}
-                data-good={good}
-                style={{
-                  width: '100%',
-                  maxWidth: '100%',
-                  margin: '20px auto 0',
-                  padding: '16px',
-                  textAlign: 'center',
-                  fontSize: '1.4rem',
-                  fontWeight: 'bold',
-                  borderRadius: '12px',
-                  background: good
-                    ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
-                    : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
-                  color: '#fff',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minHeight: '60px',
-                  opacity: showResult ? 1 : 0,
-                  transform: showResult ? 'translateY(0)' : 'translateY(20px)',
-                  transition: 'opacity 0.6s ease, transform 0.6s ease, box-shadow 0.4s ease',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Pulsierender Glow-Effekt bei Gewinn */}
-                {good && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'radial-gradient(circle, rgba(0,255,157,0.6), transparent 70%)',
-                      animation: 'pulseGlow 1.5s infinite',
-                      pointerEvents: 'none',
-                    }}
-                  />
-                )}
-
-                {/* Inhalt */}
-                {spinning ? (
-                  <Messages
-                    messages={[
-                      'Spinning!',
-                      'Good luck',
-                    ]}
-                  />
-                ) : result ? (
-                  <>
-                    Payout: <TokenValue mint={result.token} amount={result.payout} />
-                  </>
-                ) : isValid ? (
-                  <Messages
-                    messages={[
-                      'SPIN ME!',
-                      'LETS WIN!',
-                    ]}
-                  />
-                ) : (
-                  <>
-                    ❌ Choose a lower wager!
-                  </>
-                )}
-              </div>
             </div>
           </StyledSlots>
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
       <GambaUi.Portal target="controls">
-        {/* MANUELLER EINGABE */}
         <GambaUi.WagerInput value={wager} onChange={setWager} />
-
-        {/* SPARSAME x0.5 / x2 BUTTONS */}
         <div style={{display: 'flex', gap: '10px', justifyContent: 'center', margin: '10px 0'}}>
-          <button
-            className="multi-btn"
-            onClick={() => setWager(wager * 0.5)}
-          >
-            x0.5
-          </button>
-          <button
-            className="multi-btn green"
-            onClick={() => setWager(wager * 2)}
-          >
-            x2
-          </button>
+          <button className="multi-btn" onClick={() => setWager(wager * 0.5)}>x0.5</button>
+          <button className="multi-btn green" onClick={() => setWager(wager * 2)}>x2</button>
         </div>
-
-        {/* DEIN SPIN BUTTON */}
         <button
           className="spin-btn"
           disabled={!isValid || spinning}
@@ -270,43 +255,47 @@ export default function Slots() {
         </button>
       </GambaUi.Portal>
 
-      {/* Globale Keyframes für Animationen */}
+      {/* Animationen & Mobile-Optimierung */}
       <style jsx>{`
-        @keyframes pulseGlow {
-          0% {
-            transform: scale(1);
-            opacity: 0.6;
-          }
-          50% {
-            transform: scale(1.3);
-            opacity: 0.3;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 0.6;
-          }
+        @keyframes neonPulse {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
         }
 
-        .result.animate {
-          animation: fadeInUp 0.6s ease forwards;
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
+        .result-inline.animate {
+          animation: fadeInScale 0.4s ease forwards;
+        }
+
+        @media (max-width: 640px) {
+          .result-inline {
+            min-width: 140px !important;
+            max-width: 180px !important;
+            font-size: 0.85rem !important;
+            padding: 6px 10px !important;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          [data-good="true"] .result-inline {
+            font-size: 0.9rem !important;
           }
         }
 
         @media (max-width: 480px) {
-          .result {
-            font-size: 1.2rem !important;
-            padding: 14px !important;
-            min-height: 56px !important;
+          div[style*="display: flex"][style*="gap: 12px"] {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          div[style*="flex: 1"] {
+            order: 2;
+          }
+          .result-inline {
+            order: 1;
+            max-width: 100% !important;
+            min-width: auto !important;
+            margin-bottom: 12px;
           }
         }
       `}</style>
