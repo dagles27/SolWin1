@@ -44,7 +44,7 @@ export default function Slots() {
   const game = GambaUi.useGame()
   const pool = useCurrentPool()
   const [spinning, setSpinning] = React.useState(false)
-  const [result, setResult] = React.useState<GameResult>()
+  const [result, setResult] = React.useState<GameResult | null>(null) // ← null statt undefined
   const [good, setGood] = React.useState(false)
   const [revealedSlots, setRevealedSlots] = React.useState(0)
   const [wager, setWager] = useWagerInput()
@@ -115,10 +115,12 @@ export default function Slots() {
   const play = async () => {
     try {
       setSpinning(true)
-      setResult(undefined)
+      setResult(null)           // ← Reset Result
       setShowResult(false)
-      setGood(false) // Reset Gewinn-Status
-      setRevealedSlots(0) // Reset Slots
+      setGood(false)            // ← Reset Gewinn
+      setRevealedSlots(0)       // ← Reset Slots
+      setCombination(Array.from({ length: NUM_SLOTS }).map(() => SLOT_ITEMS[0])) // ← Reset Kombination
+
       await game.play({
         wager,
         bet,
@@ -136,6 +138,7 @@ export default function Slots() {
     } catch (err) {
       setSpinning(false)
       setRevealedSlots(NUM_SLOTS)
+      setResult(null)
       throw err
     }
   }
@@ -332,9 +335,9 @@ export default function Slots() {
           transition: all 0.3s ease;
           text-transform: uppercase;
           letter-spacing: 1.2px;
-          position: 'relative',
-          overflow: 'hidden',
-          white-space: 'nowrap',
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
         }
 
         .spin-btn-inline::before {
