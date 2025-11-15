@@ -161,7 +161,7 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div style={{ position: 'relative', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-              {/* HEADER – NOCH WEITER RUNTER, ÜBERLAPPEND */}
+              {/* HEADER – NOCH NÄHER ZU ITEMPREVIEW */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
@@ -172,8 +172,8 @@ export default function Slots() {
                   maxHeight: 'none',
                   objectFit: 'cover',
                   borderRadius: '0 0 20px 20px',
-                  marginTop: '-30px',           // ← MEHR nach oben verschoben
-                  marginBottom: '-60px',         // ← STÄRKER überlappend nach unten
+                  marginTop: '-30px',
+                  marginBottom: '-85px',         // ← NOCH STÄRKER nach unten → näher zu ItemPreview
                   boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
                   zIndex: 1,
                 }}
@@ -240,7 +240,7 @@ export default function Slots() {
                 )}
               </div>
 
-              {/* ItemPreview */}
+              {/* ItemPreview – jetzt näher am Header */}
               <div style={{ width: '100%', marginBottom: '12px', position: 'relative', zIndex: 2 }}>
                 <ItemPreview betArray={bet} />
               </div>
@@ -259,7 +259,7 @@ export default function Slots() {
                   ))}
                 </div>
 
-                {/* WAGER + SPIN – MOBILE: 75% / 25% */}
+                {/* WAGER + SPIN – MOBILE: 75%/25% */}
                 <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
@@ -276,7 +276,7 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING – MOBILE: 75% WAGER, 25% SPIN */}
+      {/* STYLING – MOBILE: 75%/25% MIT !IMPORTANT + SPEZIFISCHER SELEKTOR */}
       <style jsx>{`
         .slots-container {
           display: flex;
@@ -297,7 +297,7 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* WAGER + SPIN – STANDARD (Desktop) */
+        /* BASE: Desktop – 60/40 */
         .wager-spin-row {
           display: flex;
           align-items: center;
@@ -354,29 +354,30 @@ export default function Slots() {
         .spin-btn-inline:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 6px 24px rgba(255,107,107,0.7); }
         .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
 
-        /* MOBILE: 75% WAGER, 25% SPIN – NEBENEINANDER BIS 380PX */
+        /* MOBILE: 75%/25% – SPEZIFISCHER SELEKTOR + !IMPORTANT */
         @media (max-width: 768px) {
           .wager-spin-row :global(.wager-input) {
             flex: 1 1 75% !important;
+            min-width: 0 !important;
           }
-          .spin-btn-inline {
+          .wager-spin-row .spin-btn-inline {
             flex: 1 1 25% !important;
-            font-size: 0.95rem;
+            font-size: 0.9rem !important;
           }
         }
 
-        /* SEHR KLEINE HANDYS: STAPELN */
+        /* STAPELN ERST AB 380PX */
         @media (max-width: 380px) {
           .wager-spin-row {
             flex-direction: column;
             gap: 10px;
           }
           .wager-spin-row :global(.wager-input),
-          .spin-btn-inline {
+          .wager-spin-row .spin-btn-inline {
             flex: 1 1 100% !important;
-            width: 100%;
-            height: 48px;
-            font-size: 0.95rem;
+            width: 100% !important;
+            height: 48px !important;
+            font-size: 0.95rem !important;
           }
         }
 
