@@ -161,7 +161,7 @@ export default function Slots() {
         <GambaUi.Responsive>
           <StyledSlots>
             <div style={{ position: 'relative', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-              {/* HEADER – ALTE GRÖßE, ÜBERLAPPEND NACH UNTEN */}
+              {/* HEADER – NOCH WEITER RUNTER, ÜBERLAPPEND */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
@@ -171,15 +171,15 @@ export default function Slots() {
                   height: 'auto',
                   maxHeight: 'none',
                   objectFit: 'cover',
-                  borderRadius: '0 0 16px 16px',
-                  marginTop: '-20px',           // ← Überlappend nach unten
-                  marginBottom: '-40px',         // ← Platz für Payout-Box
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.5)',
+                  borderRadius: '0 0 20px 20px',
+                  marginTop: '-30px',           // ← MEHR nach oben verschoben
+                  marginBottom: '-60px',         // ← STÄRKER überlappend nach unten
+                  boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
                   zIndex: 1,
                 }}
               />
 
-              {/* Payout-Box – über Header, zentriert */}
+              {/* Payout-Box – über Header */}
               <div
                 className={`result-inline ${showResult ? 'animate' : ''}`}
                 data-good={good}
@@ -259,7 +259,7 @@ export default function Slots() {
                   ))}
                 </div>
 
-                {/* WAGER + SPIN – VOLL AUSGEFÜLLT, NEBENEINANDER */}
+                {/* WAGER + SPIN – MOBILE: 75% / 25% */}
                 <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
@@ -276,7 +276,7 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING – MOBILE: VOLL AUSGEFÜLLT, HEADER ÜBERLAPPEND */}
+      {/* STYLING – MOBILE: 75% WAGER, 25% SPIN */}
       <style jsx>{`
         .slots-container {
           display: flex;
@@ -297,7 +297,7 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* WAGER + SPIN – ZEILE VOLL AUSFÜLLEN */
+        /* WAGER + SPIN – STANDARD (Desktop) */
         .wager-spin-row {
           display: flex;
           align-items: center;
@@ -307,7 +307,7 @@ export default function Slots() {
         }
 
         .wager-spin-row :global(.wager-input) {
-          flex: 1 1 60%;           /* ← 60% für Wager */
+          flex: 1 1 60%;
           min-width: 0;
           height: 52px;
           font-size: 1rem;
@@ -321,7 +321,7 @@ export default function Slots() {
         }
 
         .spin-btn-inline {
-          flex: 1 1 40%;           /* ← 40% für SPIN */
+          flex: 1 1 40%;
           height: 52px;
           font-size: 1.05rem;
           font-weight: bold;
@@ -354,15 +354,26 @@ export default function Slots() {
         .spin-btn-inline:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 6px 24px rgba(255,107,107,0.7); }
         .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
 
-        /* MOBILE: VOLL AUSGEFÜLLT, KEIN STAPELN BIS 360PX */
-        @media (max-width: 360px) {
+        /* MOBILE: 75% WAGER, 25% SPIN – NEBENEINANDER BIS 380PX */
+        @media (max-width: 768px) {
+          .wager-spin-row :global(.wager-input) {
+            flex: 1 1 75% !important;
+          }
+          .spin-btn-inline {
+            flex: 1 1 25% !important;
+            font-size: 0.95rem;
+          }
+        }
+
+        /* SEHR KLEINE HANDYS: STAPELN */
+        @media (max-width: 380px) {
           .wager-spin-row {
             flex-direction: column;
             gap: 10px;
           }
           .wager-spin-row :global(.wager-input),
           .spin-btn-inline {
-            flex: 1 1 100%;
+            flex: 1 1 100% !important;
             width: 100%;
             height: 48px;
             font-size: 0.95rem;
