@@ -219,7 +219,7 @@ export default function Slots() {
                 <ItemPreview betArray={bet} />
               </div>
 
-              {/* SLOTS + CONTROLS – ALLES IN EINEM KOMPAKTEN BLOCK */}
+              {/* SLOTS + WAGER + SPIN – ALLES KOMPAKT IM BLOCK */}
               <div className="slots-container">
                 {/* Slots */}
                 <div className="slots">
@@ -234,11 +234,11 @@ export default function Slots() {
                   ))}
                 </div>
 
-                {/* Wager Input + Spin Button – UNTER DEN SLOTS, ZENTRIERT */}
-                <div className="slots-controls">
+                {/* WAGER + SPIN NEBENEINANDER */}
+                <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
-                    className="spin-btn"
+                    className="spin-btn-inline"
                     disabled={!isValid || spinning}
                     onClick={play}
                   >
@@ -251,12 +251,9 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* LEERES CONTROLS PORTAL – Wager & Spin sind jetzt im Screen-Bereich */}
-      <GambaUi.Portal target="controls" />
-
-      {/* ULTRA-KOMPAKTE SOL-WIN OPTIK – ALLES IN EINEM BILD */}
+      {/* STYLING – WAGER + SPIN NEBENEINANDER, SOL-WIN DESIGN */}
       <style jsx>{`
-        /* Slots Container – kompakt mit Controls darunter */
+        /* Kompakter Container um Slots + Controls */
         .slots-container {
           display: flex;
           flex-direction: column;
@@ -276,23 +273,22 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* Slots Controls – Wager + Spin zentriert unter Slots */
-        .slots-controls {
+        /* WAGER + SPIN in einer Zeile */
+        .wager-spin-row {
           display: flex;
-          flex-direction: column;
           align-items: center;
           gap: 12px;
           width: 100%;
-          max-width: 320px;
+          max-width: 360px;
         }
 
-        /* Wager Input – Neon Casino Style */
-        .slots-controls :global(.wager-input) {
-          width: 100%;
-          height: 48px;
+        /* Wager Input – flex, mit integrierten Buttons */
+        .wager-spin-row :global(.wager-input) {
+          flex: 1;
+          height: 52px;
           font-size: 1rem;
           padding: 0 16px;
-          border-radius: 12px;
+          border-radius: 14px;
           border: 2px solid rgba(255,255,255,0.2);
           background: linear-gradient(135deg, rgba(74,0,224,0.3), rgba(142,45,226,0.3));
           color: #fff;
@@ -300,35 +296,29 @@ export default function Slots() {
           backdrop-filter: blur(10px);
         }
 
-        /* Integrierte Multi-Buttons im Wager Input */
-        .slots-controls :global(.wager-input button) {
-          width: 46px;
-          height: 38px;
+        .wager-spin-row :global(.wager-input button) {
+          width: 48px;
+          height: 40px;
           font-size: 0.85rem;
           font-weight: bold;
-          border-radius: 8px;
+          border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.3);
           box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .slots-controls :global(.wager-input button:first-child) {
+        .wager-spin-row :global(.wager-input button:first-child) {
           background: linear-gradient(135deg, #6a11cb, #2575fc);
         }
 
-        .slots-controls :global(.wager-input button:last-child) {
+        .wager-spin-row :global(.wager-input button:last-child) {
           background: linear-gradient(135deg, #00b09b, #96c93d);
         }
 
-        .slots-controls :global(.wager-input button:hover) {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        /* SPIN BUTTON – HERO SIZE, Neon Glow */
-        .spin-btn {
-          width: 100%;
-          height: 56px;
-          font-size: 1.25rem;
+        /* SPIN BUTTON – RECHTS, GLEICHE HÖHE, NEON GLOW */
+        .spin-btn-inline {
+          height: 52px;
+          width: 120px;
+          font-size: 1.1rem;
           font-weight: bold;
           border-radius: 14px;
           border: none;
@@ -341,12 +331,13 @@ export default function Slots() {
             inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
+          letter-spacing: 1.2px;
           position: relative;
           overflow: hidden;
+          white-space: nowrap;
         }
 
-        .spin-btn::before {
+        .spin-btn-inline::before {
           content: '';
           position: absolute;
           top: 0;
@@ -357,21 +348,41 @@ export default function Slots() {
           transition: left 0.5s;
         }
 
-        .spin-btn:hover:not(:disabled)::before {
+        .spin-btn-inline:hover:not(:disabled)::before {
           left: 100%;
         }
 
-        .spin-btn:hover:not(:disabled) {
+        .spin-btn-inline:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 
             0 0 0 2px rgba(255,255,255,0.3),
             0 8px 30px rgba(255,107,107,0.7);
         }
 
-        .spin-btn:disabled {
+        .spin-btn-inline:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           background: linear-gradient(135deg, #666, #888);
+        }
+
+        /* Mobile: Stapeln bei kleinem Bildschirm */
+        @media (max-width: 480px) {
+          .wager-spin-row {
+            flex-direction: column;
+            gap: 10px;
+            max-width: 100%;
+          }
+
+          .wager-spin-row :global(.wager-input) {
+            width: 100%;
+            height: 48px;
+          }
+
+          .spin-btn-inline {
+            width: 100%;
+            height: 50px;
+            font-size: 1.05rem;
+          }
         }
 
         /* Animationen */
@@ -387,44 +398,6 @@ export default function Slots() {
 
         .result-inline.animate {
           animation: fadeInScale 0.4s ease forwards;
-        }
-
-        /* RESPONSIVE – Mobile perfekt kompakt */
-        @media (max-width: 768px) {
-          .slots-container {
-            padding: 16px 12px;
-            gap: 14px;
-            margin-top: 16px;
-          }
-          
-          .slots-controls {
-            max-width: 100%;
-          }
-          
-          .slots-controls :global(.wager-input) {
-            height: 46px;
-            font-size: 0.95rem;
-          }
-          
-          .spin-btn {
-            height: 54px;
-            font-size: 1.15rem;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .slots-container {
-            padding: 12px 8px;
-          }
-          
-          .slots-controls :global(.wager-input) {
-            height: 44px;
-          }
-          
-          .spin-btn {
-            height: 50px;
-            font-size: 1.1rem;
-          }
         }
 
         @media (min-width: 769px) {
