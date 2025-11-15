@@ -219,123 +219,159 @@ export default function Slots() {
                 <ItemPreview betArray={bet} />
               </div>
 
-              {/* Slots */}
-              <div className="slots" style={{ marginTop: '20px' }}>
-                {combination.map((slot, i) => (
-                  <Slot
-                    key={i}
-                    index={i}
-                    revealed={revealedSlots > i}
-                    item={slot}
-                    good={good}
-                  />
-                ))}
+              {/* SLOTS + CONTROLS – ALLES IN EINEM KOMPAKTEN BLOCK */}
+              <div className="slots-container">
+                {/* Slots */}
+                <div className="slots">
+                  {combination.map((slot, i) => (
+                    <Slot
+                      key={i}
+                      index={i}
+                      revealed={revealedSlots > i}
+                      item={slot}
+                      good={good}
+                    />
+                  ))}
+                </div>
+
+                {/* Wager Input + Spin Button – UNTER DEN SLOTS, ZENTRIERT */}
+                <div className="slots-controls">
+                  <GambaUi.WagerInput value={wager} onChange={setWager} />
+                  <button
+                    className="spin-btn"
+                    disabled={!isValid || spinning}
+                    onClick={play}
+                  >
+                    {spinning ? 'SPINNING...' : 'SPIN'}
+                  </button>
+                </div>
               </div>
             </div>
           </StyledSlots>
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* MINIMALISTISCHE CONTROLS: NUR WAGER INPUT + SPIN BUTTON */}
-      <GambaUi.Portal target="controls">
-        <div className="controls-container">
-          {/* Wager Input – mit integrierten x0.5 / x2 Buttons */}
-          <GambaUi.WagerInput value={wager} onChange={setWager} />
+      {/* LEERES CONTROLS PORTAL – Wager & Spin sind jetzt im Screen-Bereich */}
+      <GambaUi.Portal target="controls" />
 
-          {/* SPIN BUTTON – direkt darunter, volle Breite */}
-          <button
-            className="spin-btn"
-            disabled={!isValid || spinning}
-            onClick={play}
-          >
-            {spinning ? 'SPINNING...' : 'SPIN'}
-          </button>
-        </div>
-      </GambaUi.Portal>
-
-      {/* STYLING: KOMPAKT, EINHEITLICH, SOL-WIN OPTIK */}
+      {/* ULTRA-KOMPAKTE SOL-WIN OPTIK – ALLES IN EINEM BILD */}
       <style jsx>{`
-        .controls-container {
+        /* Slots Container – kompakt mit Controls darunter */
+        .slots-container {
           display: flex;
           flex-direction: column;
-          gap: 12px;
-          padding: 0 16px;
-          max-width: 100%;
+          align-items: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 20px 16px;
+          background: rgba(0,0,0,0.4);
+          border-radius: 16px;
+          border: 1px solid rgba(255,255,255,0.1);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
 
-        /* Wager Input – nutzt bereits eingebaute x0.5/x2 Buttons */
-        .controls-container :global(.wager-input) {
+        .slots {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+        }
+
+        /* Slots Controls – Wager + Spin zentriert unter Slots */
+        .slots-controls {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+          max-width: 320px;
+        }
+
+        /* Wager Input – Neon Casino Style */
+        .slots-controls :global(.wager-input) {
+          width: 100%;
           height: 48px;
           font-size: 1rem;
-          padding: 0 12px;
-          border-radius: 8px;
+          padding: 0 16px;
+          border-radius: 12px;
           border: 2px solid rgba(255,255,255,0.2);
-          background: rgba(0,0,0,0.3);
+          background: linear-gradient(135deg, rgba(74,0,224,0.3), rgba(142,45,226,0.3));
           color: #fff;
-          box-shadow: 0 0 8px rgba(0,0,0,0.3);
+          box-shadow: 0 0 16px rgba(74,0,224,0.4);
+          backdrop-filter: blur(10px);
         }
 
-        /* Integrierte Multiplikator-Buttons im Wager Input */
-        .controls-container :global(.wager-input button) {
-          width: 44px;
-          height: 36px;
+        /* Integrierte Multi-Buttons im Wager Input */
+        .slots-controls :global(.wager-input button) {
+          width: 46px;
+          height: 38px;
           font-size: 0.85rem;
           font-weight: bold;
-          border-radius: 6px;
-          border: none;
-          cursor: pointer;
-          transition: all 0.2s ease;
+          border-radius: 8px;
+          border: 1px solid rgba(255,255,255,0.3);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        .controls-container :global(.wager-input button:first-child) {
+        .slots-controls :global(.wager-input button:first-child) {
           background: linear-gradient(135deg, #6a11cb, #2575fc);
         }
 
-        .controls-container :global(.wager-input button:last-child) {
+        .slots-controls :global(.wager-input button:last-child) {
           background: linear-gradient(135deg, #00b09b, #96c93d);
         }
 
-        .controls-container :global(.wager-input button:hover) {
+        .slots-controls :global(.wager-input button:hover) {
           transform: translateY(-1px);
-          box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
-        /* SPIN BUTTON – groß, auffällig, zentriert */
+        /* SPIN BUTTON – HERO SIZE, Neon Glow */
         .spin-btn {
+          width: 100%;
           height: 56px;
-          font-size: 1.2rem;
+          font-size: 1.25rem;
           font-weight: bold;
-          border-radius: 12px;
+          border-radius: 14px;
           border: none;
-          background: linear-gradient(135deg, #ff6b6b, #f94d6a);
+          background: linear-gradient(135deg, #ff6b6b, #f94d6a, #ff8e8e);
           color: #fff;
           cursor: pointer;
-          box-shadow: 0 4px 12px rgba(255,107,107,0.4);
+          box-shadow: 
+            0 0 0 2px rgba(255,255,255,0.2),
+            0 4px 20px rgba(255,107,107,0.5),
+            inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
           letter-spacing: 1.5px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .spin-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          transition: left 0.5s;
+        }
+
+        .spin-btn:hover:not(:disabled)::before {
+          left: 100%;
         }
 
         .spin-btn:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(255,107,107,0.6);
+          box-shadow: 
+            0 0 0 2px rgba(255,255,255,0.3),
+            0 8px 30px rgba(255,107,107,0.7);
         }
 
         .spin-btn:disabled {
-          opacity: 0.5;
+          opacity: 0.6;
           cursor: not-allowed;
-        }
-
-        /* Mobile: Stapeln bei kleinem Bildschirm */
-        @media (max-width: 480px) {
-          .controls-container :global(.wager-input) {
-            height: 44px;
-            font-size: 0.95rem;
-          }
-          .spin-btn {
-            height: 52px;
-            font-size: 1.1rem;
-          }
+          background: linear-gradient(135deg, #666, #888);
         }
 
         /* Animationen */
@@ -351,6 +387,44 @@ export default function Slots() {
 
         .result-inline.animate {
           animation: fadeInScale 0.4s ease forwards;
+        }
+
+        /* RESPONSIVE – Mobile perfekt kompakt */
+        @media (max-width: 768px) {
+          .slots-container {
+            padding: 16px 12px;
+            gap: 14px;
+            margin-top: 16px;
+          }
+          
+          .slots-controls {
+            max-width: 100%;
+          }
+          
+          .slots-controls :global(.wager-input) {
+            height: 46px;
+            font-size: 0.95rem;
+          }
+          
+          .spin-btn {
+            height: 54px;
+            font-size: 1.15rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .slots-container {
+            padding: 12px 8px;
+          }
+          
+          .slots-controls :global(.wager-input) {
+            height: 44px;
+          }
+          
+          .spin-btn {
+            height: 50px;
+            font-size: 1.1rem;
+          }
         }
 
         @media (min-width: 769px) {
