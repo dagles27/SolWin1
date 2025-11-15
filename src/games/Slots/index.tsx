@@ -154,73 +154,71 @@ export default function Slots() {
                 alt="Neon Fruits Banner"
               />
 
-              {/* ItemPreview + Result-Box in einer Zeile */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
-                {/* ItemPreview (6 Boxen) */}
-                <div style={{ flex: 1 }}>
-                  <ItemPreview betArray={bet} />
-                </div>
-
-                {/* Payout-Box – kompakt, länglich, stylisch, einzeilig */}
+              {/* Payout-Box: Desktop = direkt über ItemPreview, eng, zentriert */}
+              <div
+                className={`result-inline ${showResult ? 'animate' : ''}`}
+                data-good={good}
+                style={{
+                  width: '100%',
+                  maxWidth: '300px',
+                  margin: '8px auto 4px', // Sehr eng an ItemPreview (nur 4px Abstand)
+                  padding: '8px 14px',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  background: good
+                    ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
+                    : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
+                  color: '#fff',
+                  boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 12px rgba(0,0,0,0.4)',
+                  border: '2px solid transparent',
+                  backgroundClip: 'padding-box',
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  opacity: showResult ? 1 : 0,
+                  transform: showResult ? 'scale(1)' : 'scale(0.95)',
+                  transition: 'all 0.4s ease',
+                }}
+              >
+                {/* Neon-Border Effekt */}
                 <div
-                  className={`result-inline ${showResult ? 'animate' : ''}`}
-                  data-good={good}
                   style={{
-                    minWidth: '180px',
-                    maxWidth: '220px',
-                    padding: '8px 14px',
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    borderRadius: '8px',
+                    position: 'absolute',
+                    inset: -2,
+                    borderRadius: '10px',
+                    padding: '2px',
                     background: good
-                      ? 'linear-gradient(135deg, #00ff9d, #00b86e)'
-                      : 'linear-gradient(135deg, #4a00e0, #8e2de2)',
-                    color: '#fff',
-                    boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 12px rgba(0,0,0,0.4)',
-                    border: '2px solid transparent',
-                    backgroundClip: 'padding-box',
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    opacity: showResult ? 1 : 0,
-                    transform: showResult ? 'scale(1)' : 'scale(0.95)',
-                    transition: 'all 0.4s ease',
+                      ? 'linear-gradient(45deg, #00ff9d, #00b86e, #00ff9d)'
+                      : 'linear-gradient(45deg, #8e2de2, #4a00e0, #8e2de2)',
+                    mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+                    maskComposite: 'exclude',
+                    WebkitMaskComposite: 'destination-out',
+                    pointerEvents: 'none',
+                    animation: good ? 'neonPulse 1.8s infinite' : 'none',
                   }}
-                >
-                  {/* Neon-Border Effekt */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: -2,
-                      borderRadius: '10px',
-                      padding: '2px',
-                      background: good
-                        ? 'linear-gradient(45deg, #00ff9d, #00b86e, #00ff9d)'
-                        : 'linear-gradient(45deg, #8e2de2, #4a00e0, #8e2de2)',
-                      mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
-                      maskComposite: 'exclude',
-                      WebkitMaskComposite: 'destination-out',
-                      pointerEvents: 'none',
-                      animation: good ? 'neonPulse 1.8s infinite' : 'none',
-                    }}
-                  />
+                />
 
-                  {/* Inhalt – alles in einer Zeile */}
-                  {spinning ? (
-                    <Messages messages={['Spinning!', 'Good luck']} />
-                  ) : result ? (
-                    <>
-                      Payout: <TokenValue mint={result.token} amount={result.payout} />
-                    </>
-                  ) : isValid ? (
-                    <Messages messages={['SPIN ME!', 'LETS WIN!']} />
-                  ) : (
-                    <>❌ Lower wager!</>
-                  )}
-                </div>
+                {/* Inhalt – alles in einer Zeile */}
+                {spinning ? (
+                  <Messages messages={['Spinning!', 'Good luck']} />
+                ) : result ? (
+                  <>
+                    Payout: <TokenValue mint={result.token} amount={result.payout} />
+                  </>
+                ) : isValid ? (
+                  <Messages messages={['SPIN ME!', 'LETS WIN!']} />
+                ) : (
+                  <>Lower wager!</>
+                )}
+              </div>
+
+              {/* ItemPreview direkt darunter */}
+              <div style={{ width: '100%' }}>
+                <ItemPreview betArray={bet} />
               </div>
 
               {/* Slots */}
@@ -255,7 +253,7 @@ export default function Slots() {
         </button>
       </GambaUi.Portal>
 
-      {/* Animationen & Mobile-Optimierung */}
+      {/* Animationen & Responsive: Mobile = Box oben, Desktop = Box über ItemPreview */}
       <style jsx>{`
         @keyframes neonPulse {
           0%, 100% { opacity: 0.7; }
@@ -271,31 +269,28 @@ export default function Slots() {
           animation: fadeInScale 0.4s ease forwards;
         }
 
-        @media (max-width: 640px) {
+        /* Desktop: Payout-Box über ItemPreview, eng, zentriert */
+        @media (min-width: 769px) {
           .result-inline {
-            min-width: 140px !important;
-            max-width: 180px !important;
-            font-size: 0.85rem !important;
-            padding: 6px 10px !important;
+            max-width: 300px !important;
+            margin: 8px auto 4px !important; /* Sehr eng: nur 4px Abstand */
           }
-          [data-good="true"] .result-inline {
-            font-size: 0.9rem !important;
+        }
+
+        /* Mobile: Payout-Box oben, 100% Breite, dann ItemPreview */
+        @media (max-width: 768px) {
+          .result-inline {
+            max-width: 100% !important;
+            margin: 12px auto 8px !important;
+            font-size: 0.95rem !important;
+            padding: 8px 12px !important;
           }
         }
 
         @media (max-width: 480px) {
-          div[style*="display: flex"][style*="gap: 12px"] {
-            flex-direction: column;
-            align-items: stretch;
-          }
-          div[style*="flex: 1"] {
-            order: 2;
-          }
           .result-inline {
-            order: 1;
-            max-width: 100% !important;
-            min-width: auto !important;
-            margin-bottom: 12px;
+            font-size: 0.85rem !important;
+            padding: 7px 10px !important;
           }
         }
       `}</style>
