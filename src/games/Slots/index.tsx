@@ -160,26 +160,32 @@ export default function Slots() {
 
         <GambaUi.Responsive>
           <StyledSlots>
-            <div style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}> {/* ← HEADER NICHT ABSCHNITTEN */}
-              {/* Banner – voll sichtbar */}
+            <div style={{ position: 'relative', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+              {/* HEADER – ALTE GRÖßE, ÜBERLAPPEND NACH UNTEN */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
                 alt="Neon Fruits Banner"
                 style={{
                   width: '100%',
-                  maxHeight: '140px',
-                  objectFit: 'contain',
-                  borderRadius: '12px',
-                  marginBottom: '12px',
+                  height: 'auto',
+                  maxHeight: 'none',
+                  objectFit: 'cover',
+                  borderRadius: '0 0 16px 16px',
+                  marginTop: '-20px',           // ← Überlappend nach unten
+                  marginBottom: '-40px',         // ← Platz für Payout-Box
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.5)',
+                  zIndex: 1,
                 }}
               />
 
-              {/* Payout-Box */}
+              {/* Payout-Box – über Header, zentriert */}
               <div
                 className={`result-inline ${showResult ? 'animate' : ''}`}
                 data-good={good}
                 style={{
+                  position: 'relative',
+                  zIndex: 2,
                   width: '100%',
                   maxWidth: '300px',
                   margin: '0 auto 8px',
@@ -194,7 +200,6 @@ export default function Slots() {
                   boxShadow: '0 0 0 2px rgba(255,255,255,0.3), 0 0 12px rgba(0,0,0,0.4)',
                   border: '2px solid transparent',
                   backgroundClip: 'padding-box',
-                  position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -236,11 +241,11 @@ export default function Slots() {
               </div>
 
               {/* ItemPreview */}
-              <div style={{ width: '100%', marginBottom: '12px' }}>
+              <div style={{ width: '100%', marginBottom: '12px', position: 'relative', zIndex: 2 }}>
                 <ItemPreview betArray={bet} />
               </div>
 
-              {/* SLOTS + WAGER + SPIN – KOMPAKT */}
+              {/* SLOTS + WAGER + SPIN */}
               <div className="slots-container">
                 <div className="slots">
                   {combination.map((slot, i) => (
@@ -254,7 +259,7 @@ export default function Slots() {
                   ))}
                 </div>
 
-                {/* WAGER + SPIN NEBENEINANDER – AUCH AUF MOBILE */}
+                {/* WAGER + SPIN – VOLL AUSGEFÜLLT, NEBENEINANDER */}
                 <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
@@ -271,7 +276,7 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING – MOBILE: NEBENEINANDER, KEIN ABSCHNITTEN */}
+      {/* STYLING – MOBILE: VOLL AUSGEFÜLLT, HEADER ÜBERLAPPEND */}
       <style jsx>{`
         .slots-container {
           display: flex;
@@ -292,7 +297,7 @@ export default function Slots() {
           justify-content: center;
         }
 
-        /* WAGER + SPIN NEBENEINANDER – AUCH AUF KLEINEN HANDYS */
+        /* WAGER + SPIN – ZEILE VOLL AUSFÜLLEN */
         .wager-spin-row {
           display: flex;
           align-items: center;
@@ -302,25 +307,25 @@ export default function Slots() {
         }
 
         .wager-spin-row :global(.wager-input) {
-          flex: 1;
+          flex: 1 1 60%;           /* ← 60% für Wager */
           min-width: 0;
-          height: 48px;
-          font-size: 0.95rem;
-          padding: 0 12px;
-          border-radius: 12px;
+          height: 52px;
+          font-size: 1rem;
+          padding: 0 14px;
+          border-radius: 14px;
           border: 2px solid rgba(255,255,255,0.2);
           background: linear-gradient(135deg, rgba(74,0,224,0.3), rgba(142,45,226,0.3));
           color: #fff;
-          box-shadow: 0 0 14px rgba(74,0,224,0.4);
+          box-shadow: 0 0 16px rgba(74,0,224,0.4);
           backdrop-filter: blur(10px);
         }
 
         .spin-btn-inline {
-          height: 48px;
-          min-width: 100px;
-          font-size: 1rem;
+          flex: 1 1 40%;           /* ← 40% für SPIN */
+          height: 52px;
+          font-size: 1.05rem;
           font-weight: bold;
-          border-radius: 12px;
+          border-radius: 14px;
           border: none;
           background: linear-gradient(135deg, #ff6b6b, #f94d6a, #ff8e8e);
           color: #fff;
@@ -328,11 +333,10 @@ export default function Slots() {
           box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 4px 16px rgba(255,107,107,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
-          letter-spacing: 1.1px;
+          letter-spacing: 1.2px;
           position: relative;
           overflow: hidden;
           white-space: nowrap;
-          flex-shrink: 0;
         }
 
         .spin-btn-inline::before {
@@ -350,28 +354,19 @@ export default function Slots() {
         .spin-btn-inline:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 6px 24px rgba(255,107,107,0.7); }
         .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
 
-        /* KEIN STAPELN AUF MOBILE – NEBENEINANDER BIS 340PX */
-        @media (max-width: 340px) {
+        /* MOBILE: VOLL AUSGEFÜLLT, KEIN STAPELN BIS 360PX */
+        @media (max-width: 360px) {
           .wager-spin-row {
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
           }
-          .wager-spin-row :global(.wager-input) {
-            width: 100%;
-            height: 44px;
-            font-size: 0.9rem;
-          }
+          .wager-spin-row :global(.wager-input),
           .spin-btn-inline {
+            flex: 1 1 100%;
             width: 100%;
-            height: 44px;
+            height: 48px;
             font-size: 0.95rem;
           }
-        }
-
-        /* SEHR KLEINE HANDYS – noch kleiner */
-        @media (max-width: 300px) {
-          .wager-spin-row :global(.wager-input) { height: 42px; font-size: 0.85rem; }
-          .spin-btn-inline { height: 42px; font-size: 0.9rem; }
         }
 
         @keyframes neonPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
