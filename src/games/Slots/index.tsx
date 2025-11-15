@@ -117,8 +117,8 @@ export default function Slots() {
       setSpinning(true)
       setResult(undefined)
       setShowResult(false)
-      setGood(false)           // ← Reset Gewinn-Effekt sofort
-      setRevealedSlots(0)      // ← Reset Slots sofort
+      setGood(false)
+      setRevealedSlots(0)
       await game.play({
         wager,
         bet,
@@ -143,11 +143,11 @@ export default function Slots() {
   return (
     <>
       <GambaUi.Portal target="screen">
-        {/* LEGENDARY WIN EFFECT – jetzt komplett durchklickbar! */}
+        {/* LEGENDARY WIN EFFECT – durchklickbar */}
         {good && (
           <div
             style={{
-              pointerEvents: 'none',   // ← WICHTIG: Klicks gehen direkt durch auf Button & Wager
+              pointerEvents: 'none',
               position: 'fixed',
               inset: 0,
               zIndex: 9999,
@@ -160,12 +160,19 @@ export default function Slots() {
 
         <GambaUi.Responsive>
           <StyledSlots>
-            <div>
-              {/* Banner */}
+            <div style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}> {/* ← HEADER NICHT ABSCHNITTEN */}
+              {/* Banner – voll sichtbar */}
               <img
                 className="headerImage"
                 src="/slot-neonfruits-banner.png"
                 alt="Neon Fruits Banner"
+                style={{
+                  width: '100%',
+                  maxHeight: '140px',
+                  objectFit: 'contain',
+                  borderRadius: '12px',
+                  marginBottom: '12px',
+                }}
               />
 
               {/* Payout-Box */}
@@ -175,7 +182,7 @@ export default function Slots() {
                 style={{
                   width: '100%',
                   maxWidth: '300px',
-                  margin: '8px auto 4px',
+                  margin: '0 auto 8px',
                   padding: '8px 14px',
                   fontSize: '1rem',
                   fontWeight: 'bold',
@@ -229,11 +236,11 @@ export default function Slots() {
               </div>
 
               {/* ItemPreview */}
-              <div style={{ width: '100%' }}>
+              <div style={{ width: '100%', marginBottom: '12px' }}>
                 <ItemPreview betArray={bet} />
               </div>
 
-              {/* SLOTS + WAGER + SPIN */}
+              {/* SLOTS + WAGER + SPIN – KOMPAKT */}
               <div className="slots-container">
                 <div className="slots">
                   {combination.map((slot, i) => (
@@ -247,6 +254,7 @@ export default function Slots() {
                   ))}
                 </div>
 
+                {/* WAGER + SPIN NEBENEINANDER – AUCH AUF MOBILE */}
                 <div className="wager-spin-row">
                   <GambaUi.WagerInput value={wager} onChange={setWager} />
                   <button
@@ -263,15 +271,15 @@ export default function Slots() {
         </GambaUi.Responsive>
       </GambaUi.Portal>
 
-      {/* STYLING (unverändert) */}
+      {/* STYLING – MOBILE: NEBENEINANDER, KEIN ABSCHNITTEN */}
       <style jsx>{`
         .slots-container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 16px;
-          margin-top: 20px;
-          padding: 20px 16px;
+          gap: 14px;
+          margin-top: 16px;
+          padding: 16px;
           background: rgba(0,0,0,0.4);
           border-radius: 16px;
           border: 1px solid rgba(255,255,255,0.1);
@@ -280,48 +288,51 @@ export default function Slots() {
 
         .slots {
           display: flex;
-          gap: 12px;
+          gap: 10px;
           justify-content: center;
         }
 
+        /* WAGER + SPIN NEBENEINANDER – AUCH AUF KLEINEN HANDYS */
         .wager-spin-row {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           width: 100%;
-          max-width: 360px;
+          max-width: 400px;
         }
 
         .wager-spin-row :global(.wager-input) {
           flex: 1;
-          height: 52px;
-          font-size: 1rem;
-          padding: 0 16px;
-          border-radius: 14px;
+          min-width: 0;
+          height: 48px;
+          font-size: 0.95rem;
+          padding: 0 12px;
+          border-radius: 12px;
           border: 2px solid rgba(255,255,255,0.2);
           background: linear-gradient(135deg, rgba(74,0,224,0.3), rgba(142,45,226,0.3));
           color: #fff;
-          box-shadow: 0 0 16px rgba(74,0,224,0.4);
+          box-shadow: 0 0 14px rgba(74,0,224,0.4);
           backdrop-filter: blur(10px);
         }
 
         .spin-btn-inline {
-          height: 52px;
-          width: 120px;
-          font-size: 1.1rem;
+          height: 48px;
+          min-width: 100px;
+          font-size: 1rem;
           font-weight: bold;
-          border-radius: 14px;
+          border-radius: 12px;
           border: none;
           background: linear-gradient(135deg, #ff6b6b, #f94d6a, #ff8e8e);
           color: #fff;
           cursor: pointer;
-          box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 4px 20px rgba(255,107,107,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+          box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 4px 16px rgba(255,107,107,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
           transition: all 0.3s ease;
           text-transform: uppercase;
-          letter-spacing: 1.2px;
+          letter-spacing: 1.1px;
           position: relative;
           overflow: hidden;
           white-space: nowrap;
+          flex-shrink: 0;
         }
 
         .spin-btn-inline::before {
@@ -336,21 +347,39 @@ export default function Slots() {
         }
 
         .spin-btn-inline:hover:not(:disabled)::before { left: 100%; }
-        .spin-btn-inline:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 8px 30px rgba(255,107,107,0.7); }
+        .spin-btn-inline:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 6px 24px rgba(255,107,107,0.7); }
         .spin-btn-inline:disabled { opacity: 0.6; cursor: not-allowed; background: linear-gradient(135deg, #666, #888); }
 
-        @media (max-width: 480px) {
-          .wager-spin-row { flex-direction: column; gap: 10px; max-width: 100%; }
-          .wager-spin-row :global(.wager-input) { width: 100%; height: 48px; }
-          .spin-btn-inline { width: 100%; height: 50px; font-size: 1.05rem; }
+        /* KEIN STAPELN AUF MOBILE – NEBENEINANDER BIS 340PX */
+        @media (max-width: 340px) {
+          .wager-spin-row {
+            flex-direction: column;
+            gap: 8px;
+          }
+          .wager-spin-row :global(.wager-input) {
+            width: 100%;
+            height: 44px;
+            font-size: 0.9rem;
+          }
+          .spin-btn-inline {
+            width: 100%;
+            height: 44px;
+            font-size: 0.95rem;
+          }
+        }
+
+        /* SEHR KLEINE HANDYS – noch kleiner */
+        @media (max-width: 300px) {
+          .wager-spin-row :global(.wager-input) { height: 42px; font-size: 0.85rem; }
+          .spin-btn-inline { height: 42px; font-size: 0.9rem; }
         }
 
         @keyframes neonPulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .result-inline.animate { animation: fadeInScale 0.4s ease forwards; }
 
-        @media (min-width: 769px) { .result-inline { max-width: 300px !important; margin: 8px auto 4px !important; } }
-        @media (max-width: 768px) { .result-inline { max-width: 100% !important; margin: 12px auto 8px !important; font-size: 0.95rem !important; padding: 8px 12px !important; } }
+        @media (min-width: 769px) { .result-inline { max-width: 300px !important; margin: 0 auto 8px !important; } }
+        @media (max-width: 768px) { .result-inline { max-width: 100% !important; margin: 0 auto 8px !important; font-size: 0.95rem !important; padding: 8px 12px !important; } }
         @media (max-width: 480px) { .result-inline { font-size: 0.85rem !important; padding: 7px 10px !important; } }
       `}</style>
     </>
