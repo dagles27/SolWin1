@@ -117,13 +117,13 @@ export default function Slots() {
       setSpinning(true)
       setResult(undefined)
       setShowResult(false)
+      setGood(false) // Reset Gewinn-Status
+      setRevealedSlots(0) // Reset Slots
       await game.play({
         wager,
         bet,
       })
       sounds.play('play')
-      setRevealedSlots(0)
-      setGood(false)
       const startTime = Date.now()
       sounds.play('spin', { playbackRate: .5 })
       const result = await game.result()
@@ -332,9 +332,9 @@ export default function Slots() {
           transition: all 0.3s ease;
           text-transform: uppercase;
           letter-spacing: 1.2px;
-          position: relative;
-          overflow: hidden;
-          white-space: nowrap;
+          position: 'relative',
+          overflow: 'hidden',
+          white-space: 'nowrap',
         }
 
         .spin-btn-inline::before {
