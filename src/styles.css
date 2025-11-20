@@ -1,3 +1,20 @@
+/* src/index.css oder src/App.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(135deg, #0a001f, #1a0033);
+  color: white;
+  min-height: 100vh;
+}
+
+/* Das ist der eigentliche Fix – Header darf den Body nicht überdecken */
+#root {
+  padding-top: 90px !important;
+}
 * {
   box-sizing: border-box;
 }
