@@ -11,11 +11,9 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Modal } from '../components/Modal'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
-import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
-import { useMediaQuery } from '../hooks/useMediaQuery'
+import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS, ENABLE_LEADERBOARD } from '../constants'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
-import { ENABLE_LEADERBOARD } from '../constants'
 
 const Bonus = styled.button`
   all: unset;
@@ -41,8 +39,8 @@ const GuthabenButton = styled.button`
   color: #ffe42d;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 10px 20px;
-  font-size: 18px;
+  padding: 10px 16px;
+  font-size: 16px;
   font-weight: bold;
   transition: background 0.2s;
   &:hover {
@@ -75,13 +73,14 @@ const Dropdown = styled.div`
   background: #000000ee;
   backdrop-filter: blur(20px);
   border-radius: 16px;
-  padding: 15px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  min-width: 240px;
+  gap: 14px;
+  min-width: 260px;
   z-index: 999;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
 `
 
 const StyledHeader = styled.div`
@@ -89,7 +88,7 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 20px;
+  padding: 12px 20px;
   background: #000000cc;
   backdrop-filter: blur(20px);
   position: fixed;
@@ -99,8 +98,7 @@ const StyledHeader = styled.div`
 `
 
 const Logo = styled(NavLink)`
-  height: 35px;
-  margin: 0 15px;
+  height: 40px;
   & > img {
     height: 120%;
   }
@@ -138,13 +136,12 @@ export default function Header() {
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
           <p>
-            You have <b>
+            Du hast <b>
               <TokenValue amount={balance.bonusBalance} />
             </b>{' '}
-            worth of free plays. This bonus will be applied automatically when you
-            play.
+            an Gratis-Spielen. Der Bonus wird automatisch beim Spielen verwendet.
           </p>
-          <p>Note that a fee is still needed from your wallet for each play.</p>
+          <p>Hinweis: Für jeden Spielzug wird trotzdem eine kleine Gebühr aus deinem Wallet benötigt.</p>
         </Modal>
       )}
 
@@ -152,21 +149,19 @@ export default function Header() {
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot </h1>
           <p style={{ fontWeight: 'bold' }}>
-            There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the
-            Jackpot.
+            Aktuell sind <TokenValue amount={pool.jackpotBalance} /> im Jackpot.
           </p>
           <p>
-            The Jackpot is a prize pool that grows with every bet made. As it
-            grows, so does your chance of winning. Once a winner is selected,
-            the pool resets and grows again from there.
+            Der Jackpot wächst mit jedem Einsatz. Je größer er ist, desto höher ist deine Gewinnchance.
+            Wird ein Gewinner ermittelt, wird der Pot zurückgesetzt und beginnt wieder zu wachsen.
           </p>
           <p>
-            You pay a maximum of{' '}
-            {(PLATFORM_JACKPOT_FEE * 100).toLocaleString(undefined, { maximumFractionDigits: 4 })}
-            % of each wager for a chance to win.
+            Du zahlst maximal{' '}
+            {(PLATFORM_JACKPOT_FEE * 100).toLocaleString('de-DE', { maximumFractionDigits: 4 })} % deines Einsatzes
+            für die Teilnahme.
           </p>
-          <label style={{ display: 'flex', align-items: 'center', gap: '10px' }}>
-            {context.defaultJackpotFee === 0 ? 'DISABLED' : 'ENABLED'}
+          <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {context.defaultJackpotFee === 0 ? 'DEAKTIVIERT' : 'AKTIVIERT'}
             <GambaUi.Switch
               checked={context.defaultJackpotFee > 0}
               onChange={(checked) =>
@@ -186,7 +181,7 @@ export default function Header() {
 
       <StyledHeader>
         <Logo to="/">
-          <img alt="Gamba logo" src="/logo.svg" />
+          <img alt="logo" src="/logo.svg" />
         </Logo>
 
         <div
@@ -194,11 +189,11 @@ export default function Header() {
           style={{
             display: 'flex',
             align-items: 'center',
-            gap: '20px',
+            gap: '16px',
             position: 'relative',
           }}
         >
-          {/* Guthaben / Bonus always visible, even if 0 */}
+          {/* Bonus / Guthaben immer sichtbar (auch bei 0) */}
           <GuthabenButton onClick={() => setBonusHelp(true)}>
             Guthaben ✨ <TokenValue amount={balance.bonusBalance} />
           </GuthabenButton>
