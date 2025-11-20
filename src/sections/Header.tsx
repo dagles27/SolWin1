@@ -5,106 +5,21 @@ import {
   useCurrentPool,
   useGambaPlatformContext,
   useUserBalance,
-} from "gamba-react-ui-v2"
-import React from "react"
-import { NavLink } from "react-router-dom"
-import styled from "styled-components"
-import { Modal } from "../components/Modal"
-import LeaderboardsModal from "../sections/LeaderBoard/LeaderboardsModal"
-import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from "../constants"
-import { useMediaQuery } from "../hooks/useMediaQuery"
-import TokenSelect from "./TokenSelect"
-import { UserButton } from "./UserButton"
-import { ENABLE_LEADERBOARD } from "../constants"
+} from 'gamba-react-ui-v2'
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
+import { Modal } from '../components/Modal'
+import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
+import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+import TokenSelect from './TokenSelect'
+import { UserButton } from './UserButton'
+import { ENABLE_LEADERBOARD } from '../constants'
 
-//
-// --- STYLES ---
-//
-
-const StyledHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  width: 100%;
-  padding: 10px 14px;
-
-  background: #000000cc;
-  backdrop-filter: blur(18px);
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2000;
-
-  overflow: visible;
-`
-
-const Logo = styled(NavLink)`
-  height: 35px;
-  & > img {
-    height: 120%;
-  }
-`
-
-// MOBILE BURGER ICON
-const MobileMenuIcon = styled.button`
-  display: block;
-  background: transparent;
-  border: none;
-  font-size: 32px;
-  color: white;
-  cursor: pointer;
-
-  padding: 6px;
-  z-index: 3000; /* absolute top */
-
-  @media (min-width: 1025px) {
-    display: none;
-  }
-`
-
-// MOBILE DROPDOWN CONTAINER
-const MobileMenu = styled.div<{ open: boolean }>`
-  @media (min-width: 1025px) {
-    display: none;
-  }
-
-  position: absolute;
-  top: 60px;
-  right: 15px;
-
-  background: #111;
-  border: 1px solid #333;
-  width: 220px;
-
-  border-radius: 12px;
-  padding: 12px 0;
-
-  display: flex;
-  flex-direction: column;
-
-  box-shadow: 0 12px 25px rgba(0,0,0,0.6);
-
-  opacity: ${({ open }) => (open ? 1 : 0)};
-  transform: translateY(${({ open }) => (open ? "0" : "-10px")});
-  pointer-events: ${({ open }) => (open ? "auto" : "none")};
-
-  transition: all 0.25s ease;
-
-  z-index: 2500;
-`
-
-const MobileMenuItem = styled(NavLink)`
-  padding: 14px 20px;
-  color: white;
-  text-decoration: none;
-  font-size: 15px;
-
-  &:hover {
-    background: #222;
-  }
-`
+// ========================================================
+// STYLES
+// ========================================================
 
 const Bonus = styled.button`
   all: unset;
@@ -115,48 +30,154 @@ const Bonus = styled.button`
   font-size: 12px;
   text-transform: uppercase;
   font-weight: bold;
+  transition: background-color 0.2s;
   &:hover {
     background: white;
-    color: black;
   }
 `
 
-//
-// --- COMPONENT ---
-//
+const StyledHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  background: #000000cc;
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  overflow: visible;
+`
+
+const Logo = styled(NavLink)`
+  height: 35px;
+  margin: 0 15px;
+  & > img {
+    height: 120%;
+  }
+`
+
+const MobileMenuIcon = styled.button`
+  display: block;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+
+  @media (min-width: 1025px) {
+    display: none;
+  }
+`
+
+const MobileDropdown = styled.div<{ open: boolean }>`
+  @media (min-width: 1025px) {
+    display: none;
+  }
+
+  position: absolute;
+  top: 58px;
+  right: 10px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  min-width: 210px;
+  padding: 10px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+
+  opacity: ${({ open }) => (open ? 1 : 0)};
+  transform: translateY(${({ open }) => (open ? "0" : "-10px")});
+  pointer-events: ${({ open }) => (open ? "auto" : "none")};
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  z-index: 999999; 
+`
+
+const MobileMenuItem = styled(NavLink)`
+  display: block;
+  padding: 12px 18px;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+
+  &:hover {
+    background: #222;
+  }
+`
+
+const MobileSectionLabel = styled.div`
+  padding: 14px 18px 4px;
+  color: #aaa;
+  font-size: 12px;
+  text-transform: uppercase;
+`
+
+// ========================================================
+// HEADER COMPONENT
+// ========================================================
 
 export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
   const balance = useUserBalance()
-  const isDesktop = useMediaQuery("lg")
+  const isDesktop = useMediaQuery('lg')
 
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
-
-  // MOBILE MENU STATE
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   return (
     <>
+      {/* ==================== BONUS MODAL ==================== */}
+      {bonusHelp && (
+        <Modal onClose={() => setBonusHelp(false)}>
+          <h1>Bonus ✨</h1>
+          <p>
+            You have <b>
+              <TokenValue amount={balance.bonusBalance} />
+            </b>{' '}
+            worth of free plays.
+          </p>
+          <p>A fee is still taken for each play.</p>
+        </Modal>
+      )}
+
+      {/* ==================== JACKPOT MODAL ==================== */}
+      {jackpotHelp && (
+        <Modal onClose={() => setJackpotHelp(false)}>
+          <h1>Jackpot </h1>
+          <p style={{ fontWeight: 'bold' }}>
+            <TokenValue amount={pool.jackpotBalance} /> is currently in the pot.
+          </p>
+        </Modal>
+      )}
+
+      {/* ==================== LEADERBOARD (DESKTOP ONLY) ==================== */}
+      {ENABLE_LEADERBOARD && showLeaderboard && (
+        <LeaderboardsModal
+          creator={PLATFORM_CREATOR_ADDRESS.toBase58()}
+          onClose={() => setShowLeaderboard(false)}
+        />
+      )}
+
+      {/* ========================================================
+          HEADER
+      ======================================================== */}
       <StyledHeader>
-        {/* LEFT SIDE */}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        {/* LEFT SIDE (LOGO) */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Logo to="/">
-            <img src="/logo.svg" alt="SolWin Logo" />
+            <img alt="Sol-Win logo" src="/logo.svg" />
           </Logo>
         </div>
 
-        {/* RIGHT SECTION */}
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            alignItems: "center",
-            position: "relative",
-          }}
-        >
+        {/* RIGHT SIDE */}
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          
           {/* Jackpot */}
           {pool.jackpotBalance > 0 && (
             <Bonus onClick={() => setJackpotHelp(true)}>
@@ -171,49 +192,61 @@ export default function Header() {
             </Bonus>
           )}
 
-          {/* DESKTOP ITEMS */}
+          {/* DESKTOP ELEMENTS */}
           {isDesktop && (
             <>
-              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
-                Leaderboard
-              </GambaUi.Button>
+              {/* Wallet Balance */}
+              <div style={{ color: "white", fontSize: "14px", fontWeight: "bold" }}>
+                <TokenValue amount={balance.balance} />
+              </div>
 
               <TokenSelect />
               <UserButton />
+
+              {/* Leaderboard Button */}
+              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
+                Leaderboard
+              </GambaUi.Button>
             </>
           )}
 
-          {/* MOBILE MENU BUTTON (replaces connect/user btn) */}
-          {!isDesktop && (
-            <MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
-              ☰
-            </MobileMenuIcon>
-          )}
-
-          {/* MOBILE MENU */}
-          <MobileMenu open={mobileOpen}>
-            <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
-              🎮 Games
-            </MobileMenuItem>
-
-            <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
-              🎁 Referral
-            </MobileMenuItem>
-
-            <MobileMenuItem to="/profile" onClick={() => setMobileOpen(false)}>
-              👤 My Profile
-            </MobileMenuItem>
-
-            <MobileMenuItem to="/wallet" onClick={() => setMobileOpen(false)}>
-              💼 Wallet
-            </MobileMenuItem>
-
-            <div style={{ padding: "14px 20px" }}>
-              {/* CONNECT / USER BUTTON INS MENU VERSCHOBEN */}
-              <UserButton />
-            </div>
-          </MobileMenu>
+          {/* MOBILE MENU BUTTON */}
+          <MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
+            ☰
+          </MobileMenuIcon>
         </div>
+
+        {/* ==================== MOBILE DROPDOWN ==================== */}
+        <MobileDropdown open={mobileOpen}>
+          <MobileSectionLabel>Navigation</MobileSectionLabel>
+
+          <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
+            Games
+          </MobileMenuItem>
+
+          <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
+            Referral Program
+          </MobileMenuItem>
+
+          <MobileMenuItem to="/leaderboard" onClick={() => setMobileOpen(false)}>
+            Leaderboard
+          </MobileMenuItem>
+
+          {/* WALLET SECTION */}
+          <MobileSectionLabel>Wallet</MobileSectionLabel>
+
+          <div style={{ padding: "8px 18px", color: "white" }}>
+            Balance: <TokenValue amount={balance.balance} />
+          </div>
+
+          <div style={{ padding: "8px 18px" }}>
+            <TokenSelect />
+          </div>
+
+          <div style={{ padding: "12px 18px" }}>
+            <UserButton />
+          </div>
+        </MobileDropdown>
       </StyledHeader>
     </>
   )
