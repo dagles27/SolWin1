@@ -5,110 +5,98 @@ import {
   useCurrentPool,
   useGambaPlatformContext,
   useUserBalance,
-} from 'gamba-react-ui-v2'
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
-import { Modal } from '../components/Modal'
-import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
-import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
-import { useMediaQuery } from '../hooks/useMediaQuery'
-import TokenSelect from './TokenSelect'
-import { UserButton } from './UserButton'
-import { ENABLE_LEADERBOARD } from '../constants'
+} from "gamba-react-ui-v2"
+import React from "react"
+import { NavLink } from "react-router-dom"
+import styled from "styled-components"
+import { Modal } from "../components/Modal"
+import LeaderboardsModal from "../sections/LeaderBoard/LeaderboardsModal"
+import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from "../constants"
+import { useMediaQuery } from "../hooks/useMediaQuery"
+import TokenSelect from "./TokenSelect"
+import { UserButton } from "./UserButton"
+import { ENABLE_LEADERBOARD } from "../constants"
 
-// --- Existing styles ---
-const Bonus = styled.button`
-  all: unset;
-  cursor: pointer;
-  color: #ffe42d;
-  border-radius: 10px;
-  padding: 2px 10px;
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: background-color 0.2s;
-  &:hover {
-    background: white;
-  }
-`
+//
+// --- STYLES ---
+//
 
 const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   width: 100%;
-  padding: 10px;
+  padding: 10px 14px;
+
   background: #000000cc;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(18px);
+
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 2000;
 
-  overflow: visible; /* IMPORTANT FIX FOR MOBILE */
+  overflow: visible;
 `
-
 
 const Logo = styled(NavLink)`
   height: 35px;
-  margin: 0 15px;
   & > img {
     height: 120%;
   }
 `
-// ⬇️ ADD THIS HERE (below Logo styled-component)
 
-// MOBILE ONLY ICON
+// MOBILE BURGER ICON
 const MobileMenuIcon = styled.button`
   display: block;
   background: transparent;
   border: none;
-  font-size: 30px;
+  font-size: 32px;
   color: white;
   cursor: pointer;
 
-  /* Fix für iPhone & Android */
-  padding: 8px;
-  z-index: 2000;
+  padding: 6px;
+  z-index: 3000; /* absolute top */
 
   @media (min-width: 1025px) {
     display: none;
   }
 `
 
-
-// ANIMATED DROPDOWN CONTAINER
-const AnimatedDropdown = styled.div<{ open: boolean }>`
+// MOBILE DROPDOWN CONTAINER
+const MobileMenu = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
     display: none;
   }
 
   position: absolute;
-  top: 55px;
-  right: 10px;
+  top: 60px;
+  right: 15px;
 
-  background: #121212;
+  background: #111;
   border: 1px solid #333;
-  border-radius: 10px;
-  min-width: 180px;
-  padding: 10px 0;
+  width: 220px;
 
-  z-index: 999999; /* FIX */
+  border-radius: 12px;
+  padding: 12px 0;
 
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 0 12px 25px rgba(0,0,0,0.6);
 
   opacity: ${({ open }) => (open ? 1 : 0)};
   transform: translateY(${({ open }) => (open ? "0" : "-10px")});
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
-  transition: opacity .25s ease, transform .25s ease;
+
+  transition: all 0.25s ease;
+
+  z-index: 2500;
 `
 
-
-// MENU LINKS
 const MobileMenuItem = styled(NavLink)`
-  display: block;
-  padding: 12px 18px;
+  padding: 14px 20px;
   color: white;
   text-decoration: none;
   font-size: 15px;
@@ -118,134 +106,116 @@ const MobileMenuItem = styled(NavLink)`
   }
 `
 
-// ⬇️ NEW DROPDOWN STYLES
-const Dropdown = styled.div`
-  position: relative;
-  display: inline-block;
-`
-
-const DropdownButton = styled.button`
-  background: #222;
-  border: 1px solid #444;
-  color: white;
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 8px;
+const Bonus = styled.button`
+  all: unset;
   cursor: pointer;
-  transition: 0.2s;
-
+  color: #ffe42d;
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
   &:hover {
-    background: #333;
+    background: white;
+    color: black;
   }
 `
 
-const DropdownMenu = styled.div<{ open: boolean }>`
-  display: ${({ open }) => (open ? 'flex' : 'none')};
-  flex-direction: column;
-  position: absolute;
-  top: 42px;
-  right: 0;
-  background: #111;
-  border: 1px solid #444;
-  padding: 8px 0;
-  border-radius: 8px;
-  min-width: 160px;
-  z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-`
-
-const DropdownItem = styled(NavLink)`
-  padding: 10px 16px;
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-
-  &:hover {
-    background: #222;
-  }
-`
-// ⬆️ NEW DROPDOWN PART END
+//
+// --- COMPONENT ---
+//
 
 export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
   const balance = useUserBalance()
-  const isDesktop = useMediaQuery('lg')
+  const isDesktop = useMediaQuery("lg")
+
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
-  const [mobileOpen, setMobileOpen] = React.useState(false)
 
-  // ⬇️ NEW DROPDOWN STATE
-  const [openMenu, setOpenMenu] = React.useState(false)
+  // MOBILE MENU STATE
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   return (
     <>
-      {/* Existing modals ... */}
-
       <StyledHeader>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        {/* LEFT SIDE */}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Logo to="/">
-            <img alt="Gamba logo" src="/logo.svg" />
+            <img src="/logo.svg" alt="SolWin Logo" />
           </Logo>
         </div>
 
+        {/* RIGHT SECTION */}
         <div
           style={{
-            display: 'flex',
-            gap: '10px',
-            alignItems: 'center',
-            position: 'relative',
+            display: "flex",
+            gap: "12px",
+            alignItems: "center",
+            position: "relative",
           }}
         >
+          {/* Jackpot */}
           {pool.jackpotBalance > 0 && (
             <Bonus onClick={() => setJackpotHelp(true)}>
               💰 <TokenValue amount={pool.jackpotBalance} />
             </Bonus>
           )}
 
+          {/* Bonus */}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
             </Bonus>
           )}
 
-          {/* Desktop Leaderboard Button */}
+          {/* DESKTOP ITEMS */}
           {isDesktop && (
-            <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
-              Leaderboard
-            </GambaUi.Button>
+            <>
+              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
+                Leaderboard
+              </GambaUi.Button>
+
+              <TokenSelect />
+              <UserButton />
+            </>
           )}
 
-          <TokenSelect />
-<UserButton />
+          {/* MOBILE MENU BUTTON (replaces connect/user btn) */}
+          {!isDesktop && (
+            <MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
+              ☰
+            </MobileMenuIcon>
+          )}
 
-{/* MOBILE MENU ICON */}
-<MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
-  ☰
-</MobileMenuIcon>
+          {/* MOBILE MENU */}
+          <MobileMenu open={mobileOpen}>
+            <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
+              🎮 Games
+            </MobileMenuItem>
 
-{/* MOBILE DROPDOWN */}
-<AnimatedDropdown open={mobileOpen}>
-  <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
-    Games
-  </MobileMenuItem>
+            <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
+              🎁 Referral
+            </MobileMenuItem>
 
-  <MobileMenuItem to="/profile" onClick={() => setMobileOpen(false)}>
-    My Profile
-  </MobileMenuItem>
+            <MobileMenuItem to="/profile" onClick={() => setMobileOpen(false)}>
+              👤 My Profile
+            </MobileMenuItem>
 
-  <MobileMenuItem to="/wallet" onClick={() => setMobileOpen(false)}>
-    Wallet
-  </MobileMenuItem>
+            <MobileMenuItem to="/wallet" onClick={() => setMobileOpen(false)}>
+              💼 Wallet
+            </MobileMenuItem>
 
-  <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
-    Referral Program
-  </MobileMenuItem>
-</AnimatedDropdown>
-
+            <div style={{ padding: "14px 20px" }}>
+              {/* CONNECT / USER BUTTON INS MENU VERSCHOBEN */}
+              <UserButton />
+            </div>
+          </MobileMenu>
         </div>
       </StyledHeader>
     </>
   )
 }
+
