@@ -13,12 +13,14 @@ import { Modal } from '../components/Modal'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
 import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS, ENABLE_LEADERBOARD } from '../constants'
 
+// src/sections/Header.tsx – NUR DIESE ZEILEN ERSETZEN (ab Zeile 1 bis inkl. </StyledHeader>)
+
 const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 80px;                 // ← war 70px → jetzt mehr Platz
   background: linear-gradient(180deg, rgba(15,0,40,0.95), rgba(10,0,30,0.8));
   backdrop-filter: blur(15px);
   border-bottom: 2px solid #8e2de2;
@@ -28,6 +30,12 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`
+
+// WICHTIG: Diese Zeile direkt unter </StyledHeader> hinzufügen (falls noch nicht da!)
+const ContentWrapper = styled.div`
+  padding-top: 90px;   // gibt dem eigentlichen Spiel-Inhalt Platz unter dem Header
+  min-height: 100vh;
 `
 
 const Logo = styled(NavLink)`
