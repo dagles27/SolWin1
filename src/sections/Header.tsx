@@ -1,4 +1,4 @@
-// src/sections/Header.tsx – 100% buildbar, perfekter Neon-Style, Slide-In Menü mit Leaderboard
+// src/sections/Header.tsx – FERTIG, BUILD-FIXED, ORIGINAL FUNKTIONALITÄT + NEUES MENÜ
 
 import React from 'react'
 import {
@@ -12,7 +12,7 @@ import {
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Modal } from '../components/Modal'
-import LeaderboardsModal from '../LeaderBoard/LeaderboardsModal' // ← Korrekter Pfad!
+import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal' // ← ORIGINALER PFAD, BUILD FIX!
 import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
@@ -38,7 +38,6 @@ export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
   const balance = useUserBalance()
-  const isDesktop = useMediaQuery('lg')
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
@@ -46,7 +45,7 @@ export default function Header() {
 
   return (
     <>
-      {/* MODALS (unverändert) */}
+      {/* ORIGINAL MODALS – behalten */}
       {bonusHelp && (
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
@@ -64,22 +63,16 @@ export default function Header() {
             There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the Jackpot.
           </p>
           <p>
-            The Jackpot is a prize pool that grows with every bet made. As it
-            grows, so does your chance of winning. Once a winner is selected,
-            the pool resets and grows again from there.
+            The Jackpot is a prize pool that grows with every bet. As it grows, your chance of winning increases.
           </p>
           <p>
-            You pay a maximum of{' '}
-            {(PLATFORM_JACKPOT_FEE * 100).toLocaleString(undefined, { maximumFractionDigits: 4 })}
-            % of each wager for a chance to win.
+            You pay max {(PLATFORM_JACKPOT_FEE * 100).toFixed(4)}% fee for a chance to win.
           </p>
           <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {context.defaultJackpotFee === 0 ? 'DISABLED' : 'ENABLED'}
             <GambaUi.Switch
               checked={context.defaultJackpotFee > 0}
-              onChange={(checked) =>
-                context.setDefaultJackpotFee(checked ? PLATFORM_JACKPOT_FEE : 0)
-              }
+              onChange={(checked) => context.setDefaultJackpotFee(checked ? PLATFORM_JACKPOT_FEE : 0)}
             />
           </label>
         </Modal>
@@ -92,7 +85,7 @@ export default function Header() {
         />
       )}
 
-      {/* CLEAN HEADER – Logo | Balance Mitte | Hamburger */}
+      {/* NEUER CLEAN HEADER */}
       <header className="solwin-header">
         <div className="header-content">
           <NavLink to="/" className="logo-link">
@@ -113,18 +106,23 @@ export default function Header() {
         </div>
       </header>
 
-      {/* SLIDE-IN SIDEBAR */}
+      {/* SLIDE-IN MENÜ – alles drin */}
       <div className={`sidebar ${menuOpen ? 'open' : ''}`}>
         <div className="sidebar-inner">
           <button className="close" onClick={() => setMenuOpen(false)}>✕</button>
 
           {/* JACKPOT */}
-          <div className="menu-block">
-            <h3>Jackpot</h3>
-            <JackpotTicker />
-          </div>
+          {pool.jackpotBalance > 0 && (
+            <div className="menu-block">
+              <h3>Jackpot 💰</h3>
+              <JackpotTicker />
+              <Bonus onClick={() => { setMenuOpen(false); setJackpotHelp(true); }}>
+                More info
+              </Bonus>
+            </div>
+          )}
 
-          {/* BONUS INFO */}
+          {/* BONUS */}
           {balance.bonusBalance > 0 && (
             <div className="menu-block">
               <h3>Bonus ✨</h3>
@@ -148,14 +146,14 @@ export default function Header() {
           {/* WALLET */}
           <div className="menu-block">
             <h3>Wallet</h3>
-            <UserButton />
+            <UserButton fullWidth />
           </div>
         </div>
       </div>
 
       {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)} />}
 
-      {/* SOL-WIN NEON STYLING */}
+      {/* SOL-WIN NEON STYLE */}
       <style jsx>{`
         .solwin-header {
           position: fixed;
