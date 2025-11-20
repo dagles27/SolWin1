@@ -163,6 +163,7 @@ export default function Header() {
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   // ⬇️ NEW DROPDOWN STATE
   const [openMenu, setOpenMenu] = React.useState(false)
