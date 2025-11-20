@@ -1,8 +1,6 @@
-// Datei: src/sections/Header.tsx   (komplett ersetzen!)
-
 import React from 'react'
 import { GambaUi, JackpotTicker, useCurrentPool } from 'gamba-react-ui-v2'
-import Leaderboard from '../components/Leaderboard' // ← Pfad ggf. anpassen (z. B. LeaderBoard, LeaderboardModal, etc.)
+import RecentPlays from '../RecentPlays/RecentPlays' // ← Dein "Leaderboard"
 
 export default function Header() {
   const [open, setOpen] = React.useState(false)
@@ -10,19 +8,17 @@ export default function Header() {
 
   return (
     <>
-      {/* CLEANER HEADER – nur Logo, Balance Mitte, Hamburger rechts */}
+      {/* CLEAN HEADER – Logo | Balance Mitte | Hamburger */}
       <header className="solwin-header">
         <div className="header-content">
           <a href="/" className="logo-link">
-            <img src="/logo.png" alt="SolWin" className="logo" /> {/* Logo-Pfad anpassen falls nötig */}
+            <img src="/logo.png" alt="SolWin" className="logo" />
           </a>
 
-          {/* Balance / Token Mitte */}
           <div className="balance-center">
             <GambaUi.Balance showTokenSelect />
           </div>
 
-          {/* Hamburger Button */}
           <button className="menu-btn" onClick={() => setOpen(true)}>
             <svg viewBox="0 0 24 24" width="32" height="32">
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -33,40 +29,34 @@ export default function Header() {
         </div>
       </header>
 
-      {/* SLIDE-IN SIDEBAR */}
+      {/* SLIDE-IN MENÜ – Jackpot + Leaderboard + Wallet */}
       <div className={`sidebar ${open ? 'open' : ''}`}>
         <div className="sidebar-inner">
           <button className="close" onClick={() => setOpen(false)}>✕</button>
 
-          {/* Jackpot */}
+          {/* JACKPOT */}
           <div className="menu-block">
             <h3>Jackpot</h3>
             <JackpotTicker />
-            <div className="jackpot-amount">
-              <TokenValue amount={pool.jackpot || 0} />
-            </div>
           </div>
 
-          {/* Wallet / Connect */}
+          {/* LEADERBOARD (dein RecentPlays – jetzt auch Mobile!) */}
+          <div className="menu-block">
+            <h3>Leaderboard</h3>
+            <RecentPlays limit={20} />
+          </div>
+
+          {/* WALLET */}
           <div className="menu-block">
             <h3>Wallet</h3>
             <GambaUi.WalletButton fullWidth />
           </div>
-
-          {/* Leaderboard – jetzt immer sichtbar (auch Mobile) */}
-          <div className="menu-block leaderboard-block">
-            <h3>Leaderboard</h3>
-            <div className="leaderboard-container">
-              <Leaderboard />
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Overlay */}
       {open && <div className="overlay" onClick={() => setOpen(false)} />}
 
-      {/* NEON SOL-WIN STYLES */}
+      {/* SOL-WIN NEON DESIGN – perfekt für Mobile & Desktop */}
       <style jsx>{`
         .solwin-header {
           position: fixed;
@@ -91,11 +81,7 @@ export default function Header() {
           margin: 0 auto;
         }
 
-        .logo-link {
-          display: block;
-        }
-
-        .logo {
+        .logo-link img {
           height: 48px;
           filter: drop-shadow(0 0 15px #8e2de2);
         }
@@ -193,20 +179,6 @@ export default function Header() {
           font-size: 1.3rem;
         }
 
-        .jackpot-amount {
-          font-size: 1.8rem;
-          font-weight: bold;
-          color: #00ff9d;
-          text-shadow: 0 0 15px #00ff9d;
-          margin-top: 8px;
-        }
-
-        .leaderboard-container {
-          max-height: 60vh;
-          overflow-y: auto;
-          margin-top: 10px;
-        }
-
         .overlay {
           position: fixed;
           inset: 0;
@@ -214,7 +186,7 @@ export default function Header() {
           z-index: 1000;
         }
 
-        /* MOBILE FIXES */
+        /* MOBILE */
         @media (max-width: 480px) {
           .solwin-header { height: 65px; padding: 0 16px; }
           .logo { height: 42px; }
