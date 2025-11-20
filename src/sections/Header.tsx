@@ -45,7 +45,10 @@ const StyledHeader = styled.div`
   top: 0;
   left: 0;
   z-index: 1000;
+
+  overflow: visible; /* IMPORTANT FIX FOR MOBILE */
 `
+
 
 const Logo = styled(NavLink)`
   height: 35px;
@@ -58,18 +61,22 @@ const Logo = styled(NavLink)`
 
 // MOBILE ONLY ICON
 const MobileMenuIcon = styled.button`
-  display: none;
-
-  @media (max-width: 1024px) {
-    display: block;
-  }
-
+  display: block;
   background: transparent;
   border: none;
-  font-size: 28px;
+  font-size: 30px;
   color: white;
   cursor: pointer;
+
+  /* Fix für iPhone & Android */
+  padding: 8px;
+  z-index: 2000;
+
+  @media (min-width: 1025px) {
+    display: none;
+  }
 `
+
 
 // ANIMATED DROPDOWN CONTAINER
 const AnimatedDropdown = styled.div<{ open: boolean }>`
@@ -79,20 +86,24 @@ const AnimatedDropdown = styled.div<{ open: boolean }>`
 
   position: absolute;
   top: 55px;
-  right: 0;
-  background: #111;
+  right: 10px;
+
+  background: #121212;
   border: 1px solid #333;
   border-radius: 10px;
   min-width: 180px;
   padding: 10px 0;
-  z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+
+  z-index: 999999; /* FIX */
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 
   opacity: ${({ open }) => (open ? 1 : 0)};
   transform: translateY(${({ open }) => (open ? "0" : "-10px")});
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity .25s ease, transform .25s ease;
 `
+
 
 // MENU LINKS
 const MobileMenuItem = styled(NavLink)`
