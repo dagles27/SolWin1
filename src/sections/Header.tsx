@@ -54,6 +54,58 @@ const Logo = styled(NavLink)`
     height: 120%;
   }
 `
+// ⬇️ ADD THIS HERE (below Logo styled-component)
+
+// MOBILE ONLY ICON
+const MobileMenuIcon = styled.button`
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+  }
+
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+`
+
+// ANIMATED DROPDOWN CONTAINER
+const AnimatedDropdown = styled.div<{ open: boolean }>`
+  @media (min-width: 1025px) {
+    display: none;
+  }
+
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  min-width: 180px;
+  padding: 10px 0;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+
+  opacity: ${({ open }) => (open ? 1 : 0)};
+  transform: translateY(${({ open }) => (open ? "0" : "-10px")});
+  pointer-events: ${({ open }) => (open ? "auto" : "none")};
+  transition: opacity 0.25s ease, transform 0.25s ease;
+`
+
+// MENU LINKS
+const MobileMenuItem = styled(NavLink)`
+  display: block;
+  padding: 12px 18px;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+
+  &:hover {
+    background: #222;
+  }
+`
 
 // ⬇️ NEW DROPDOWN STYLES
 const Dropdown = styled.div`
