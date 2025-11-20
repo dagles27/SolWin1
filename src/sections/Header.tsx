@@ -188,7 +188,7 @@ export default function Header() {
           ref={menuRef}
           style={{
             display: 'flex',
-            align-items: 'center',
+            alignItems: 'center',
             gap: '16px',
             position: 'relative',
           }}
