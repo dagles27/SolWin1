@@ -11,194 +11,146 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Modal } from '../components/Modal'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
-import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS, ENABLE_LEADERBOARD } from '../constants'
+import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+import TokenSelect from './TokenSelect'
+import { UserButton } from './UserButton'
+import { ENABLE_LEADERBOARD } from '../constants'
 
-// src/sections/Header.tsx – NUR DIESE ZEILEN ERSETZEN (ab Zeile 1 bis inkl. </StyledHeader>)
+const Bonus = styled.button`
+  all: unset;
+  cursor: pointer;
+  color: #ffe42d;
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  &:hover {
+    background: white;
+  }
+`
 
-const StyledHeader = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;                 // ← war 70px → jetzt mehr Platz
-  background: linear-gradient(180deg, rgba(15,0,40,0.95), rgba(10,0,30,0.8));
-  backdrop-filter: blur(15px);
-  border-bottom: 2px solid #8e2de2;
-  box-shadow: 0 4px 25px rgba(142,45,226,0.5);
-  z-index: 1000;
-  padding: 0 20px;
+const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
-
-// WICHTIG: Diese Zeile direkt unter </StyledHeader> hinzufügen (falls noch nicht da!)
-const ContentWrapper = styled.div`
-  padding-top: 90px;   // gibt dem eigentlichen Spiel-Inhalt Platz unter dem Header
-  min-height: 100vh;
+  width: 100%;
+  padding: 10px;
+  background: #000000cc;
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 `
 
 const Logo = styled(NavLink)`
-  height: 48px;
-  img { height: 120%; filter: drop-shadow(0 0 15px #8e2de2); }
-`
-
-const BalanceCenter = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.5);
-  padding: 10px 24px;
-  border-radius: 30px;
-  font-weight: bold;
-  font-size: 1.3rem;
-  color: #00ff9d;
-  box-shadow: 0 0 20px rgba(0,255,157,0.6);
-  backdrop-filter: blur(8px);
-`
-
-const MenuButton = styled.button`
-  all: unset;
-  cursor: pointer;
-  background: rgba(142,45,226,0.2);
-  border: 2px solid #8e2de2;
-  border-radius: 16px;
-  padding: 14px 28px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s;
-  &:hover { background: #8e2de2; box-shadow: 0 0 30px #8e2de2; transform: translateY(-3px); }
-`
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: calc(100% + 12px);
-  right: 20px;
-  width: 360px;
-  max-width: calc(100vw - 40px);
-  background: linear-gradient(135deg, #0f0028, #1a0033);
-  border: 2px solid #8e2de2;
-  border-radius: 20px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-shadow: 0 20px 50px rgba(142,45,226,0.7);
-  z-index: 999;
-  max-height: 80vh;
-  overflow-y: auto;
-`
-
-const InfoBox = styled.div`
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(142,45,226,0.4);
-  border-radius: 16px;
-  padding: 18px;
-  text-align: center;
-  color: white;
+  height: 35px;
+  margin: 0 15px;
+  & > img {
+    height: 120%;
+  }
 `
 
 export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
-  const { balance, publicKey, bonusBalance } = useUserBalance()
-  const [menuOpen, setMenuOpen] = React.useState(false)
+  const balance = useUserBalance()
+  const isDesktop = useMediaQuery('lg') 
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
+  const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
-  const menuRef = React.useRef<HTMLDivElement>(null)
-
-  const shortAddress = publicKey ? `${publicKey.toBase58().slice(0, 6)}...${publicKey.toBase58().slice(-4)}` : 'Nicht verbunden'
-
-  React.useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false)
-    }
-    if (menuOpen) document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [menuOpen])
 
   return (
     <>
-      {/* Jackpot Hilfe Modal */}
+      {bonusHelp && (
+        <Modal onClose={() => setBonusHelp(false)}>
+          <h1>Bonus ✨</h1>
+          <p>
+            You have <b>
+              <TokenValue amount={balance.bonusBalance} />
+            </b>{' '}
+            worth of free plays. This bonus will be applied automatically when you
+            play.
+          </p>
+          <p>Note that a fee is still needed from your wallet for each play.</p>
+        </Modal>
+      )}
+
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
-          <h1>Jackpot</h1>
-          <p>Aktuell im Jackpot: <TokenValue amount={pool.jackpotBalance} /></p>
-          <p>Du zahlst max. {(PLATFORM_JACKPOT_FEE * 100).toFixed(4)} % deines Einsatzes für die Chance auf den Jackpot.</p>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
-            {context.defaultJackpotFee === 0 ? 'DEAKTIVIERT' : 'AKTIVIERT'}
+          <h1>Jackpot </h1>
+          <p style={{ fontWeight: 'bold' }}>
+            There&apos;s <TokenValue amount={pool.jackpotBalance} /> in the
+            Jackpot.
+          </p>
+          <p>
+            The Jackpot is a prize pool that grows with every bet made. As it
+            grows, so does your chance of winning. Once a winner is selected,
+            the pool resets and grows again from there.
+          </p>
+          <p>
+            You pay a maximum of{' '}
+            {(PLATFORM_JACKPOT_FEE * 100).toLocaleString(undefined, { maximumFractionDigits: 4 })}
+            % of each wager for a chance to win.
+          </p>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {context.defaultJackpotFee === 0 ? 'DISABLED' : 'ENABLED'}
             <GambaUi.Switch
               checked={context.defaultJackpotFee > 0}
-              onChange={checked => context.setDefaultJackpotFee(checked ? PLATFORM_JACKPOT_FEE : 0)}
+              onChange={(checked) =>
+                context.setDefaultJackpotFee(checked ? PLATFORM_JACKPOT_FEE : 0)
+              }
             />
           </label>
         </Modal>
       )}
 
       {ENABLE_LEADERBOARD && showLeaderboard && (
-        <LeaderboardsModal creator={PLATFORM_CREATOR_ADDRESS.toBase58()} onClose={() => setShowLeaderboard(false)} />
+        <LeaderboardsModal
+          creator={PLATFORM_CREATOR_ADDRESS.toBase58()}
+          onClose={() => setShowLeaderboard(false)}
+        />
       )}
 
       <StyledHeader>
-        <Logo to="/"><img src="/logo.svg" alt="SolWin" /></Logo>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <Logo to="/">
+            <img alt="Gamba logo" src="/logo.svg" />
+          </Logo>
+        </div>
 
-        <BalanceCenter>
-          <GambaUi.Balance />
-        </BalanceCenter>
-
-        <div ref={menuRef} style={{ position: 'relative' }}>
-          <MenuButton onClick={() => setMenuOpen(!menuOpen)}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-            Menü
-          </MenuButton>
-
-          {menuOpen && (
-            <Dropdown>
-              {/* Wallet Adresse */}
-              <InfoBox>
-                <strong>Wallet Adresse</strong><br />
-                <span style={{ fontSize: '1.1rem', color: '#00ff9d' }}>{shortAddress}</span>
-                <GambaUi.WalletButton fullWidth />
-              </InfoBox>
-
-              {/* Jackpot Chance */}
-              {pool.jackpotBalance > 0 && (
-                <InfoBox>
-                  <strong>Jackpot Chance</strong><br />
-                  <TokenValue amount={pool.jackpotBalance} />
-                  <p style={{ margin: '8px 0 0', fontSize: '0.9rem' }}>
-                    Chance: {(PLATFORM_JACKPOT_FEE * 100).toFixed(4)} % deines Einsatzes
-                  </p>
-                  <GambaUi.Button onClick={() => { setJackpotHelp(true); setMenuOpen(false); }} fullWidth>
-                    Mehr Infos
-                  </GambaUi.Button>
-                </InfoBox>
-              )}
-
-              {/* Bonus falls vorhanden */}
-              {bonusBalance > 0 && (
-                <InfoBox>
-                  <strong>Bonus</strong><br />
-                  <TokenValue amount={bonusBalance} />
-                </InfoBox>
-              )}
-
-              {/* Leaderboard */}
-              {ENABLE_LEADERBOARD && (
-                <GambaUi.Button onClick={() => { setShowLeaderboard(true); setMenuOpen(false); }} fullWidth>
-                  Leaderboard
-                </GambaUi.Button>
-              )}
-            </Dropdown>
+        <div
+          style={{
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'center',
+            position: 'relative',
+          }}
+        >
+          {pool.jackpotBalance > 0 && (
+            <Bonus onClick={() => setJackpotHelp(true)}>
+              💰 <TokenValue amount={pool.jackpotBalance} />
+            </Bonus>
           )}
+
+          {balance.bonusBalance > 0 && (
+            <Bonus onClick={() => setBonusHelp(true)}>
+              ✨ <TokenValue amount={balance.bonusBalance} />
+            </Bonus>
+          )}
+
+          {/* Leaderboard shows only on desktop */}
+          {isDesktop && (
+            <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
+              Leaderboard
+            </GambaUi.Button>
+          )}
+
+          <TokenSelect />
+          <UserButton />
         </div>
       </StyledHeader>
     </>
