@@ -100,7 +100,7 @@ const Dropdown = styled.div`
 export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
-  const { balance } = useUser()
+  const { balance } = useUserBalance()
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
