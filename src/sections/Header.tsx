@@ -207,22 +207,32 @@ export default function Header() {
           )}
 
           <TokenSelect />
-          <UserButton />
+<UserButton />
 
-          {/* ⬇️ NEW DROPDOWN BUTTON */}
-          <Dropdown>
-            <DropdownButton onClick={() => setOpenMenu(!openMenu)}>
-              Menu ▾
-            </DropdownButton>
+{/* MOBILE MENU ICON */}
+<MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
+  ☰
+</MobileMenuIcon>
 
-            <DropdownMenu open={openMenu}>
-              <DropdownItem to="/profile">My Profile</DropdownItem>
-              <DropdownItem to="/wallet">Wallet</DropdownItem>
-              <DropdownItem to="/referral">Referral Program</DropdownItem>
-              <DropdownItem to="/terms">Terms & Conditions</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-          {/* ⬆️ NEW DROPDOWN END */}
+{/* MOBILE DROPDOWN */}
+<AnimatedDropdown open={mobileOpen}>
+  <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
+    Games
+  </MobileMenuItem>
+
+  <MobileMenuItem to="/profile" onClick={() => setMobileOpen(false)}>
+    My Profile
+  </MobileMenuItem>
+
+  <MobileMenuItem to="/wallet" onClick={() => setMobileOpen(false)}>
+    Wallet
+  </MobileMenuItem>
+
+  <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
+    Referral Program
+  </MobileMenuItem>
+</AnimatedDropdown>
+
         </div>
       </StyledHeader>
     </>
