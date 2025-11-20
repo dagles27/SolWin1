@@ -32,12 +32,64 @@ const Bonus = styled.button`
   }
 `
 
+const GuthabenButton = styled.button`
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffe42d;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background 0.2s;
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`
+
+const Hamburger = styled.button`
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 32px;
+  height: 32px;
+  padding: 6px 4px;
+  box-sizing: border-box;
+  & > div {
+    width: 100%;
+    height: 4px;
+    background: white;
+    border-radius: 4px;
+  }
+`
+
+const Dropdown = styled.div`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #000000ee;
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 240px;
+  z-index: 999;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+`
+
 const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px;
+  padding: 10px 20px;
   background: #000000cc;
   backdrop-filter: blur(20px);
   position: fixed;
@@ -58,10 +110,27 @@ export default function Header() {
   const pool = useCurrentPool()
   const context = useGambaPlatformContext()
   const balance = useUserBalance()
-  const isDesktop = useMediaQuery('lg') 
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  const menuRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuOpen])
 
   return (
     <>
@@ -96,7 +165,7 @@ export default function Header() {
             {(PLATFORM_JACKPOT_FEE * 100).toLocaleString(undefined, { maximumFractionDigits: 4 })}
             % of each wager for a chance to win.
           </p>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <label style={{ display: 'flex', align-items: 'center', gap: '10px' }}>
             {context.defaultJackpotFee === 0 ? 'DISABLED' : 'ENABLED'}
             <GambaUi.Switch
               checked={context.defaultJackpotFee > 0}
@@ -116,41 +185,61 @@ export default function Header() {
       )}
 
       <StyledHeader>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <Logo to="/">
-            <img alt="Gamba logo" src="/logo.svg" />
-          </Logo>
-        </div>
+        <Logo to="/">
+          <img alt="Gamba logo" src="/logo.svg" />
+        </Logo>
 
         <div
+          ref={menuRef}
           style={{
             display: 'flex',
-            gap: '10px',
-            alignItems: 'center',
+            align-items: 'center',
+            gap: '20px',
             position: 'relative',
           }}
         >
-          {pool.jackpotBalance > 0 && (
-            <Bonus onClick={() => setJackpotHelp(true)}>
-              💰 <TokenValue amount={pool.jackpotBalance} />
-            </Bonus>
-          )}
+          {/* Guthaben / Bonus always visible, even if 0 */}
+          <GuthabenButton onClick={() => setBonusHelp(true)}>
+            Guthaben ✨ <TokenValue amount={balance.bonusBalance} />
+          </GuthabenButton>
 
-          {balance.bonusBalance > 0 && (
-            <Bonus onClick={() => setBonusHelp(true)}>
-              ✨ <TokenValue amount={balance.bonusBalance} />
-            </Bonus>
-          )}
+          <Hamburger
+            onClick={(e) => {
+              e.stopPropagation()
+              setMenuOpen((prev) => !prev)
+            }}
+          >
+            <div />
+            <div />
+            <div />
+          </Hamburger>
 
-          {/* Leaderboard shows only on desktop */}
-          {isDesktop && (
-            <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
-              Leaderboard
-            </GambaUi.Button>
+          {menuOpen && (
+            <Dropdown onClick={(e) => e.stopPropagation()}>
+              <TokenSelect />
+              <UserButton />
+              {pool.jackpotBalance > 0 && (
+                <Bonus
+                  onClick={() => {
+                    setJackpotHelp(true)
+                    setMenuOpen(false)
+                  }}
+                >
+                  💰 Jackpot <TokenValue amount={pool.jackpotBalance} />
+                </Bonus>
+              )}
+              {ENABLE_LEADERBOARD && (
+                <GambaUi.Button
+                  onClick={() => {
+                    setShowLeaderboard(true)
+                    setMenuOpen(false)
+                  }}
+                >
+                  Leaderboard
+                </GambaUi.Button>
+              )}
+            </Dropdown>
           )}
-
-          <TokenSelect />
-          <UserButton />
         </div>
       </StyledHeader>
     </>
