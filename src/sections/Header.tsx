@@ -1,7 +1,6 @@
 // src/sections/Header.tsx
 import {
   GambaUi,
-  JackpotTicker,
   TokenValue,
   useCurrentPool,
   useGambaPlatformContext,
@@ -157,15 +156,16 @@ export default function Header() {
             <Dropdown>
               {/* Wallet Adresse */}
               <InfoBox>
-                <strong>Wallet</strong><br />
+                <strong>Wallet Adresse</strong><br />
                 <span style={{ fontSize: '1.1rem', color: '#00ff9d' }}>{shortAddress}</span>
+                <GambaUi.WalletButton fullWidth />
               </InfoBox>
 
               {/* Jackpot Chance */}
               {pool.jackpotBalance > 0 && (
                 <InfoBox>
                   <strong>Jackpot Chance</strong><br />
-                  <JackpotTicker />
+                  <TokenValue amount={pool.jackpotBalance} />
                   <p style={{ margin: '8px 0 0', fontSize: '0.9rem' }}>
                     Chance: {(PLATFORM_JACKPOT_FEE * 100).toFixed(4)} % deines Einsatzes
                   </p>
@@ -189,8 +189,6 @@ export default function Header() {
                   Leaderboard
                 </GambaUi.Button>
               )}
-
-              <GambaUi.WalletButton fullWidth />
             </Dropdown>
           )}
         </div>
