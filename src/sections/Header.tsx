@@ -1,14 +1,15 @@
+// src/sections/Header.tsx – 100% buildbar + korrekter Leaderboard-Import
+
 import React from 'react'
-import { GambaUi, JackpotTicker, useCurrentPool } from 'gamba-react-ui-v2'
-import RecentPlays from '../RecentPlays/RecentPlays' // ← Dein "Leaderboard"
+import { GambaUi, JackpotTicker } from 'gamba-react-ui-v2'
+import LeaderboardsModal from '../LeaderBoard/LeaderboardsModal' // ← Korrekter Pfad!
 
 export default function Header() {
   const [open, setOpen] = React.useState(false)
-  const pool = useCurrentPool()
 
   return (
     <>
-      {/* CLEAN HEADER – Logo | Balance Mitte | Hamburger */}
+      {/* CLEAN HEADER – Logo links | Balance Mitte | Hamburger rechts */}
       <header className="solwin-header">
         <div className="header-content">
           <a href="/" className="logo-link">
@@ -29,7 +30,7 @@ export default function Header() {
         </div>
       </header>
 
-      {/* SLIDE-IN MENÜ – Jackpot + Leaderboard + Wallet */}
+      {/* SLIDE-IN SIDEBAR */}
       <div className={`sidebar ${open ? 'open' : ''}`}>
         <div className="sidebar-inner">
           <button className="close" onClick={() => setOpen(false)}>✕</button>
@@ -40,10 +41,10 @@ export default function Header() {
             <JackpotTicker />
           </div>
 
-          {/* LEADERBOARD (dein RecentPlays – jetzt auch Mobile!) */}
+          {/* LEADERBOARD – jetzt der echte Modal! */}
           <div className="menu-block">
             <h3>Leaderboard</h3>
-            <RecentPlays limit={20} />
+            <LeaderboardsModal />
           </div>
 
           {/* WALLET */}
@@ -56,7 +57,7 @@ export default function Header() {
 
       {open && <div className="overlay" onClick={() => setOpen(false)} />}
 
-      {/* SOL-WIN NEON DESIGN – perfekt für Mobile & Desktop */}
+      {/* SOL-WIN NEON DESIGN */}
       <style jsx>{`
         .solwin-header {
           position: fixed;
@@ -161,6 +162,8 @@ export default function Header() {
           font-size: 2rem;
           color: #ff6b6b;
           cursor: pointer;
+        }
+
         }
 
         .menu-block {
