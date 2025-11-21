@@ -33,7 +33,7 @@ interface LeaderboardsModalProps {
   creator: string
 }
 
-const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
+const LeaderboardsModal = ({ onClose, creator }) => {
   onClose,
   creator,
 }) => {
@@ -46,8 +46,8 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
   } = useLeaderboardData(period, creator)
 
   return (
-    <ModalWrapper>
-      <ModalContent>
+    <ModalWrapper onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
         {/* ────── header ────── */}
         <HeaderSection>
           <Title>Leaderboard</Title>
