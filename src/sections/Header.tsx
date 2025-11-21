@@ -317,11 +317,11 @@ export default function Header() {
         <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
           {/* Balance */}
           {balance.balance > 0 && (
-  <BalanceBox>
-    <span>Balance:</span>
-    <TokenValue amount={balance.balance} />
-  </BalanceBox>
-)}
+            <BalanceBox>
+              <span>Balance:</span>
+              <TokenValue amount={balance.balance} />
+            </BalanceBox>
+          )}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
