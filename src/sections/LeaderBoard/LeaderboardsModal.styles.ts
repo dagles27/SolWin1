@@ -123,23 +123,29 @@ export const RankItem = styled.div<{ $isTop3?: boolean }>`
 `
 
 export const RankNumber = styled.div<{ rank: number }>`
-  width: 40px;
+  flex: 0 0 40px;           // fixe Breite
   font-weight: 700;
   color: ${({ rank }) =>
     rank === 1 ? '#ffd700' : rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : '#e5fff5'};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const PlayerInfo = styled.div`
   flex: 1;
   padding-left: 4px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  text-overflow: ellipsis;  // 👈 abgeschnitten
+  white-space: nowrap;      // 👈 verhindert Zeilenumbruch
+  overflow: hidden;         // 👈 versteckt den Überlauf
 `
 
 export const VolumeAmount = styled.div`
   width: 80px;
   text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 // Status Texte
