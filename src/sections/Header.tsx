@@ -73,100 +73,35 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 12px 18px;
-
+  padding: 10px;
+  background: #000000cc;
+  backdrop-filter: blur(20px);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
-
-  /* FUTURISTIC GLASS PANEL */
-  background: rgba(8, 12, 20, 0.72);
-  border-bottom: 1px solid rgba(0, 255, 170, 0.25);
-  backdrop-filter: blur(22px) saturate(190%);
-
-  /* SUBTLE INNER NEON EDGE */
-  box-shadow:
-    inset 0 -2px 10px rgba(0, 255, 170, 0.12),
-    0 0 14px rgba(0, 255, 150, 0.25);
-
-  /* VERY LIGHT TOP GRADIENT (Tech HUD) */
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 255, 170, 0.06),
-    rgba(8, 12, 20, 0.4)
-  );
-
-  /* Holographic bar animation */
-  &:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 1px;
-
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(0, 255, 170, 0.6),
-      transparent
-    );
-
-    animation: scanline 4s linear infinite;
-    opacity: 0.55;
-  }
-
-  @keyframes scanline {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
-`;
+`
 
 const Logo = styled(NavLink)`
-  height: 40px;
-  margin: 0 18px;
-  display: flex;
-  align-items: center;
-
-  img {
-    height: 130%;
-    filter: drop-shadow(0 0 6px rgba(0, 255, 180, 0.45));
-    transition: 0.25s ease;
+  height: 35px;
+  margin: 0 15px;
+  & > img {
+    height: 120%;
   }
-
-  &:hover img {
-    filter: drop-shadow(0 0 10px rgba(0, 255, 200, 0.7));
-    transform: scale(1.03);
-  }
-`;
+`
 
 const MobileMenuIcon = styled.button`
   display: block;
   background: transparent;
   border: none;
   font-size: 30px;
-  color: #00ffc8;
+  color: white;
   cursor: pointer;
   padding: 8px;
-  transition: 0.2s ease;
-
-  text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
-
-  &:hover {
-    color: #8affea;
-    text-shadow: 0 0 12px rgba(0, 255, 200, 1);
-    transform: scale(1.12);
-  }
-
   @media (min-width: 1025px) {
     display: none;
   }
-`;
+`
 
 const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
