@@ -120,3 +120,8 @@ export const EmptyStateText = styled.div`
   text-align: center;
   padding: 20px 0;
 `
+export const formatVolume = (value: number) =>
+  value?.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
