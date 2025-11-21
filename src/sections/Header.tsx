@@ -176,8 +176,28 @@ export default function Header() {
         </div>
 
         {/* RIGHT SIDE */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          
+        <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+
+          {/* Stylische Balance Anzeige */}
+          {balance.balance > 0 && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(255,255,255,0.1)",
+                padding: "6px 12px",
+                borderRadius: "12px",
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "white",
+              }}
+            >
+              <span style={{ opacity: 0.7 }}>Balance:</span>
+              <TokenValue amount={balance.balance} />
+            </div>
+          )}
+
           {/* Bonus */}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
@@ -188,15 +208,8 @@ export default function Header() {
           {/* DESKTOP ELEMENTS */}
           {isDesktop && (
             <>
-              {/* Wallet Balance */}
-              <div style={{ color: "white", fontSize: "14px", fontWeight: "bold" }}>
-                <TokenValue amount={balance.balance} />
-              </div>
-
               <TokenSelect />
               <UserButton />
-
-              {/* Leaderboard Button */}
               <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
                 Leaderboard
               </GambaUi.Button>
@@ -211,12 +224,11 @@ export default function Header() {
 
         {/* ==================== MOBILE DROPDOWN ==================== */}
         <MobileDropdown open={mobileOpen}>
-          
-          {/* Jackpot Button aus Header ins Menü verschoben */}
+
+          {/* Jackpot Button */}
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
-
               <div
                 style={{
                   padding: "12px 18px",
@@ -225,11 +237,11 @@ export default function Header() {
                   fontSize: "15px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px"
+                  gap: "8px",
                 }}
                 onClick={() => {
-                  setJackpotHelp(true);
-                  setMobileOpen(false);
+                  setJackpotHelp(true)
+                  setMobileOpen(false)
                 }}
               >
                 💰 <TokenValue amount={pool.jackpotBalance} />
@@ -253,10 +265,6 @@ export default function Header() {
 
           {/* WALLET SECTION */}
           <MobileSectionLabel>Wallet</MobileSectionLabel>
-
-          <div style={{ padding: "8px 18px", color: "white" }}>
-            Balance: <TokenValue amount={balance.balance} />
-          </div>
 
           <div style={{ padding: "8px 18px" }}>
             <TokenSelect />
