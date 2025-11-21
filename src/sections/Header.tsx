@@ -218,6 +218,25 @@ const MobileSectionLabel = styled.div`
   }
 `;
 
+const BalanceBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 170, 0.08);
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #eafff7;
+  border: 1px solid rgba(0, 255, 170, 0.25);
+
+  box-shadow: inset 0 0 8px rgba(0, 255, 150, 0.12);
+
+  span {
+    opacity: 0.65;
+  }
+`;
+
 // ========================================================
 // HEADER COMPONENT
 // ========================================================
