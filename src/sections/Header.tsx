@@ -105,13 +105,23 @@ const MobileMenuIcon = styled.button`
   background: transparent;
   border: none;
   font-size: 30px;
-  color: white;
+  color: #00ffc8;
   cursor: pointer;
   padding: 8px;
+  transition: 0.2s ease;
+
+  text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
+
+  &:hover {
+    color: #8affea;
+    text-shadow: 0 0 12px rgba(0, 255, 200, 1);
+    transform: scale(1.12);
+  }
+
   @media (min-width: 1025px) {
     display: none;
   }
-`
+`;
 
 const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
