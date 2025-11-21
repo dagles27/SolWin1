@@ -21,27 +21,37 @@ import { ENABLE_LEADERBOARD } from '../constants'
 // STYLES
 // ========================================================
 
+/* Glow-Button mit kleineren Glow-Umfang für Jackpot & Wallet */
 const GlowButton = styled.div`
   background: #00ff99;
   color: #000;
   text-align: center;
   font-weight: bold;
-  padding: 10px 18px;
+  padding: 10px 12px;
   font-size: 15px;
-  border-radius: 12px;
+  border-radius: 10px;
+  width: 90%;
+  margin: 0 auto;
   cursor: pointer;
-  box-shadow: 0 0 12px #00ff99, 0 0 24px #00ff99aa;
+
+  /* Glow kleiner & dezenter */
+  box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9977;
+
   transition: 0.2s;
   &:active {
     transform: scale(0.96);
   }
 `
 
+/* GlowWrapper korrigiert: kein schwarzer Hintergrund mehr */
 const GlowWrapper = styled.div`
-  background: #00ff99;
-  padding: 8px 10px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
   border-radius: 12px;
-  box-shadow: 0 0 12px #00ff99, 0 0 24px #00ff99aa;
+
+  /* kleiner Glow, liegt nicht über */
+  box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
 `
 
 const Bonus = styled.button`
@@ -116,7 +126,8 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
   transition: opacity 0.25s ease, transform 0.25s ease;
 
-  z-index: 999999; 
+  z-index: 999999;
+  overflow: hidden;
 `
 
 const MobileMenuItem = styled(NavLink)`
@@ -198,7 +209,7 @@ export default function Header() {
         {/* RIGHT SIDE */}
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
 
-          {/* Stylish Balance Badge */}
+          {/* Stylish Header Balance */}
           {balance.balance > 0 && (
             <div
               style={{
@@ -246,6 +257,7 @@ export default function Header() {
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
+
               <GlowButton
                 onClick={() => {
                   setJackpotHelp(true)
