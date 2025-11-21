@@ -47,7 +47,6 @@ const GlowWrapper = styled.div`
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
 `
 
-/* Entfernt dunklen Hintergrund vom UserButton */
 const CleanUserButtonWrapper = styled.div`
   * {
     background: transparent !important;
@@ -99,7 +98,6 @@ const MobileMenuIcon = styled.button`
   color: white;
   cursor: pointer;
   padding: 8px;
-
   @media (min-width: 1025px) {
     display: none;
   }
@@ -109,7 +107,6 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
     display: none;
   }
-
   position: absolute;
   top: 58px;
   right: 10px;
@@ -161,6 +158,33 @@ export default function Header() {
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
+  // === NEW: Outside click handler ===
+  const dropdownRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
+        !(e.target as HTMLElement).closest("button[data-menu]")
+      ) {
+        setMobileOpen(false)
+      }
+    }
+
+    if (mobileOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [mobileOpen])
+
+  // ========================================================
+
   return (
     <>
       {bonusHelp && (
@@ -176,7 +200,7 @@ export default function Header() {
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
-          <p style={{ fontWeight: 'bold' }}>
+          <p style={{ fontWeight: "bold" }}>
             <TokenValue amount={pool.jackpotBalance} /> is currently in the pot.
           </p>
         </Modal>
@@ -184,21 +208,20 @@ export default function Header() {
 
       {ENABLE_LEADERBOARD && showLeaderboard && (
         <LeaderboardsModal
-          creator={PLATFORM_CREATOR_ADDRESS.toBase58()}
+          creator={PLATFORM_CREATOR_ADDRESS.toBaseBase58()}
           onClose={() => setShowLeaderboard(false)}
         />
       )}
 
       <StyledHeader>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <Logo to="/">
             <img alt="Sol-Win logo" src="/logo.svg" />
           </Logo>
         </div>
 
-        <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-
+        <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+          {/* Balance */}
           {balance.balance > 0 && (
             <div
               style={{
@@ -224,6 +247,7 @@ export default function Header() {
             </Bonus>
           )}
 
+          {/* Desktop */}
           {isDesktop && (
             <>
               <TokenSelect />
@@ -234,13 +258,17 @@ export default function Header() {
             </>
           )}
 
-          <MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
+          {/* Mobile menu button */}
+          <MobileMenuIcon
+            data-menu
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
             ☰
           </MobileMenuIcon>
         </div>
 
-        <MobileDropdown open={mobileOpen}>
-
+        {/* MOBILE DROPDOWN */}
+        <MobileDropdown ref={dropdownRef} open={mobileOpen}>
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
@@ -271,14 +299,12 @@ export default function Header() {
 
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
-          {/* TokenSelect */}
           <div style={{ padding: "12px 18px" }}>
             <GlowWrapper>
               <TokenSelect />
             </GlowWrapper>
           </div>
 
-          {/* Wallet-Adresse (UserButton) komplett ohne dunklen Hintergrund */}
           <div style={{ padding: "12px 18px" }}>
             <GlowButton>
               <CleanUserButtonWrapper>
@@ -286,7 +312,6 @@ export default function Header() {
               </CleanUserButtonWrapper>
             </GlowButton>
           </div>
-
         </MobileDropdown>
       </StyledHeader>
     </>
