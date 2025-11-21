@@ -380,21 +380,21 @@ export default function Header() {
           </MobileMenuItem>
 
           <MobileMenuItem
-  as="button"
-  onClick={() => {
-    setShowLeaderboard(true)
-    setMobileOpen(false)
-  }}
-  style={{
-    background: "transparent",
-    border: "none",
-    textAlign: "left",
-    width: "100%",
-    cursor: "pointer",
-  }}
->
-  Leaderboard
-</MobileMenuItem>
+            as="button"
+            onClick={() => {
+            setShowLeaderboard(true)
+            setMobileOpen(false)
+          }}
+          style={{
+            background: "transparent",
+            border: "none",
+            textAlign: "left",
+            width: "100%",
+            cursor: "pointer",
+          }}
+         >
+          Leaderboard
+        </MobileMenuItem>
 
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
