@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Modal } from '../../components/Modal'
 import {
   useLeaderboardData,
   Period,
@@ -7,6 +6,7 @@ import {
 } from '../../hooks/useLeaderboardData'
 
 import {
+  ModalWrapper,
   ModalContent,
   HeaderSection,
   Title,
@@ -26,7 +26,6 @@ import {
   LoadingText,
   ErrorText,
   EmptyStateText,
-  ModalWrapper, // ← WICHTIG: musste importiert werden
 } from './LeaderboardsModal.styles'
 
 interface LeaderboardsModalProps {
@@ -49,7 +48,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
   return (
     <ModalWrapper onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        {/* ────── header ────── */}
+        {/* HEADER */}
         <HeaderSection>
           <Title>Leaderboard</Title>
           <Subtitle>
@@ -58,7 +57,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
           </Subtitle>
         </HeaderSection>
 
-        {/* ────── tabs ────── */}
+        {/* TABS */}
         <TabRow>
           <TabButton
             $selected={period === 'weekly'}
@@ -77,6 +76,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
           </TabButton>
         </TabRow>
 
+        {/* CONTENT */}
         {loading ? (
           <LoadingText>Loading...</LoadingText>
         ) : error ? (
@@ -86,7 +86,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
             <ListHeader>
               <HeaderRank>Rank</HeaderRank>
               <HeaderPlayer>Player</HeaderPlayer>
-              <HeaderVolume>Volume&nbsp;(USD)</HeaderVolume>
+              <HeaderVolume>Volume (USD)</HeaderVolume>
             </ListHeader>
 
             {leaderboard.map((entry: Player, index) => {
