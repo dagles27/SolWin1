@@ -380,13 +380,11 @@ export default function Header() {
             </GlowWrapper>
           </div>
 
-          <div style={{ padding: "12px 18px" }}>
-            <GlowButton>
-              <CleanUserButtonWrapper>
-                <UserButton />
-              </CleanUserButtonWrapper>
-            </GlowButton>
-          </div>
+          <MobileUserButtonWrapper>
+  <MobileUserButton onClick={() => setMobileOpen(false)}>
+    <UserButton />
+  </MobileUserButton>
+</MobileUserButtonWrapper>
         </MobileDropdown>
       </StyledHeader>
     </>
