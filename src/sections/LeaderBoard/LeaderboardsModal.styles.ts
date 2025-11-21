@@ -111,50 +111,45 @@ export const HeaderVolume = styled.div`
 
 export const RankItem = styled.div<{ $isTop3?: boolean }>`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
   padding: 6px 8px;
   border-radius: 10px;
   background: ${({ $isTop3 }) =>
     $isTop3 ? 'rgba(0, 255, 150, 0.08)' : 'rgba(0, 255, 180, 0.04)'};
   color: #e5fff5;
   font-size: 14px;
-  font-weight: 500;
   transition: 0.2s ease;
-  overflow: hidden;
-
-  &:hover {
-    background: rgba(0, 255, 180, 0.1);
-    box-shadow: 0 0 6px #00ff99;
-  }
+  overflow: hidden;          /* WICHTIG */
 `
 
 export const RankNumber = styled.div<{ rank: number }>`
-  width: 40px;
-  flex-shrink: 0;
+  flex: 0 0 32px;            /* fixe Breite, aber shrinkt nicht */
   font-weight: 700;
+  text-align: left;
   color: ${({ rank }) =>
     rank === 1 ? '#ffd700' : rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : '#e5fff5'};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `
 
 export const PlayerInfo = styled.div`
-  flex: 1;
-  padding-left: 4px;
-  min-width: 0;               /* WICHTIG: Ellipsis funktioniert nur damit */
+  flex: 1 1 auto;            /* WICHTIG: erlaubt schrumpfen */
+  min-width: 0;              /* WICHTIG: Safari ellipsis fix */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 500;
 `
 
 export const VolumeAmount = styled.div`
-  width: 90px;
-  flex-shrink: 0;
-  text-align: right;
+  flex: 0 0 auto;
+  width: 80px;               /* du kannst 70–90px wählen */
+  min-width: 0;              /* WICHTIG */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: right;
+  font-weight: 600;
 `
 
 // Status Text
