@@ -107,41 +107,96 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
     display: none;
   }
+
   position: absolute;
   top: 58px;
-  right: 10px;
-  background: #111;
-  border: 1px solid #333;
-  border-radius: 10px;
-  min-width: 230px;
-  padding: 10px 0;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  right: 12px;
+  min-width: 240px;
+  border-radius: 14px;
 
+  /* HOLOGRAPHIC FUTURE PANEL */
+  background: rgba(12, 12, 20, 0.85);
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(0, 255, 160, 0.25);
+
+  padding: 12px 0;
+
+  /* NEON SHADOW */
+  box-shadow:
+    0 0 14px rgba(0, 255, 180, 0.45),
+    inset 0 0 6px rgba(0, 255, 180, 0.15);
+
+  /* OPEN/CLOSE ANIMATION */
   opacity: ${({ open }) => (open ? 1 : 0)};
-  transform: translateY(${({ open }) => (open ? "0" : "-10px")});
+  transform: scale(${({ open }) => (open ? 1 : 0.92)})
+    translateY(${({ open }) => (open ? "0" : "-8px")});
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
-  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 
   z-index: 999999;
-`
+`;
 
 const MobileMenuItem = styled(NavLink)`
   display: block;
-  padding: 12px 18px;
-  color: white;
-  text-decoration: none;
+  padding: 13px 20px;
+  color: #e5fff5;
   font-size: 15px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+
+  position: relative;
+  overflow: hidden;
+
+  transition: 0.25s ease;
+
   &:hover {
-    background: #222;
+    background: rgba(0, 255, 180, 0.08);
+    color: #00ffbf;
   }
-`
+
+  /* Futuristic hover underline */
+  &:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    bottom: 8px;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #00ffbf, transparent);
+    transition: width 0.25s ease;
+  }
+
+  &:hover:after {
+    width: 60%;
+  }
+`;
 
 const MobileSectionLabel = styled.div`
-  padding: 14px 18px 4px;
-  color: #aaa;
-  font-size: 12px;
+  padding: 14px 22px 6px;
+  color: #6affd8;
+  font-size: 11px;
   text-transform: uppercase;
-`
+  letter-spacing: 1.4px;
+
+  opacity: 0.75;
+
+  /* Glow line under title */
+  position: relative;
+  margin-bottom: 6px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    bottom: 0;
+    height: 1px;
+    width: 40%;
+    background: linear-gradient(90deg, #00ffbf66, transparent);
+  }
+`;
 
 // ========================================================
 // HEADER COMPONENT
