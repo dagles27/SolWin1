@@ -107,7 +107,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
               return (
                 <RankItem key={entry.user} $isTop3={rank <= 3}>
                   <RankNumber rank={rank}>
-                    {rank > 3 ? rank : ''}
+                    {rank}
                   </RankNumber>
 
                   <PlayerInfo title={entry.user}>
