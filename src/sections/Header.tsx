@@ -72,58 +72,32 @@ const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   width: 100%;
-  padding: 12px 18px;
+  padding: 10px 14px;
 
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
 
-  /* FUTURISTIC GLASS PANEL */
   background: rgba(8, 12, 20, 0.72);
   border-bottom: 1px solid rgba(0, 255, 170, 0.25);
   backdrop-filter: blur(22px) saturate(190%);
+  box-shadow: inset 0 -2px 10px rgba(0, 255, 170, 0.12), 
+              0 0 14px rgba(0, 255, 150, 0.25);
 
-  /* SUBTLE INNER NEON EDGE */
-  box-shadow:
-    inset 0 -2px 10px rgba(0, 255, 170, 0.12),
-    0 0 14px rgba(0, 255, 150, 0.25);
-
-  /* VERY LIGHT TOP GRADIENT (Tech HUD) */
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 255, 170, 0.06),
-    rgba(8, 12, 20, 0.4)
-  );
-
-  /* Holographic bar animation */
-  &:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 1px;
-
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(0, 255, 170, 0.6),
-      transparent
-    );
-
-    animation: scanline 4s linear infinite;
-    opacity: 0.55;
+  /* ANPASSUNG WICHTIG */
+  & > div:first-child {
+    flex-shrink: 0;     /* Logo NIE schrumpfen */
   }
 
-  @keyframes scanline {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
+  & > div:last-child {
+    flex-shrink: 1;     /* Right menu kann sich anpassen */
+    display: flex;
+    gap: 10px;          /* kleineres Gap */
+    align-items: center;
+    min-width: 0;       /* verhindert Overflow */
   }
 `;
 
@@ -147,6 +121,7 @@ const Logo = styled(NavLink)`
 `;
 
 const MobileMenuIcon = styled.button`
+  flex-shrink: 0;   /* GANZ WICHTIG */
   display: block;
   background: transparent;
   border: none;
@@ -155,7 +130,6 @@ const MobileMenuIcon = styled.button`
   cursor: pointer;
   padding: 8px;
   transition: 0.2s ease;
-
   text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
 
   &:hover {
