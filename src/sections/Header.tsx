@@ -317,24 +317,11 @@ export default function Header() {
         <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
           {/* Balance */}
           {balance.balance > 0 && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: "rgba(255,255,255,0.1)",
-                padding: "6px 12px",
-                borderRadius: "12px",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "white",
-              }}
-            >
-              <span style={{ opacity: 0.7 }}>Balance:</span>
-              <TokenValue amount={balance.balance} />
-            </div>
-          )}
-
+  <BalanceBox>
+    <span>Balance:</span>
+    <TokenValue amount={balance.balance} />
+  </BalanceBox>
+)}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
