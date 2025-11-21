@@ -46,7 +46,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
   } = useLeaderboardData(period, creator)
 
   return (
-    <Modal onClose={onClose}>
+    <ModalWrapper>
       <ModalContent>
         {/* ────── header ────── */}
         <HeaderSection>
@@ -103,7 +103,7 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
           <EmptyStateText>No leaderboard data for this period.</EmptyStateText>
         )}
       </ModalContent>
-    </Modal>
+    </ModalWrapper>
   )
 }
 
