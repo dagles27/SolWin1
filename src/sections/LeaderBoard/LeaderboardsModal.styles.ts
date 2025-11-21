@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-// Wrapper für das Modal: dunkler, transparent, blur, zentriert
+// Wrapper für das Modal
 export const ModalWrapper = styled.div`
   position: fixed;
   inset: 0;
@@ -14,7 +14,7 @@ export const ModalWrapper = styled.div`
   padding: 20px;
 `
 
-// Inhalt des Modals: abgerundete Ecken, Neon-Rahmen
+// Inhalt
 export const ModalContent = styled.div`
   background: rgba(12, 12, 20, 0.95);
   border-radius: 16px;
@@ -25,9 +25,10 @@ export const ModalContent = styled.div`
               inset 0 0 6px rgba(0, 255, 180, 0.15);
   color: #e5fff5;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
 `
 
-// Header Section
+// Header
 export const HeaderSection = styled.div`
   margin-bottom: 16px;
 `
@@ -52,6 +53,7 @@ export const TabRow = styled.div`
   display: flex;
   gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 `
 
 export const TabButton = styled.button<{ $selected?: boolean }>`
@@ -68,9 +70,7 @@ export const TabButton = styled.button<{ $selected?: boolean }>`
       ? '0 0 8px #00ff99, 0 0 16px #00ff9944'
       : 'inset 0 0 4px rgba(0, 255, 180, 0.15)'};
   transition: 0.2s ease;
-  &:hover {
-    background: ${({ $selected }) => ($selected ? '#00ff99' : 'rgba(0,255,180,0.15)')};
-  }
+  white-space: nowrap;
 `
 
 // Leaderboard List
@@ -90,18 +90,23 @@ export const ListHeader = styled.div`
   border-bottom: 1px solid rgba(0, 255, 180, 0.25);
   padding-bottom: 4px;
   margin-bottom: 8px;
+  overflow: hidden;
 `
 
 export const HeaderRank = styled.div`
   width: 40px;
+  flex-shrink: 0;
 `
 export const HeaderPlayer = styled.div`
   flex: 1;
   padding-left: 4px;
+  overflow: hidden;
 `
 export const HeaderVolume = styled.div`
-  width: 80px;
+  width: 90px;
+  flex-shrink: 0;
   text-align: right;
+  overflow: hidden;
 `
 
 export const RankItem = styled.div<{ $isTop3?: boolean }>`
@@ -115,6 +120,7 @@ export const RankItem = styled.div<{ $isTop3?: boolean }>`
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s ease;
+  overflow: hidden;
 
   &:hover {
     background: rgba(0, 255, 180, 0.1);
@@ -123,7 +129,8 @@ export const RankItem = styled.div<{ $isTop3?: boolean }>`
 `
 
 export const RankNumber = styled.div<{ rank: number }>`
-  flex: 0 0 40px;           // fixe Breite
+  width: 40px;
+  flex-shrink: 0;
   font-weight: 700;
   color: ${({ rank }) =>
     rank === 1 ? '#ffd700' : rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : '#e5fff5'};
@@ -135,20 +142,22 @@ export const RankNumber = styled.div<{ rank: number }>`
 export const PlayerInfo = styled.div`
   flex: 1;
   padding-left: 4px;
-  text-overflow: ellipsis;  // 👈 abgeschnitten
-  white-space: nowrap;      // 👈 verhindert Zeilenumbruch
-  overflow: hidden;         // 👈 versteckt den Überlauf
+  min-width: 0;               /* WICHTIG: Ellipsis funktioniert nur damit */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const VolumeAmount = styled.div`
-  width: 80px;
+  width: 90px;
+  flex-shrink: 0;
   text-align: right;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `
 
-// Status Texte
+// Status Text
 export const LoadingText = styled.div`
   text-align: center;
   padding: 20px;
