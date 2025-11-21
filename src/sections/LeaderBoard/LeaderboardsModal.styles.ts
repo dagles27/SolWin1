@@ -1,132 +1,165 @@
 import styled from 'styled-components'
 
+// Wrapper für das Modal: dunkler, transparent, blur, zentriert
 export const ModalWrapper = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  z-index: 999999;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100000;
+  overflow-y: auto;
   padding: 20px;
 `
 
+// Inhalt des Modals: abgerundete Ecken, Neon-Rahmen
 export const ModalContent = styled.div`
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 12px;
+  background: rgba(12, 12, 20, 0.95);
+  border-radius: 16px;
   padding: 24px;
   width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-width: 520px;
+  box-shadow: 0 0 14px rgba(0, 255, 180, 0.45),
+              inset 0 0 6px rgba(0, 255, 180, 0.15);
+  color: #e5fff5;
+  font-family: 'Inter', sans-serif;
 `
 
+// Header Section
 export const HeaderSection = styled.div`
-  margin-bottom: 20px;
-  text-align: center;
+  margin-bottom: 16px;
 `
 
 export const Title = styled.h2`
+  font-size: 22px;
+  font-weight: 700;
   margin: 0;
-  font-size: 24px;
-  color: #fff;
+  color: #00ff99;
+  text-shadow: 0 0 8px rgba(0, 255, 180, 0.6);
 `
 
 export const Subtitle = styled.p`
+  font-size: 13px;
   margin: 4px 0 0;
-  color: #bbb;
-  font-size: 14px;
+  opacity: 0.7;
+  color: #a5fff5;
 `
 
+// Tabs
 export const TabRow = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
 `
 
-export const TabButton = styled.button<{ $selected: boolean }>`
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: none;
+export const TabButton = styled.button<{ $selected?: boolean }>`
+  all: unset;
   cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 13px;
   font-weight: 600;
-  background: ${({ $selected }) => ($selected ? '#ffcc00' : '#222')};
-  color: ${({ $selected }) => ($selected ? '#000' : '#fff')};
-  transition: all 0.2s ease;
+  color: ${({ $selected }) => ($selected ? '#000' : '#00ffc8')};
+  background: ${({ $selected }) => ($selected ? '#00ff99' : 'rgba(0, 255, 180, 0.08)')};
+  box-shadow: ${({ $selected }) =>
+    $selected
+      ? '0 0 8px #00ff99, 0 0 16px #00ff9944'
+      : 'inset 0 0 4px rgba(0, 255, 180, 0.15)'};
+  transition: 0.2s ease;
+  &:hover {
+    background: ${({ $selected }) => ($selected ? '#00ff99' : 'rgba(0,255,180,0.15)')};
+  }
 `
 
+// Leaderboard List
 export const LeaderboardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 `
 
 export const ListHeader = styled.div`
-  display: grid;
-  grid-template-columns: 60px 1fr 120px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #333;
-  color: #aaa;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
   font-size: 13px;
+  text-transform: uppercase;
+  color: #6affd8;
+  border-bottom: 1px solid rgba(0, 255, 180, 0.25);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
 `
 
-export const HeaderRank = styled.div``
-export const HeaderPlayer = styled.div``
-export const HeaderVolume = styled.div``
+export const HeaderRank = styled.div`
+  width: 40px;
+`
+export const HeaderPlayer = styled.div`
+  flex: 1;
+  padding-left: 4px;
+`
+export const HeaderVolume = styled.div`
+  width: 80px;
+  text-align: right;
+`
 
-export const RankItem = styled.div<{ $isTop3: boolean }>`
-  display: grid;
-  grid-template-columns: 60px 1fr 120px;
-  padding: 10px 0;
-  align-items: center;
-  border-bottom: 1px solid #222;
-  background: ${({ $isTop3 }) => ($isTop3 ? 'rgba(255, 204, 0, 0.08)' : 'none')};
+export const RankItem = styled.div<{ $isTop3?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: ${({ $isTop3 }) =>
+    $isTop3 ? 'rgba(0, 255, 150, 0.08)' : 'rgba(0, 255, 180, 0.04)'};
+  color: #e5fff5;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 255, 180, 0.1);
+    box-shadow: 0 0 6px #00ff99;
+  }
 `
 
 export const RankNumber = styled.div<{ rank: number }>`
-  font-size: 16px;
+  width: 40px;
   font-weight: 700;
   color: ${({ rank }) =>
-    rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : rank === 3 ? '#CD7F32' : '#fff'};
+    rank === 1 ? '#ffd700' : rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : '#e5fff5'};
 `
 
 export const PlayerInfo = styled.div`
-  color: #fff;
-  font-size: 15px;
+  flex: 1;
+  padding-left: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 
 export const VolumeAmount = styled.div`
+  width: 80px;
   text-align: right;
-  color: #0f0;
-  font-size: 15px;
 `
 
+// Status Texte
 export const LoadingText = styled.div`
-  color: #aaa;
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
+  color: #00ff99;
+  font-weight: 600;
 `
 
 export const ErrorText = styled.div`
-  color: #f55;
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
+  color: #ff4d4d;
+  font-weight: 600;
 `
 
 export const EmptyStateText = styled.div`
-  color: #777;
   text-align: center;
-  padding: 20px 0;
+  padding: 20px;
+  color: #a5fff5;
+  font-weight: 500;
 `
-
-// ✅ FIXED: SAFE FORMAT FUNCTION (verhindert schwarze Screens)
-export const formatVolume = (value: number | string | null | undefined) => {
-  const num = Number(value)
-  if (isNaN(num)) return '0.00'
-  return num.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-}
