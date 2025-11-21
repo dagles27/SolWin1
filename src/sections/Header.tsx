@@ -178,13 +178,6 @@ export default function Header() {
         {/* RIGHT SIDE */}
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           
-          {/* Jackpot */}
-          {pool.jackpotBalance > 0 && (
-            <Bonus onClick={() => setJackpotHelp(true)}>
-              💰 <TokenValue amount={pool.jackpotBalance} />
-            </Bonus>
-          )}
-
           {/* Bonus */}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
@@ -218,6 +211,32 @@ export default function Header() {
 
         {/* ==================== MOBILE DROPDOWN ==================== */}
         <MobileDropdown open={mobileOpen}>
+          
+          {/* Jackpot Button aus Header ins Menü verschoben */}
+          {pool.jackpotBalance > 0 && (
+            <>
+              <MobileSectionLabel>Jackpot</MobileSectionLabel>
+
+              <div
+                style={{
+                  padding: "12px 18px",
+                  color: "#ffe42d",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+                onClick={() => {
+                  setJackpotHelp(true);
+                  setMobileOpen(false);
+                }}
+              >
+                💰 <TokenValue amount={pool.jackpotBalance} />
+              </div>
+            </>
+          )}
+
           <MobileSectionLabel>Navigation</MobileSectionLabel>
 
           <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
@@ -251,4 +270,3 @@ export default function Header() {
     </>
   )
 }
-
