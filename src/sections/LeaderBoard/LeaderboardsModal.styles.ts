@@ -120,8 +120,13 @@ export const EmptyStateText = styled.div`
   text-align: center;
   padding: 20px 0;
 `
-export const formatVolume = (value: number) =>
-  value?.toLocaleString('en-US', {
+
+// ✅ FIXED: SAFE FORMAT FUNCTION (verhindert schwarze Screens)
+export const formatVolume = (value: number | string | null | undefined) => {
+  const num = Number(value)
+  if (isNaN(num)) return '0.00'
+  return num.toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })
+}
