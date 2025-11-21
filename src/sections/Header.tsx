@@ -26,8 +26,8 @@ const GlowButton = styled.div`
   color: #000;
   text-align: center;
   font-weight: bold;
-  padding: 10px 12px;
-  font-size: 15px;
+  padding: 12px 14px;
+  font-size: 17px;
   border-radius: 10px;
   width: 90%;
   margin: 0 auto;
@@ -41,17 +41,24 @@ const GlowButton = styled.div`
 
 const GlowWrapper = styled.div`
   width: 100%;
-  padding: 0;
   background: transparent !important;
+  padding: 8px 10px;
   border-radius: 12px;
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
 `
 
-/* Entfernt dunklen Hintergrund vom UserButton */
+/* Entfernt dunklen Hintergrund vom UserButton + macht Schrift & Icon größer */
 const CleanUserButtonWrapper = styled.div`
   * {
     background: transparent !important;
     box-shadow: none !important;
+    font-size: 20px !important;
+    padding: 10px !important;
+  }
+
+  svg {
+    width: 26px !important;
+    height: 26px !important;
   }
 `
 
@@ -99,7 +106,6 @@ const MobileMenuIcon = styled.button`
   color: white;
   cursor: pointer;
   padding: 8px;
-
   @media (min-width: 1025px) {
     display: none;
   }
@@ -109,7 +115,6 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
     display: none;
   }
-
   position: absolute;
   top: 58px;
   right: 10px;
@@ -119,12 +124,10 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   min-width: 230px;
   padding: 10px 0;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-
   opacity: ${({ open }) => (open ? 1 : 0)};
   transform: translateY(${({ open }) => (open ? "0" : "-10px")});
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
   transition: opacity 0.25s ease, transform 0.25s ease;
-
   z-index: 999999;
 `
 
@@ -190,7 +193,6 @@ export default function Header() {
       )}
 
       <StyledHeader>
-
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Logo to="/">
             <img alt="Sol-Win logo" src="/logo.svg" />
@@ -198,7 +200,6 @@ export default function Header() {
         </div>
 
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-
           {balance.balance > 0 && (
             <div
               style={{
@@ -257,28 +258,18 @@ export default function Header() {
 
           <MobileSectionLabel>Navigation</MobileSectionLabel>
 
-          <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
-            Games
-          </MobileMenuItem>
-
-          <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
-            Referral Program
-          </MobileMenuItem>
-
-          <MobileMenuItem to="/leaderboard" onClick={() => setMobileOpen(false)}>
-            Leaderboard
-          </MobileMenuItem>
+          <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>Games</MobileMenuItem>
+          <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>Referral Program</MobileMenuItem>
+          <MobileMenuItem to="/leaderboard" onClick={() => setMobileOpen(false)}>Leaderboard</MobileMenuItem>
 
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
-          {/* TokenSelect */}
           <div style={{ padding: "12px 18px" }}>
             <GlowWrapper>
               <TokenSelect />
             </GlowWrapper>
           </div>
 
-          {/* Wallet-Adresse (UserButton) komplett ohne dunklen Hintergrund */}
           <div style={{ padding: "12px 18px" }}>
             <GlowButton>
               <CleanUserButtonWrapper>
