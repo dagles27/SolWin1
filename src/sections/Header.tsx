@@ -26,7 +26,7 @@ const GlowButton = styled.div`
   text-align: center;
   font-weight: bold;
   padding: 6px 18px;
-  font-size: 20px;
+  font-size: 14px;
   border-radius: 8px;
   width: 100%;
   margin: 0 auto;
