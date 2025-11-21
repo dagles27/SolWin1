@@ -47,18 +47,28 @@ const GlowWrapper = styled.div`
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
 `
 
-/* Entfernt dunklen Hintergrund vom UserButton + macht Schrift & Icon größer */
+/* Neue Version → fixiert alle Probleme */
 const CleanUserButtonWrapper = styled.div`
-  * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Entfernt dunklen Hintergrund vollständig */
+  button, div {
     background: transparent !important;
     box-shadow: none !important;
-    font-size: 20px !important;
-    padding: 10px !important;
   }
 
+  /* Text sichtbar größer – aber ohne Layout zu zerstören */
+  span {
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+
+  /* Wallet Icon wieder korrekt anzeigen & skalieren */
   svg {
-    width: 26px !important;
-    height: 26px !important;
+    width: 20px !important;
+    height: 20px !important;
   }
 `
 
@@ -270,6 +280,7 @@ export default function Header() {
             </GlowWrapper>
           </div>
 
+          {/* FIXED: Kein schwarzer Kasten + Button gleiche Größe wie darüber */}
           <div style={{ padding: "12px 18px" }}>
             <GlowButton>
               <CleanUserButtonWrapper>
