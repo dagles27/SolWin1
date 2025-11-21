@@ -80,7 +80,11 @@ const StyledHeader = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-`
+
+  @media (max-width: 1024px) {
+    padding: 10px 6px; /* 👈 Header links/rechts enger */
+  }
+`;
 
 const Logo = styled(NavLink)`
   height: 35px;
