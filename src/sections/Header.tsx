@@ -21,6 +21,29 @@ import { ENABLE_LEADERBOARD } from '../constants'
 // STYLES
 // ========================================================
 
+const GlowButton = styled.div`
+  background: #00ff99;
+  color: #000;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 12px #00ff99, 0 0 24px #00ff99aa;
+  transition: 0.2s;
+  &:active {
+    transform: scale(0.96);
+  }
+`
+
+const GlowWrapper = styled.div`
+  background: #00ff99;
+  padding: 8px 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00ff99, 0 0 24px #00ff99aa;
+`
+
 const Bonus = styled.button`
   all: unset;
   cursor: pointer;
@@ -84,7 +107,7 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   background: #111;
   border: 1px solid #333;
   border-radius: 10px;
-  min-width: 210px;
+  min-width: 230px;
   padding: 10px 0;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 
@@ -115,6 +138,7 @@ const MobileSectionLabel = styled.div`
   text-transform: uppercase;
 `
 
+
 // ========================================================
 // HEADER COMPONENT
 // ========================================================
@@ -132,31 +156,28 @@ export default function Header() {
 
   return (
     <>
-      {/* ==================== BONUS MODAL ==================== */}
+      {/* BONUS MODAL */}
       {bonusHelp && (
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
           <p>
-            You have <b>
-              <TokenValue amount={balance.bonusBalance} />
-            </b>{' '}
-            worth of free plays.
+            You have <b><TokenValue amount={balance.bonusBalance} /></b> worth of free plays.
           </p>
           <p>A fee is still taken for each play.</p>
         </Modal>
       )}
 
-      {/* ==================== JACKPOT MODAL ==================== */}
+      {/* JACKPOT MODAL */}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
-          <h1>Jackpot </h1>
+          <h1>Jackpot</h1>
           <p style={{ fontWeight: 'bold' }}>
             <TokenValue amount={pool.jackpotBalance} /> is currently in the pot.
           </p>
         </Modal>
       )}
 
-      {/* ==================== LEADERBOARD (DESKTOP ONLY) ==================== */}
+      {/* LEADERBOARD */}
       {ENABLE_LEADERBOARD && showLeaderboard && (
         <LeaderboardsModal
           creator={PLATFORM_CREATOR_ADDRESS.toBase58()}
@@ -164,11 +185,10 @@ export default function Header() {
         />
       )}
 
-      {/* ========================================================
-          HEADER
-      ======================================================== */}
+      {/* HEADER */}
       <StyledHeader>
-        {/* LEFT SIDE (LOGO) */}
+
+        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Logo to="/">
             <img alt="Sol-Win logo" src="/logo.svg" />
@@ -178,7 +198,7 @@ export default function Header() {
         {/* RIGHT SIDE */}
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
 
-          {/* Stylische Balance Anzeige */}
+          {/* Stylish Balance Badge */}
           {balance.balance > 0 && (
             <div
               style={{
@@ -198,14 +218,12 @@ export default function Header() {
             </div>
           )}
 
-          {/* Bonus */}
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
             </Bonus>
           )}
 
-          {/* DESKTOP ELEMENTS */}
           {isDesktop && (
             <>
               <TokenSelect />
@@ -216,36 +234,26 @@ export default function Header() {
             </>
           )}
 
-          {/* MOBILE MENU BUTTON */}
           <MobileMenuIcon onClick={() => setMobileOpen(!mobileOpen)}>
             ☰
           </MobileMenuIcon>
         </div>
 
-        {/* ==================== MOBILE DROPDOWN ==================== */}
+        {/* MOBILE DROPDOWN */}
         <MobileDropdown open={mobileOpen}>
 
-          {/* Jackpot Button */}
+          {/* Jackpot */}
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
-              <div
-                style={{
-                  padding: "12px 18px",
-                  color: "#ffe42d",
-                  cursor: "pointer",
-                  fontSize: "15px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
+              <GlowButton
                 onClick={() => {
                   setJackpotHelp(true)
                   setMobileOpen(false)
                 }}
               >
                 💰 <TokenValue amount={pool.jackpotBalance} />
-              </div>
+              </GlowButton>
             </>
           )}
 
@@ -263,16 +271,21 @@ export default function Header() {
             Leaderboard
           </MobileMenuItem>
 
-          {/* WALLET SECTION */}
+          {/* WALLET */}
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
-          <div style={{ padding: "8px 18px" }}>
-            <TokenSelect />
+          <div style={{ padding: "12px 18px" }}>
+            <GlowWrapper>
+              <TokenSelect />
+            </GlowWrapper>
           </div>
 
           <div style={{ padding: "12px 18px" }}>
-            <UserButton />
+            <GlowButton onClick={() => setMobileOpen(false)}>
+              <UserButton />
+            </GlowButton>
           </div>
+
         </MobileDropdown>
       </StyledHeader>
     </>
