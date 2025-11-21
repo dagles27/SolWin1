@@ -85,10 +85,20 @@ const StyledHeader = styled.div`
 const Logo = styled(NavLink)`
   height: 35px;
   margin: 0 15px;
-  & > img {
-    height: 120%;
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 130%;
+    filter: drop-shadow(0 0 6px rgba(0, 255, 180, 0.45));
+    transition: 0.25s ease;
   }
-`
+
+  &:hover img {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 200, 0.7));
+    transform: scale(1.03);
+  }
+`;
 
 const MobileMenuIcon = styled.button`
   display: block;
