@@ -10,11 +10,11 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
-import { PLATFORM_CREATOR_ADDRESS } from '../constants'
+import { PLATFORM_CREATOR_ADDRESS, ENABLE_LEADERBOARD } from '../constants'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
-import { ENABLE_LEADERBOARD } from '../constants'
+import { Modal } from '../components/Modal'
 
 // ========================================================
 // STYLES
@@ -81,9 +81,9 @@ const StyledHeader = styled.div`
   z-index: 9999;
 
   @media (max-width: 1024px) {
-    padding: 10px 6px; /* 👈 Header links/rechts enger */
+    padding: 10px 6px;
   }
-`;
+`
 
 const Logo = styled(NavLink)`
   height: 35px;
@@ -101,7 +101,7 @@ const Logo = styled(NavLink)`
     filter: drop-shadow(0 0 10px rgba(0, 255, 200, 0.7));
     transform: scale(1.03);
   }
-`;
+`
 
 const MobileMenuIcon = styled.button`
   display: block;
@@ -112,9 +112,7 @@ const MobileMenuIcon = styled.button`
   cursor: pointer;
   padding: 8px;
   transition: 0.2s ease;
-
-  margin-right: 6px; /* 👈 Mobile Icon etwas weiter nach links schieben */
-
+  margin-right: 6px;
   text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
 
   &:hover {
@@ -126,7 +124,7 @@ const MobileMenuIcon = styled.button`
   @media (min-width: 1025px) {
     display: none;
   }
-`;
+`
 
 const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
@@ -138,43 +136,34 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   right: 12px;
   min-width: 240px;
   border-radius: 14px;
-
-  /* HOLOGRAPHIC FUTURE PANEL */
   background: rgba(12, 12, 20, 0.85);
   backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(0, 255, 160, 0.25);
-
   padding: 12px 0;
-
-  /* NEON SHADOW */
   box-shadow:
     0 0 14px rgba(0, 255, 180, 0.45),
     inset 0 0 6px rgba(0, 255, 180, 0.15);
-
-  /* OPEN/CLOSE ANIMATION */
   opacity: ${({ open }) => (open ? 1 : 0)};
   transform: scale(${({ open }) => (open ? 1 : 0.92)})
     translateY(${({ open }) => (open ? "0" : "-8px")});
   pointer-events: ${({ open }) => (open ? "auto" : "none")};
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 999999;
-`;
+`
 
-const MobileMenuItem = styled(NavLink)`
+const MobileMenuItem = styled.button`
   display: block;
+  width: 100%;
   padding: 13px 20px;
   color: #e5fff5;
   font-size: 15px;
-  text-decoration: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
   letter-spacing: 0.5px;
-
   position: relative;
   overflow: hidden;
-
   transition: 0.25s ease;
 
   &:hover {
@@ -182,7 +171,6 @@ const MobileMenuItem = styled(NavLink)`
     color: #00ffbf;
   }
 
-  /* Futuristic hover underline */
   &:after {
     content: "";
     position: absolute;
@@ -197,7 +185,7 @@ const MobileMenuItem = styled(NavLink)`
   &:hover:after {
     width: 60%;
   }
-`;
+`
 
 const MobileSectionLabel = styled.div`
   padding: 14px 22px 6px;
@@ -205,10 +193,7 @@ const MobileSectionLabel = styled.div`
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
-
   opacity: 0.75;
-
-  /* Glow line under title */
   position: relative;
   margin-bottom: 6px;
 
@@ -221,7 +206,7 @@ const MobileSectionLabel = styled.div`
     width: 40%;
     background: linear-gradient(90deg, #00ffbf66, transparent);
   }
-`;
+`
 
 const BalanceBox = styled.div`
   display: flex;
@@ -234,13 +219,12 @@ const BalanceBox = styled.div`
   font-weight: 600;
   color: #eafff7;
   border: 1px solid rgba(0, 255, 170, 0.25);
-
   box-shadow: inset 0 0 8px rgba(0, 255, 150, 0.12);
 
   span {
     opacity: 0.65;
   }
-`;
+`
 
 // ========================================================
 // HEADER COMPONENT
@@ -248,7 +232,6 @@ const BalanceBox = styled.div`
 
 export default function Header() {
   const pool = useCurrentPool()
-  const context = useGambaPlatformContext()
   const balance = useUserBalance()
   const isDesktop = useMediaQuery('lg')
 
@@ -257,9 +240,8 @@ export default function Header() {
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
-  // === NEW: Outside click handler ===
+  // Dropdown outside click
   const dropdownRef = React.useRef<HTMLDivElement>(null)
-
   React.useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -270,22 +252,13 @@ export default function Header() {
         setMobileOpen(false)
       }
     }
-
-    if (mobileOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [mobileOpen])
-
-  // ========================================================
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   return (
     <>
+      {/* BONUS MODAL */}
       {bonusHelp && (
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
@@ -296,6 +269,7 @@ export default function Header() {
         </Modal>
       )}
 
+      {/* JACKPOT MODAL */}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
@@ -305,13 +279,19 @@ export default function Header() {
         </Modal>
       )}
 
-      {ENABLE_LEADERBOARD && showLeaderboard && (
+      {/* LEADERBOARD MODAL */}
+      {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
         <LeaderboardsModal
-          creator={PLATFORM_CREATOR_ADDRESS.toBaseBase58()}
+          creator={
+            typeof PLATFORM_CREATOR_ADDRESS.toBaseBase58 === "function"
+              ? PLATFORM_CREATOR_ADDRESS.toBaseBase58()
+              : PLATFORM_CREATOR_ADDRESS
+          }
           onClose={() => setShowLeaderboard(false)}
         />
-       )}
+      )}
 
+      {/* HEADER */}
       <StyledHeader>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Logo to="/">
@@ -371,30 +351,26 @@ export default function Header() {
 
           <MobileSectionLabel>Navigation</MobileSectionLabel>
 
-          <MobileMenuItem to="/games" onClick={() => setMobileOpen(false)}>
-            Games
+          <MobileMenuItem onClick={() => setMobileOpen(false)}>
+            <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>
+              Games
+            </NavLink>
           </MobileMenuItem>
 
-          <MobileMenuItem to="/referral" onClick={() => setMobileOpen(false)}>
-            Referral Program
+          <MobileMenuItem onClick={() => setMobileOpen(false)}>
+            <NavLink to="/referral" style={{ textDecoration: "none", color: "inherit" }}>
+              Referral Program
+            </NavLink>
           </MobileMenuItem>
 
           <MobileMenuItem
-            as="button"
             onClick={() => {
-            setShowLeaderboard(true)
-            setMobileOpen(false)
-          }}
-          style={{
-            background: "transparent",
-            border: "none",
-            textAlign: "left",
-            width: "100%",
-            cursor: "pointer",
-          }}
-         >
-          Leaderboard
-        </MobileMenuItem>
+              setShowLeaderboard(true)
+              setMobileOpen(false)
+            }}
+          >
+            Leaderboard
+          </MobileMenuItem>
 
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
