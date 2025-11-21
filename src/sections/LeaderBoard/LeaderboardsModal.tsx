@@ -39,7 +39,7 @@ interface LeaderboardsModalProps {
 // Kürzt Wallet-Adressen zu: A…b6J
 const shortenAddress = (addr: string) => {
   if (!addr) return ""
-  return `${addr.slice(0, 1)}…${addr.slice(-3)}`
+  return `${addr.slice(0, 3)}…${addr.slice(-3)}`
 }
 
 // Zahlformatierung → 2 Nachkommastellen + dt. Komma
