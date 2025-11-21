@@ -110,6 +110,8 @@ const MobileMenuIcon = styled.button`
   padding: 8px;
   transition: 0.2s ease;
 
+  margin-right: 6px; /* 👈 Mobile Icon etwas weiter nach links schieben */
+
   text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
 
   &:hover {
