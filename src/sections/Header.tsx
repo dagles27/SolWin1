@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Modal } from '../components/Modal'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
-import { PLATFORM_JACKPOT_FEE, PLATFORM_CREATOR_ADDRESS } from '../constants'
+import { PLATFORM_CREATOR_ADDRESS } from '../constants'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
@@ -21,7 +21,6 @@ import { ENABLE_LEADERBOARD } from '../constants'
 // STYLES
 // ========================================================
 
-/* Glow-Button mit kleineren Glow-Umfang für Jackpot & Wallet */
 const GlowButton = styled.div`
   background: #00ff99;
   color: #000;
@@ -33,25 +32,27 @@ const GlowButton = styled.div`
   width: 90%;
   margin: 0 auto;
   cursor: pointer;
-
-  /* Glow kleiner & dezenter */
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9977;
-
   transition: 0.2s;
   &:active {
     transform: scale(0.96);
   }
 `
 
-/* GlowWrapper korrigiert: kein schwarzer Hintergrund mehr */
 const GlowWrapper = styled.div`
   width: 100%;
   padding: 0;
   background: transparent !important;
   border-radius: 12px;
-
-  /* kleiner Glow, liegt nicht über */
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
+`
+
+/* Entfernt dunklen Hintergrund vom UserButton */
+const CleanUserButtonWrapper = styled.div`
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
 `
 
 const Bonus = styled.button`
@@ -63,7 +64,6 @@ const Bonus = styled.button`
   font-size: 12px;
   text-transform: uppercase;
   font-weight: bold;
-  transition: background-color 0.2s;
   &:hover {
     background: white;
   }
@@ -81,7 +81,6 @@ const StyledHeader = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-  overflow: visible;
 `
 
 const Logo = styled(NavLink)`
@@ -127,7 +126,6 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   transition: opacity 0.25s ease, transform 0.25s ease;
 
   z-index: 999999;
-  overflow: hidden;
 `
 
 const MobileMenuItem = styled(NavLink)`
@@ -136,7 +134,6 @@ const MobileMenuItem = styled(NavLink)`
   color: white;
   text-decoration: none;
   font-size: 15px;
-
   &:hover {
     background: #222;
   }
@@ -148,7 +145,6 @@ const MobileSectionLabel = styled.div`
   font-size: 12px;
   text-transform: uppercase;
 `
-
 
 // ========================================================
 // HEADER COMPONENT
@@ -167,7 +163,6 @@ export default function Header() {
 
   return (
     <>
-      {/* BONUS MODAL */}
       {bonusHelp && (
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
@@ -178,7 +173,6 @@ export default function Header() {
         </Modal>
       )}
 
-      {/* JACKPOT MODAL */}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
@@ -188,7 +182,6 @@ export default function Header() {
         </Modal>
       )}
 
-      {/* LEADERBOARD */}
       {ENABLE_LEADERBOARD && showLeaderboard && (
         <LeaderboardsModal
           creator={PLATFORM_CREATOR_ADDRESS.toBase58()}
@@ -196,20 +189,16 @@ export default function Header() {
         />
       )}
 
-      {/* HEADER */}
       <StyledHeader>
 
-        {/* Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Logo to="/">
             <img alt="Sol-Win logo" src="/logo.svg" />
           </Logo>
         </div>
 
-        {/* RIGHT SIDE */}
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
 
-          {/* Stylish Header Balance */}
           {balance.balance > 0 && (
             <div
               style={{
@@ -250,14 +239,11 @@ export default function Header() {
           </MobileMenuIcon>
         </div>
 
-        {/* MOBILE DROPDOWN */}
         <MobileDropdown open={mobileOpen}>
 
-          {/* Jackpot */}
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
-
               <GlowButton
                 onClick={() => {
                   setJackpotHelp(true)
@@ -283,18 +269,21 @@ export default function Header() {
             Leaderboard
           </MobileMenuItem>
 
-          {/* WALLET */}
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
+          {/* TokenSelect */}
           <div style={{ padding: "12px 18px" }}>
             <GlowWrapper>
               <TokenSelect />
             </GlowWrapper>
           </div>
 
+          {/* Wallet-Adresse (UserButton) komplett ohne dunklen Hintergrund */}
           <div style={{ padding: "12px 18px" }}>
-            <GlowButton onClick={() => setMobileOpen(false)}>
-              <UserButton />
+            <GlowButton>
+              <CleanUserButtonWrapper>
+                <UserButton />
+              </CleanUserButtonWrapper>
             </GlowButton>
           </div>
 
