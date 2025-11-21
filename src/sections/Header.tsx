@@ -129,7 +129,8 @@ const StyledHeader = styled.div`
 
 const Logo = styled(NavLink)`
   height: 40px;
-  margin: 0 18px;
+  margin: 0 6px 0 4px; /* vorher 0 18px — jetzt viel kompakter */
+  
   display: flex;
   align-items: center;
 
