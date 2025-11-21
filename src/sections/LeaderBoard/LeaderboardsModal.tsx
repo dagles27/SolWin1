@@ -22,7 +22,6 @@ import {
   RankNumber,
   PlayerInfo,
   VolumeAmount,
-  formatVolume,
   LoadingText,
   ErrorText,
   EmptyStateText,
@@ -33,10 +32,20 @@ interface LeaderboardsModalProps {
   creator: string
 }
 
-function formatVolume(volume: number) {
-  if (volume >= 1_000_000) return (volume / 1_000_000).toFixed(1) + "M";
-  if (volume >= 1_000) return (volume / 1_000).toFixed(1) + "K";
-  return volume.toString();
+/* ---------------------------------------------
+   WALLET & VOLUME FORMATTER
+---------------------------------------------- */
+
+// Kürzt Wallet-Adressen zu: A…b6J
+const shortenAddress = (addr: string) => {
+  if (!addr) return ""
+  return `${addr.slice(0, 1)}…${addr.slice(-3)}`
+}
+
+// Zahlformatierung → 2 Nachkommastellen + dt. Komma
+const formatUsdVolume = (volume: number) => {
+  if (!volume && volume !== 0) return ""
+  return volume.toFixed(2).replace('.', ',') // z. B. 234.73 → 234,73
 }
 
 const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
@@ -94,11 +103,20 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
 
             {leaderboard.map((entry: Player, index) => {
               const rank = index + 1
+
               return (
                 <RankItem key={entry.user} $isTop3={rank <= 3}>
-                  <RankNumber rank={rank}>{rank > 3 ? rank : ''}</RankNumber>
-                  <PlayerInfo title={entry.user}>{entry.user}</PlayerInfo>
-                  <VolumeAmount>{formatVolume(entry.usd_volume)}</VolumeAmount>
+                  <RankNumber rank={rank}>
+                    {rank > 3 ? rank : ''}
+                  </RankNumber>
+
+                  <PlayerInfo title={entry.user}>
+                    {shortenAddress(entry.user)}
+                  </PlayerInfo>
+
+                  <VolumeAmount>
+                    {formatUsdVolume(entry.usd_volume)}
+                  </VolumeAmount>
                 </RankItem>
               )
             })}
