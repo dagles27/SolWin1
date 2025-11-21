@@ -34,9 +34,6 @@ interface LeaderboardsModalProps {
 }
 
 const LeaderboardsModal = ({ onClose, creator }) => {
-  onClose,
-  creator,
-}) => {
   const [period, setPeriod] = useState<Period>('weekly') // default
 
   const {
