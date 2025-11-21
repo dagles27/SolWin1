@@ -2,6 +2,17 @@
 import styled, { css } from 'styled-components'
 
 /* ───── Base modal‑content shell (identical to StakingModal) ───── */
+export const ModalWrapper = styled.div`
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+
+  z-index: 9999999; /* 👈 WICHTIG: über Mobile Dropdown */
+`;
 export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
