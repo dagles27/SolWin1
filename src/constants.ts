@@ -47,8 +47,6 @@ export const POOLS = [
   lp('So11111111111111111111111111111111111111112'),
   // USDC:
   lp('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
-  //private pool example (mint + authority)
-  lp('So11111111111111111111111111111111111111112', 'Fki4Yah4ZXvFmDUw8WspxRAEmfERPth7PPEwPYt3bior'),
   ]
 
 // The default token to be selected
