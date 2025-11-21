@@ -3,8 +3,8 @@ import { Modal } from '../../components/Modal'
 import {
   useLeaderboardData,
   Period,
-  Player,           
-} from '../../hooks/useLeaderboardData' 
+  Player,
+} from '../../hooks/useLeaderboardData'
 
 import {
   ModalContent,
@@ -26,6 +26,7 @@ import {
   LoadingText,
   ErrorText,
   EmptyStateText,
+  ModalWrapper, // ← WICHTIG: musste importiert werden
 } from './LeaderboardsModal.styles'
 
 interface LeaderboardsModalProps {
@@ -33,8 +34,11 @@ interface LeaderboardsModalProps {
   creator: string
 }
 
-const LeaderboardsModal = ({ onClose, creator }) => {
-  const [period, setPeriod] = useState<Period>('weekly') // default
+const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
+  onClose,
+  creator,
+}) => {
+  const [period, setPeriod] = useState<Period>('weekly')
 
   const {
     data: leaderboard,
