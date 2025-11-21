@@ -380,9 +380,16 @@ export default function Header() {
             Referral Program
           </MobileMenuItem>
 
-          <MobileMenuItem to="/leaderboard" onClick={() => setMobileOpen(false)}>
-            Leaderboard
-          </MobileMenuItem>
+          <div
+  onClick={() => {
+    setShowLeaderboard(true);
+    setMobileOpen(false);
+  }}
+>
+  <MobileMenuItem as="div">
+    Leaderboard
+  </MobileMenuItem>
+</div>
 
           <MobileSectionLabel>Wallet</MobileSectionLabel>
 
