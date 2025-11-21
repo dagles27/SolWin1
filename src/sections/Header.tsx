@@ -9,7 +9,6 @@ import {
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { Modal } from '../components/Modal'
 import LeaderboardsModal from '../sections/LeaderBoard/LeaderboardsModal'
 import { PLATFORM_CREATOR_ADDRESS } from '../constants'
 import { useMediaQuery } from '../hooks/useMediaQuery'
@@ -311,7 +310,7 @@ export default function Header() {
           creator={PLATFORM_CREATOR_ADDRESS.toBaseBase58()}
           onClose={() => setShowLeaderboard(false)}
         />
-      )}
+       )}
 
       <StyledHeader>
         <div style={{ display: "flex", alignItems: "center" }}>
