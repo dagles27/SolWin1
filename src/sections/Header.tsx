@@ -22,11 +22,11 @@ import { Modal } from '../components/Modal'
 
 const GlowButton = styled.div`
   background: #00ff99;
-  color: #000;
+  color: #0F0F0F;
   text-align: center;
   font-weight: bold;
   padding: 6px 18px;
-  font-size: 18px;
+  font-size: 20px;
   border-radius: 10px;
   width: 100%;
   margin: 0 auto;
