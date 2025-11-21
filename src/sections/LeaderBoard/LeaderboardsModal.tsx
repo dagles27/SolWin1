@@ -48,16 +48,14 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
   return (
     <ModalWrapper onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        {/* HEADER */}
+        
         <HeaderSection>
           <Title>Leaderboard</Title>
           <Subtitle>
-            Top players by volume{' '}
-            {period === 'weekly' ? 'this week' : 'this month'} (USD)
+            Top players by volume {period === 'weekly' ? 'this week' : 'this month'} (USD)
           </Subtitle>
         </HeaderSection>
 
-        {/* TABS */}
         <TabRow>
           <TabButton
             $selected={period === 'weekly'}
@@ -76,7 +74,6 @@ const LeaderboardsModal: React.FC<LeaderboardsModalProps> = ({
           </TabButton>
         </TabRow>
 
-        {/* CONTENT */}
         {loading ? (
           <LoadingText>Loading...</LoadingText>
         ) : error ? (
