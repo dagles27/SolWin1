@@ -282,30 +282,30 @@ export default function Header() {
       )}
 
            {/* REFERRAL MODAL – angepasst an Repo-Styles (dark glass, grün neon, mobile-optimiert) */}
+{/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
 {referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
     <div 
       style={{
-        paddingTop: '80px',  /* Platz für Header */
-        background: 'rgba(12, 12, 20, 0.95)',  /* wie MobileDropdown */
+        paddingTop: '80px',
+        background: 'rgba(12, 12, 20, 0.95)',
         backdropFilter: 'blur(18px)',
-        border: '1px solid rgba(0, 255, 160, 0.25)',  /* grüner Border wie BalanceBox */
+        border: '1px solid rgba(0, 255, 160, 0.25)',
         borderRadius: '14px',
         padding: '24px',
         maxWidth: '90vw',
         maxHeight: '90vh',
         overflowY: 'auto',
-        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',  /* Glow-Shadow wie MobileDropdown */
-        color: '#e5fff5',  /* Textfarbe wie MobileMenuItem */
+        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',
+        color: '#e5fff5',
       }}
     >
-      {/* Überschrift – fett, grün-glow wie Logo */}
       <h1 
         style={{
           fontSize: '1.8rem',
           fontWeight: 'bold',
-          color: '#00ffc8',  /* grün wie MobileMenuIcon */
-          textShadow: '0 0 8px rgba(0, 255, 180, 0.75)',  /* Glow wie MobileMenuIcon */
+          color: '#00ffc8',
+          textShadow: '0 0 8px rgba(0, 255, 180, 0.75)',
           textAlign: 'center',
           marginBottom: '16px',
           letterSpacing: '0.5px',
@@ -314,48 +314,31 @@ export default function Header() {
         Referral Program
       </h1>
 
-      {/* Text – wie MobileMenuItem (hellgrau, leading-relaxed) */}
-      <p 
-        style={{
-          color: '#eafff7',  /* wie BalanceBox */
-          fontSize: '1rem',
-          lineHeight: '1.5',
-          marginBottom: '20px',
-          opacity: 0.9,
-        }}
-      >
+      <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.9 }}>
         Invite your friends using your personal referral link.
         When they sign up and connect their wallet for the first time using your link,
         you will earn <b style={{ color: '#ffe42d' }}>up to 25% of all transaction fees</b> from every bet they make!
       </p>
 
-      <p 
-        style={{
-          color: '#eafff7',
-          fontSize: '1rem',
-          lineHeight: '1.5',
-          marginBottom: '20px',
-          opacity: 0.8,
-        }}
-      >
+      <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.8 }}>
         Your rewards are automatic and paid instantly as your referrals play.
       </p>
 
-      {/* Copy-Button – wie Bonus (hover white, grün-glow) */}
+      {/* Copy Referral Link Button */}
       <button
         style={{
           width: '100%',
           padding: '12px',
-          background: 'rgba(0, 255, 174, 0.08)',  /* wie BalanceBox */
-          border: '1px solid rgba(0, 255, 170, 0.25)',  /* grüner Border */
+          background: 'rgba(0, 255, 174, 0.08)',
+          border: '1px solid rgba(0, 255, 170, 0.25)',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: 'bold',
           fontSize: '16px',
-          color: '#eafff7',  /* wie BalanceBox */
-          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',  /* inset glow wie BalanceBox */
+          color: '#eafff7',
+          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
           marginBottom: '18px',
-          transition: 'background 0.2s, box-shadow 0.2s',  /* wie Bonus */
+          transition: 'all 0.25s ease',
         }}
         onClick={() => {
           const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
@@ -364,52 +347,53 @@ export default function Header() {
         }}
         onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';  /* hover white wie Bonus */
-          e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 255, 174, 0.5)';
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)';
-          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)';
+          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
         }}
       >
         📋 Copy Referral Link
       </button>
 
-      {/* Help-Link – wie MobileMenuItem (hover grün) */}
-      <p style={{ marginTop: '20px', opacity: '0.8', fontSize: '14px', textAlign: 'center' }}>
-        Still confused?
-        Watch the quick guide video here:
-      </p>
-      <a
-        href="https://www.linktr.ee/solwin_casino"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'block',
-          width: '100%',
-          textAlign: 'center',
-          marginTop: '12px',
-          padding: '13px 20px',
-          background: 'transparent',
-          border: 'none',
-          color: '#e5fff5',
-          fontSize: '15px',
-          letterSpacing: '0.5px',
-          textDecoration: 'none',
-          borderRadius: '14px',
-          transition: '0.25s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(0, 255, 180, 0.08)';  /* hover wie MobileMenuItem */
-          e.currentTarget.style.color = '#00ffbf';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'transparent';
-          e.currentTarget.style.color = '#e5fff5';
-        }}
-      >
-        🎥 Open Help Video
-      </a>
+      {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
+      <div style={{ textAlign: 'center', marginTop: '8px' }}>
+        <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
+          Still confused? Watch the quick guide video:
+        </p>
+
+        <a
+          href="https://www.linktr.ee/solwin_casino"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-block',
+            width: '100%',
+            padding: '13px',
+            background: 'rgba(0, 255, 174, 0.08)',
+            border: '1px solid rgba(0, 255, 170, 0.25)',
+            borderRadius: '12px',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            color: '#eafff7',
+            textDecoration: 'none',
+            boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
+            transition: 'all 0.25s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+            e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
+          }}
+        >
+          🎥 Open Help Video
+        </a>
+      </div>
     </div>
   </Modal>
 )}
