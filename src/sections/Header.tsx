@@ -211,9 +211,9 @@ const MobileSectionLabel = styled.div`
 const BalanceBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: rgba(0, 255, 170, 0.08);
-  padding: 6px 14px;
+  padding: 4px 14px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
