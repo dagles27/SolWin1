@@ -3,7 +3,6 @@ import {
   GambaUi,
   TokenValue,
   useCurrentPool,
-  useGambaPlatformContext,
   useUserBalance,
 } from 'gamba-react-ui-v2'
 import React from 'react'
@@ -240,6 +239,9 @@ export default function Header() {
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
+  // NEW REFERRAL MODAL STATE
+  const [referralHelp, setReferralHelp] = React.useState(false)
+
   // Dropdown outside click
   const dropdownRef = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
@@ -279,6 +281,71 @@ export default function Header() {
         </Modal>
       )}
 
+      {/* REFERRAL MODAL */}
+      {referralHelp && (
+        <Modal onClose={() => setReferralHelp(false)}>
+          <h1>Referral Program</h1>
+
+          <p>
+            Invite your friends using your personal referral link.
+            When they sign up and connect their wallet for the first time using your link,
+            you will earn <b>up to 25% of all transaction fees</b> from every bet they make!
+          </p>
+
+          <p style={{ marginBottom: "20px" }}>
+            Your rewards are automatic and paid instantly as your referrals play.
+          </p>
+
+          {/* Copy referral link button */}
+          <button
+            style={{
+              width: "100%",
+              padding: "12px",
+              background: "#00ffae",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer",
+              fontWeight: "bold",
+              boxShadow: "0 0 10px #00ffaeaa",
+              marginBottom: "18px",
+            }}
+            onClick={() => {
+              const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
+              navigator.clipboard.writeText(link)
+              alert("Referral link copied!")
+            }}
+          >
+            📋 Copy Referral Link
+          </button>
+
+          <p style={{ marginTop: "20px", opacity: 0.8 }}>
+            Still confused?
+            Watch the quick guide video here:
+          </p>
+
+          <a
+            href="https://www.linktr.ee/solwin_casino"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "block",
+              width: "100%",
+              textAlign: "center",
+              marginTop: "12px",
+              padding: "12px",
+              background: "#0099ff",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              color: "#ffffff",
+              textDecoration: "none",
+              boxShadow: "0 0 10px #0099ffaa",
+            }}
+          >
+            🎥 Open Help Video
+          </a>
+        </Modal>
+      )}
+
       {/* LEADERBOARD MODAL */}
       {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
         <LeaderboardsModal
@@ -300,13 +367,14 @@ export default function Header() {
         </div>
 
         <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-          {/* Balance */}
+
           {balance.balance > 0 && (
             <BalanceBox>
               <span>Balance:</span>
               <TokenValue amount={balance.balance} />
             </BalanceBox>
           )}
+
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
@@ -335,6 +403,7 @@ export default function Header() {
 
         {/* MOBILE DROPDOWN */}
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
+          
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
@@ -357,10 +426,14 @@ export default function Header() {
             </NavLink>
           </MobileMenuItem>
 
-          <MobileMenuItem onClick={() => setMobileOpen(false)}>
-            <NavLink to="/referral" style={{ textDecoration: "none", color: "inherit" }}>
-              Referral Program
-            </NavLink>
+          {/* REFERRAL BUTTON — opens modal */}
+          <MobileMenuItem
+            onClick={() => {
+              setReferralHelp(true)
+              setMobileOpen(false)
+            }}
+          >
+            Referral Program
           </MobileMenuItem>
 
           <MobileMenuItem
