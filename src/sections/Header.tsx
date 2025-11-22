@@ -282,9 +282,9 @@ export default function Header() {
       )}
 
             {/* REFERRAL MODAL – FIX: Abstand oben + Button klickbar auf Mobile */}
-      {referralHelp && (
+       {referralHelp && (
         <Modal onClose={() => setReferralHelp(false)}>
-          <div style={{ paddingTop: '80px' }}> {/* ← FIX 1: Platz unter dem Header */}
+          <div style={{ paddingTop: '80px', minHeight: '100vh' }}>
             <h1>Referral Program</h1>
             <p>
               Invite your friends using your personal referral link.
@@ -296,7 +296,7 @@ export default function Header() {
             </p>
 
             {/* ← FIX 2: Button funktioniert jetzt auf Mobile */}
-            <button
+           <button
               style={{
                 width: "100%",
                 padding: "12px",
@@ -313,11 +313,11 @@ export default function Header() {
                 navigator.clipboard.writeText(link)
                 alert("Referral link copied!")
               }}
-              onMouseDown={(e) => e.preventDefault()}   {/* ← das war der eigentliche Mobile-Fix */}
+              onMouseDown={(e) => e.preventDefault()}  {/* ← jetzt korrekt im Button */}
             >
               📋 Copy Referral Link
             </button>
-
+          
             <p style={{ marginTop: "20px", opacity: 0.8 }}>
               Still confused?
               Watch the quick guide video here:
