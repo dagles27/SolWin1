@@ -281,106 +281,135 @@ export default function Header() {
         </Modal>
       )}
 
-           {referralHelp && (
+           {/* REFERRAL MODAL – angepasst an Repo-Styles (dark glass, grün neon, mobile-optimiert) */}
+{referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
-    <div
-      className="relative mx-auto max-w-md w-full bg-gradient-to-b from-[#1a1a2e] to-[#16213e] 
-                 rounded-2xl border border-[#00ffae33] shadow-2xl 
-                 overflow-hidden backdrop-blur-xl"
+    <div 
       style={{
-        paddingTop: "90px",
-        paddingBottom: "32px",
-        paddingLeft: "24px",
-        paddingRight: "24px",
-        background:
-          "linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%)",
-        boxShadow:
-          "0 0 40px rgba(0, 255, 174, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+        paddingTop: '80px',  /* Platz für Header */
+        background: 'rgba(12, 12, 20, 0.95)',  /* wie MobileDropdown */
+        backdropFilter: 'blur(18px)',
+        border: '1px solid rgba(0, 255, 160, 0.25)',  /* grüner Border wie BalanceBox */
+        borderRadius: '14px',
+        padding: '24px',
+        maxWidth: '90vw',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',  /* Glow-Shadow wie MobileDropdown */
+        color: '#e5fff5',  /* Textfarbe wie MobileMenuItem */
       }}
     >
-      {/* Neon-Header */}
-      <h1
-        className="text-4xl md:text-5xl font-black text-transparent bg-clip-text 
-                   bg-gradient-to-r from-[#00ffae] via-[#00ffae] to-[#00ffae] 
-                   drop-shadow-lg text-center mb-6"
+      {/* Überschrift – fett, grün-glow wie Logo */}
+      <h1 
         style={{
-          textShadow: "0 0 20px #00ffae, 0 0 40px #00ffae",
-          letterSpacing: "0.05em",
+          fontSize: '1.8rem',
+          fontWeight: 'bold',
+          color: '#00ffc8',  /* grün wie MobileMenuIcon */
+          textShadow: '0 0 8px rgba(0, 255, 180, 0.75)',  /* Glow wie MobileMenuIcon */
+          textAlign: 'center',
+          marginBottom: '16px',
+          letterSpacing: '0.5px',
         }}
       >
-        REFERRAL PROGRAM
+        Referral Program
       </h1>
 
-      {/* Haupttext */}
-      <p className="text-lg md:text-xl text-gray-200 leading-relaxed text-center mb-6">
+      {/* Text – wie MobileMenuItem (hellgrau, leading-relaxed) */}
+      <p 
+        style={{
+          color: '#eafff7',  /* wie BalanceBox */
+          fontSize: '1rem',
+          lineHeight: '1.5',
+          marginBottom: '20px',
+          opacity: 0.9,
+        }}
+      >
         Invite your friends using your personal referral link.
-        <br />
         When they sign up and connect their wallet for the first time using your link,
-        <br />
-        you will earn{" "}
-        <span className="font-black text-[#00ffae] text-2xl glow">
-          up to 25% of all transaction fees
-        </span>{" "}
-        from every bet they make!
+        you will earn <b style={{ color: '#ffe42d' }}>up to 25% of all transaction fees</b> from every bet they make!
       </p>
 
-      <p className="text-md text-gray-400 text-center mb-8 opacity-90">
+      <p 
+        style={{
+          color: '#eafff7',
+          fontSize: '1rem',
+          lineHeight: '1.5',
+          marginBottom: '20px',
+          opacity: 0.8,
+        }}
+      >
         Your rewards are automatic and paid instantly as your referrals play.
       </p>
 
-      {/* Copy-Button – jetzt 100% mobil klickbar & Sol-Win Style */}
+      {/* Copy-Button – wie Bonus (hover white, grün-glow) */}
       <button
-        className="w-full py-5 px-8 rounded-2xl font-black text-xl tracking-wider
-                   bg-gradient-to-r from-[#00ffae] to-[#00ff85] text-black
-                   border-2 border-[#00ffae] 
-                   shadow-lg shadow-[#00ffae]/50 
-                   transform transition-all duration-200 active:scale-95
-                   hover:shadow-[#00ffae]/80 hover:brightness-110
-                   focus:outline-none focus:ring-4 focus:ring-[#00ffae]/50"
-        onClick={() => {
-          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`;
-          navigator.clipboard.writeText(link);
-          // Optional: schöneres Feedback als alert()
-          alert("✅ Referral link copied to clipboard!");
+        style={{
+          width: '100%',
+          padding: '12px',
+          background: 'rgba(0, 255, 174, 0.08)',  /* wie BalanceBox */
+          border: '1px solid rgba(0, 255, 170, 0.25)',  /* grüner Border */
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          color: '#eafff7',  /* wie BalanceBox */
+          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',  /* inset glow wie BalanceBox */
+          marginBottom: '18px',
+          transition: 'background 0.2s, box-shadow 0.2s',  /* wie Bonus */
         }}
-        // Wichtig für Mobile: verhindert langes Drücken / Kontextmenü
+        onClick={() => {
+          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
+          navigator.clipboard.writeText(link)
+          alert("Referral link copied!")
+        }}
         onMouseDown={(e) => e.preventDefault()}
-        onTouchStart={(e) => e.preventDefault()}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';  /* hover white wie Bonus */
+          e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 255, 174, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)';
+          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)';
+        }}
       >
-        📋 COPY REFERRAL LINK
+        📋 Copy Referral Link
       </button>
 
-      {/* Help-Video Button */}
-      <div className="mt-10 text-center">
-        <p className="text-gray-400 mb-4 text-sm md:text-base">
-          Still confused? Watch the quick guide video here:
-        </p>
-
-        <a
-          href="https://www.linktr.ee/solwin_casino"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block w-full max0-w-xs py-4 px-8 rounded-2xl font-bold text-lg
-                     bg-gradient-to-r from-[#0099ff] to-[#00c8ff] text-white
-                     border-2 border-[#0099ff]
-                     shadow-lg shadow-[#0099ff]/50
-                     transform transition-all duration-200 active:scale-95
-                     hover:shadow-[#0099ff]/80 hover:brightness-110"
-        >
-          🎥 OPEN HELP VIDEO
-        </a>
-      </div>
-
-      {/* Optional: dezenter Close-Button oben rechts */}
-      <button
-        onClick={() => setReferralHelp(false)}
-        className="absolute top-4 right-4 w-10 h-10 rounded-full 
-                   bg-white/10 backdrop-blur-md border border-white/20
-                   flex items-center justify-center text-2xl text-gray-400
-                   hover:bg-white/20 hover:text-white transition"
+      {/* Help-Link – wie MobileMenuItem (hover grün) */}
+      <p style={{ marginTop: '20px', opacity: '0.8', fontSize: '14px', textAlign: 'center' }}>
+        Still confused?
+        Watch the quick guide video here:
+      </p>
+      <a
+        href="https://www.linktr.ee/solwin_casino"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'block',
+          width: '100%',
+          textAlign: 'center',
+          marginTop: '12px',
+          padding: '13px 20px',
+          background: 'transparent',
+          border: 'none',
+          color: '#e5fff5',
+          fontSize: '15px',
+          letterSpacing: '0.5px',
+          textDecoration: 'none',
+          borderRadius: '14px',
+          transition: '0.25s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'rgba(0, 255, 180, 0.08)';  /* hover wie MobileMenuItem */
+          e.currentTarget.style.color = '#00ffbf';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'transparent';
+          e.currentTarget.style.color = '#e5fff5';
+        }}
       >
-        ×
-      </button>
+        🎥 Open Help Video
+      </a>
     </div>
   </Modal>
 )}
