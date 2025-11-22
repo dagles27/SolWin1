@@ -306,6 +306,7 @@ Du hast’s geschafft! Jetzt wird abgekassiert 🚀💰💜
             {/* ← FIX 2: Button funktioniert jetzt auf Mobile */}
             <button
               style={{
+                align-items: center;
                 width: "85%",
                 padding: "10px",
                 background: "#00ffae",
@@ -335,6 +336,7 @@ Du hast’s geschafft! Jetzt wird abgekassiert 🚀💰💜
               target="_blank"
               rel="noopener noreferrer"
               style={{
+                align-items: center;
                 display: "block",
                 width: "85%",
                 textAlign: "center",
