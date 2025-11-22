@@ -281,68 +281,68 @@ export default function Header() {
         </Modal>
       )}
 
-      {/* REFERRAL MODAL */}
+            {/* REFERRAL MODAL – FIX: Abstand oben + Button klickbar auf Mobile */}
       {referralHelp && (
         <Modal onClose={() => setReferralHelp(false)}>
-          <h1>Referral Program</h1>
+          <div style={{ paddingTop: '80px' }}> {/* ← FIX 1: Platz unter dem Header */}
+            <h1>Referral Program</h1>
+            <p>
+              Invite your friends using your personal referral link.
+              When they sign up and connect their wallet for the first time using your link,
+              you will earn <b>up to 25% of all transaction fees</b> from every bet they make!
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              Your rewards are automatic and paid instantly as your referrals play.
+            </p>
 
-          <p>
-            Invite your friends using your personal referral link.
-            When they sign up and connect their wallet for the first time using your link,
-            you will earn <b>up to 25% of all transaction fees</b> from every bet they make!
-          </p>
+            {/* ← FIX 2: Button funktioniert jetzt auf Mobile */}
+            <button
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#00ffae",
+                border: "none",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                boxShadow: "0 0 10px #00ffaeaa",
+                marginBottom: "18px",
+              }}
+              onClick={() => {
+                const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
+                navigator.clipboard.writeText(link)
+                alert("Referral link copied!")
+              }}
+              onMouseDown={(e) => e.preventDefault()}   {/* ← das war der eigentliche Mobile-Fix */}
+            >
+              📋 Copy Referral Link
+            </button>
 
-          <p style={{ marginBottom: "20px" }}>
-            Your rewards are automatic and paid instantly as your referrals play.
-          </p>
-
-          {/* Copy referral link button */}
-          <button
-            style={{
-              width: "100%",
-              padding: "12px",
-              background: "#00ffae",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              boxShadow: "0 0 10px #00ffaeaa",
-              marginBottom: "18px",
-            }}
-            onClick={() => {
-              const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
-              navigator.clipboard.writeText(link)
-              alert("Referral link copied!")
-            }}
-          >
-            📋 Copy Referral Link
-          </button>
-
-          <p style={{ marginTop: "20px", opacity: 0.8 }}>
-            Still confused?
-            Watch the quick guide video here:
-          </p>
-
-          <a
-            href="https://www.linktr.ee/solwin_casino"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "block",
-              width: "100%",
-              textAlign: "center",
-              marginTop: "12px",
-              padding: "12px",
-              background: "#0099ff",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              color: "#ffffff",
-              textDecoration: "none",
-              boxShadow: "0 0 10px #0099ffaa",
-            }}
-          >
-            🎥 Open Help Video
-          </a>
+            <p style={{ marginTop: "20px", opacity: 0.8 }}>
+              Still confused?
+              Watch the quick guide video here:
+            </p>
+            <a
+              href="https://www.linktr.ee/solwin_casino"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "center",
+                marginTop: "12px",
+                padding: "12px",
+                background: "#0099ff",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                color: "#ffffff",
+                textDecoration: "none",
+                boxShadow: "0 0 10px #0099ffaa",
+              }}
+            >
+              🎥 Open Help Video
+            </a>
+          </div>
         </Modal>
       )}
 
