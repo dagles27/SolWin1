@@ -3,7 +3,6 @@ import {
   GambaUi,
   TokenValue,
   useCurrentPool,
-  useGambaPlatformContext,
   useUserBalance,
 } from 'gamba-react-ui-v2'
 import React from 'react'
@@ -103,6 +102,7 @@ const Logo = styled(NavLink)`
   }
 `
 
+// HAMBURGER HIDDEN ON DESKTOP
 const MobileMenuIcon = styled.button`
   display: block;
   background: transparent;
@@ -122,13 +122,24 @@ const MobileMenuIcon = styled.button`
   }
 
   @media (min-width: 1025px) {
-    display: none;
+    display: none; /* ← makes it invisible on desktop */
   }
 `
 
+// SHOW DROPDOWN ALSO ON DESKTOP
 const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
-    display: none;
+    display: block !important;   /* ← always visible on desktop */
+    opacity: 1 !important;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+    position: fixed; /* keep same location */
+    top: 58px;
+    right: 12px;
+  }
+
+  @media (max-width: 1024px) {
+    display: ${({ open }) => (open ? "block" : "none")};
   }
 
   position: absolute;
@@ -143,11 +154,6 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   box-shadow:
     0 0 14px rgba(0, 255, 180, 0.45),
     inset 0 0 6px rgba(0, 255, 180, 0.15);
-  opacity: ${({ open }) => (open ? 1 : 0)};
-  transform: scale(${({ open }) => (open ? 1 : 0.92)})
-    translateY(${({ open }) => (open ? "0" : "-8px")});
-  pointer-events: ${({ open }) => (open ? "auto" : "none")};
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 999999;
 `
 
@@ -170,21 +176,6 @@ const MobileMenuItem = styled.button`
     background: rgba(0, 255, 180, 0.08);
     color: #00ffbf;
   }
-
-  &:after {
-    content: "";
-    position: absolute;
-    left: 20px;
-    bottom: 8px;
-    width: 0%;
-    height: 2px;
-    background: linear-gradient(90deg, #00ffbf, transparent);
-    transition: width 0.25s ease;
-  }
-
-  &:hover:after {
-    width: 60%;
-  }
 `
 
 const MobileSectionLabel = styled.div`
@@ -194,18 +185,7 @@ const MobileSectionLabel = styled.div`
   text-transform: uppercase;
   letter-spacing: 1.4px;
   opacity: 0.75;
-  position: relative;
   margin-bottom: 6px;
-
-  &:after {
-    content: "";
-    position: absolute;
-    left: 22px;
-    bottom: 0;
-    height: 1px;
-    width: 40%;
-    background: linear-gradient(90deg, #00ffbf66, transparent);
-  }
 `
 
 const BalanceBox = styled.div`
@@ -227,7 +207,7 @@ const BalanceBox = styled.div`
 `
 
 // ========================================================
-// HEADER COMPONENT
+// HEADER
 // ========================================================
 
 export default function Header() {
@@ -240,58 +220,33 @@ export default function Header() {
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
-  // Dropdown outside click
   const dropdownRef = React.useRef<HTMLDivElement>(null)
-  React.useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node) &&
-        !(e.target as HTMLElement).closest("button[data-menu]")
-      ) {
-        setMobileOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
 
   return (
     <>
-      {/* BONUS MODAL */}
       {bonusHelp && (
         <Modal onClose={() => setBonusHelp(false)}>
           <h1>Bonus ✨</h1>
           <p>
             You have <b><TokenValue amount={balance.bonusBalance} /></b> worth of free plays.
           </p>
-          <p>A fee is still taken for each play.</p>
         </Modal>
       )}
 
-      {/* JACKPOT MODAL */}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
           <h1>Jackpot</h1>
-          <p style={{ fontWeight: "bold" }}>
-            <TokenValue amount={pool.jackpotBalance} /> is currently in the pot.
-          </p>
+          <p><TokenValue amount={pool.jackpotBalance} /> is currently in the pot.</p>
         </Modal>
       )}
 
-      {/* LEADERBOARD MODAL */}
-      {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
+      {ENABLE_LEADERBOARD && showLeaderboard && (
         <LeaderboardsModal
-          creator={
-            typeof PLATFORM_CREATOR_ADDRESS.toBaseBase58 === "function"
-              ? PLATFORM_CREATOR_ADDRESS.toBaseBase58()
-              : PLATFORM_CREATOR_ADDRESS
-          }
+          creator={PLATFORM_CREATOR_ADDRESS}
           onClose={() => setShowLeaderboard(false)}
         />
       )}
 
-      {/* HEADER */}
       <StyledHeader>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Logo to="/">
@@ -300,20 +255,20 @@ export default function Header() {
         </div>
 
         <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-          {/* Balance */}
+
           {balance.balance > 0 && (
             <BalanceBox>
               <span>Balance:</span>
               <TokenValue amount={balance.balance} />
             </BalanceBox>
           )}
+
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
             </Bonus>
           )}
 
-          {/* Desktop */}
           {isDesktop && (
             <>
               <TokenSelect />
@@ -324,7 +279,7 @@ export default function Header() {
             </>
           )}
 
-          {/* Mobile menu button */}
+          {/* MOBILE ONLY BUTTON */}
           <MobileMenuIcon
             data-menu
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -333,7 +288,7 @@ export default function Header() {
           </MobileMenuIcon>
         </div>
 
-        {/* MOBILE DROPDOWN */}
+        {/* MOBILE DROPDOWN (ALSO DESKTOP NOW) */}
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
           {pool.jackpotBalance > 0 && (
             <>
@@ -351,24 +306,19 @@ export default function Header() {
 
           <MobileSectionLabel>Navigation</MobileSectionLabel>
 
-          <MobileMenuItem onClick={() => setMobileOpen(false)}>
-            <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>
+          <MobileMenuItem>
+            <NavLink to="/games" style={{ color: "inherit", textDecoration: "none" }}>
               Games
             </NavLink>
           </MobileMenuItem>
 
-          <MobileMenuItem onClick={() => setMobileOpen(false)}>
-            <NavLink to="/referral" style={{ textDecoration: "none", color: "inherit" }}>
+          <MobileMenuItem>
+            <NavLink to="/referral" style={{ color: "inherit", textDecoration: "none" }}>
               Referral Program
             </NavLink>
           </MobileMenuItem>
 
-          <MobileMenuItem
-            onClick={() => {
-              setShowLeaderboard(true)
-              setMobileOpen(false)
-            }}
-          >
+          <MobileMenuItem onClick={() => setShowLeaderboard(true)}>
             Leaderboard
           </MobileMenuItem>
 
