@@ -306,8 +306,8 @@ Du hast’s geschafft! Jetzt wird abgekassiert 🚀💰💜
             {/* ← FIX 2: Button funktioniert jetzt auf Mobile */}
             <button
               style={{
-                width: "100%",
-                padding: "12px",
+                width: "85%",
+                padding: "10px",
                 background: "#00ffae",
                 border: "none",
                 borderRadius: "10px",
@@ -336,10 +336,10 @@ Du hast’s geschafft! Jetzt wird abgekassiert 🚀💰💜
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                width: "100%",
+                width: "85%",
                 textAlign: "center",
                 marginTop: "12px",
-                padding: "12px",
+                padding: "10px",
                 background: "#0099ff",
                 borderRadius: "10px",
                 fontWeight: "bold",
