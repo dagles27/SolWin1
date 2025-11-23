@@ -233,6 +233,7 @@ export default function Header() {
   const pool = useCurrentPool()
   const balance = useUserBalance()
   const isDesktop = useMediaQuery('lg')
+  const wallet = GambaUi.useWallet()
 
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
@@ -341,22 +342,19 @@ export default function Header() {
           transition: 'all 0.25s ease',
         }}
         onClick={() => {
-          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
-          navigator.clipboard.writeText(link)
-          alert("Referral link copied!")
-        }}
-        onMouseDown={(e) => e.preventDefault()}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
-        }}
-      >
-        📋 Copy Referral Link
-      </button>
+          const ref = wallet?.publicKey?.toString()
+    if (!ref) {
+      alert("Connect your wallet first!")
+      return
+    }
+
+    const link = `${window.location.origin}/?ref=${ref}`
+    navigator.clipboard.writeText(link)
+    alert("Referral link copied!")
+  }}
+>
+  📋 Copy Referral Link
+</button>
 
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
