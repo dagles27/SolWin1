@@ -399,10 +399,10 @@ export default function Header() {
       {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
         <LeaderboardsModal
           creator={
-            typeof PLATFORM_CREATOR_ADDRESS.toBaseBase58 === "function"
-              ? PLATFORM_CREATOR_ADDRESS.toBaseBase58()
-              : PLATFORM_CREATOR_ADDRESS
-          }
+  typeof PLATFORM_CREATOR_ADDRESS?.toBase58 === "function"
+    ? PLATFORM_CREATOR_ADDRESS.toBase58()
+    : PLATFORM_CREATOR_ADDRESS
+}
           onClose={() => setShowLeaderboard(false)}
         />
       )}
