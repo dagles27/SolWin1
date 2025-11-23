@@ -14,6 +14,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
+import { PublicKey } from '@solana/web3.js'
 
 // ========================================================
 // STYLES
@@ -399,9 +400,9 @@ export default function Header() {
       {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
         <LeaderboardsModal
           creator={
-  typeof PLATFORM_CREATOR_ADDRESS?.toBase58 === "function"
+  PLATFORM_CREATOR_ADDRESS instanceof PublicKey
     ? PLATFORM_CREATOR_ADDRESS.toBase58()
-    : PLATFORM_CREATOR_ADDRESS
+    : String(PLATFORM_CREATOR_ADDRESS)
 }
           onClose={() => setShowLeaderboard(false)}
         />
