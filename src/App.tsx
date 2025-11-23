@@ -15,6 +15,7 @@ import Header from './sections/Header'
 import RecentPlays from './sections/RecentPlays/RecentPlays'
 import Toasts from './sections/Toasts'
 import TrollBox from './components/TrollBox'
+import AllGames from "./sections/allgames"
 
 import { MainWrapper, TosInner, TosWrapper } from './styles'
 
@@ -81,6 +82,7 @@ export default function App() {
         <Routes>
           {/* Normal landing page always shows Dashboard (with optional inline game) */}
           <Route path="/"          element={<Dashboard />} />
+          <Route path="/games" element={<AllGames />} />
           {/* Dedicated game pages */}
           <Route path="/:gameId"   element={<Game />} />
         </Routes>
