@@ -2,7 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useGames } from 'gamba-react-ui-v2'
-import { GameCard } from './GameCard'  // ← Annahme: dein GameCard-Component
 
 const Container = styled.div`
   padding: 20px;
@@ -57,7 +56,6 @@ const FilterButton = styled.button<{ active: boolean }>`
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: ${({ active }) => active ? '0 0 15px rgba(0, 255, 174, 0.6)' : 'none'};
-  backdrop-filter: blur(10px);
 
   &:hover {
     background: linear-gradient(135deg, #00ffae, #00cc85);
@@ -91,6 +89,71 @@ const GamesGrid = styled.div`
 
   @media (min-width: 480px) and (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+`
+
+const GameCard = styled.div`
+  background: rgba(12, 12, 20, 0.8);
+  border: 1px solid rgba(0, 255, 174, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  &:hover {
+    background: rgba(12, 12, 20, 0.95);
+    border-color: #00ffae;
+    box-shadow: 0 12px 40px rgba(0, 255, 174, 0.4);
+    transform: translateY(-4px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+`
+
+const GameTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00ffae;
+  margin-bottom: 12px;
+  text-shadow: 0 0 10px rgba(0, 255, 174, 0.5);
+`
+
+const GameDescription = styled.p`
+  color: #e5fff5;
+  opacity: 0.8;
+  line-height: 1.5;
+  margin-bottom: 16px;
+`
+
+const PlayButton = styled.button`
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #00ffae, #00cc85);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 255, 174, 0.4);
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 174, 0.6);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    font-size: 0.95rem;
   }
 `
 
@@ -150,9 +213,22 @@ export default function AllGames() {
       </FilterButtons>
 
       <GamesGrid>
-        {filteredGames.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
+        {filteredGames.length === 0 ? (
+          <GameCard>
+            <GameTitle>No games found</GameTitle>
+            <GameDescription>Try a different filter.</GameDescription>
+          </GameCard>
+        ) : (
+          filteredGames.map((game) => (
+            <GameCard key={game.id}>
+              <GameTitle>{game.name}</GameTitle>
+              <GameDescription>{game.description}</GameDescription>
+              <PlayButton onClick={() => window.location.href = `/game/${game.id}`}>
+                Play Now
+              </PlayButton>
+            </GameCard>
+          ))
+        )}
       </GamesGrid>
     </Container>
   )
