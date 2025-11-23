@@ -47,7 +47,7 @@ export default function AllGames() {
           textShadow: "0 0 15px rgba(0,255,180,0.7)",
         }}
       >
-        🎮 Games
+        All Games | Play & Win
       </h1>
 
       <p style={{ textAlign: "center", opacity: 0.8, marginBottom: "50px" }}>
