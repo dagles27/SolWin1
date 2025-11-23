@@ -83,7 +83,6 @@ export default function App() {
           {/* Normal landing page always shows Dashboard (with optional inline game) */}
           <Route path="/"          element={<Dashboard />} />
           <Route path="/games" element={<AllGames />} />
-          <Route path="/games/:id" element={<GameWrapper />} />
           {/* Dedicated game pages */}
           <Route path="/:gameId"   element={<Game />} />
         </Routes>
