@@ -295,6 +295,7 @@ export default function Header() {
       {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
         {/* FINAL & 100% FUNKTIONIEREND – nutzt exakt dieselbe Logik wie im UserButton */}
       {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
+            {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
       <button
         style={{
           width: '100%',
