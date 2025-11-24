@@ -293,9 +293,41 @@ export default function Header() {
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
             {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
       {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
-     <GambaUi.Button main onClick={() => user.set({ userModal: true })}>
-  🎉 Open Wallet & Copy Referral Link
-</GambaUi.Button>
+          <button
+        style={{
+          width: '100%',
+          padding: '14px',
+          background: 'rgba(0, 255, 174, 0.08)',
+          border: '1px solid rgba(0, 255, 170, 0.25)',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          color: '#eafff7',
+          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
+          marginBottom: '18px',
+          transition: 'all 0.25s ease',
+        }}
+        onClick={() => {
+          try {
+            GambaUi.useReferral().copyLinkToClipboard()
+            // Dein eigener Toast aus useToast() – wie im UserButton!
+            // Wenn du useToast() hier nutzen willst, musst du ihn importieren
+          } catch {
+            alert('Please connect your wallet first!')
+          }
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
+        }}
+      >
+        💸 Copy Invite Link
+      </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
