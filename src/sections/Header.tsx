@@ -14,11 +14,9 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
-
 // ========================================================
 // STYLES
 // ========================================================
-
 const GlowButton = styled.div`
   background: #00ff99;
   color: #000000;
@@ -36,7 +34,6 @@ const GlowButton = styled.div`
     transform: scale(0.96);
   }
 `
-
 const GlowWrapper = styled.div`
   width: 100%;
   padding: 0;
@@ -44,14 +41,12 @@ const GlowWrapper = styled.div`
   border-radius: 12px;
   box-shadow: 0 0 6px #00ff99, 0 0 12px #00ff9944;
 `
-
 const CleanUserButtonWrapper = styled.div`
   * {
     background: transparent !important;
     box-shadow: none !important;
   }
 `
-
 const Bonus = styled.button`
   all: unset;
   cursor: pointer;
@@ -65,7 +60,6 @@ const Bonus = styled.button`
     background: white;
   }
 `
-
 const StyledHeader = styled.div`
   display: flex;
   align-items: center;
@@ -78,30 +72,25 @@ const StyledHeader = styled.div`
   top: 0;
   left: 0;
   z-index: 9999;
-
   @media (max-width: 1024px) {
     padding: 10px 6px;
   }
 `
-
 const Logo = styled(NavLink)`
   height: 35px;
   margin: 0 15px;
   display: flex;
   align-items: center;
-
   img {
     height: 130%;
     filter: drop-shadow(0 0 6px rgba(0, 255, 180, 0.45));
     transition: 0.25s ease;
   }
-
   &:hover img {
     filter: drop-shadow(0 0 10px rgba(0, 255, 200, 0.7));
     transform: scale(1.03);
   }
 `
-
 const MobileMenuIcon = styled.button`
   display: block;
   background: transparent;
@@ -113,23 +102,19 @@ const MobileMenuIcon = styled.button`
   transition: 0.2s ease;
   margin-right: 6px;
   text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
-
   &:hover {
     color: #8affea;
     text-shadow: 0 0 12px rgba(0, 255, 200, 1);
     transform: scale(1.12);
   }
-
   @media (min-width: 1025px) {
     display: none;
   }
 `
-
 const MobileDropdown = styled.div<{ open: boolean }>`
   @media (min-width: 1025px) {
     display: none;
   }
-
   position: absolute;
   top: 58px;
   right: 12px;
@@ -149,7 +134,6 @@ const MobileDropdown = styled.div<{ open: boolean }>`
   transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 999999;
 `
-
 const MobileMenuItem = styled.button`
   display: block;
   width: 100%;
@@ -164,12 +148,10 @@ const MobileMenuItem = styled.button`
   position: relative;
   overflow: hidden;
   transition: 0.25s ease;
-
   &:hover {
     background: rgba(0, 255, 180, 0.08);
     color: #00ffbf;
   }
-
   &:after {
     content: "";
     position: absolute;
@@ -180,12 +162,10 @@ const MobileMenuItem = styled.button`
     background: linear-gradient(90deg, #00ffbf, transparent);
     transition: width 0.25s ease;
   }
-
   &:hover:after {
     width: 60%;
   }
 `
-
 const MobileSectionLabel = styled.div`
   padding: 14px 22px 6px;
   color: #6affd8;
@@ -195,7 +175,6 @@ const MobileSectionLabel = styled.div`
   opacity: 0.75;
   position: relative;
   margin-bottom: 6px;
-
   &:after {
     content: "";
     position: absolute;
@@ -206,7 +185,6 @@ const MobileSectionLabel = styled.div`
     background: linear-gradient(90deg, #00ffbf66, transparent);
   }
 `
-
 const BalanceBox = styled.div`
   display: flex;
   align-items: center;
@@ -219,29 +197,23 @@ const BalanceBox = styled.div`
   color: #eafff7;
   border: 1px solid rgba(0, 255, 170, 0.25);
   box-shadow: inset 0 0 8px rgba(0, 255, 150, 0.12);
-
   span {
     opacity: 0.65;
   }
 `
-
 // ========================================================
 // HEADER COMPONENT
 // ========================================================
-
 export default function Header() {
   const pool = useCurrentPool()
   const balance = useUserBalance()
   const isDesktop = useMediaQuery('lg')
-
   const [showLeaderboard, setShowLeaderboard] = React.useState(false)
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
-
   // NEW REFERRAL MODAL STATE
   const [referralHelp, setReferralHelp] = React.useState(false)
-
   // Dropdown outside click
   const dropdownRef = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
@@ -257,7 +229,6 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
-
   return (
     <>
       {/* BONUS MODAL */}
@@ -270,7 +241,6 @@ export default function Header() {
           <p>A fee is still taken for each play.</p>
         </Modal>
       )}
-
       {/* JACKPOT MODAL */}
       {jackpotHelp && (
         <Modal onClose={() => setJackpotHelp(false)}>
@@ -280,12 +250,11 @@ export default function Header() {
           </p>
         </Modal>
       )}
-
            {/* REFERRAL MODAL – angepasst an Repo-Styles (dark glass, grün neon, mobile-optimiert) */}
 {/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
 {referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
-    <div 
+    <div
       style={{
         paddingTop: '80px',
         background: 'rgba(12, 12, 20, 0.95)',
@@ -300,7 +269,7 @@ export default function Header() {
         color: '#e5fff5',
       }}
     >
-      <h1 
+      <h1
         style={{
           fontSize: '1.8rem',
           fontWeight: 'bold',
@@ -313,23 +282,19 @@ export default function Header() {
       >
         Referral Program
       </h1>
-
       <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.9 }}>
         Invite your friends using your personal referral link.
         When they sign up and connect their wallet for the first time using your link,
         you will earn <b style={{ color: '#ffe42d' }}>up to 25% of all transaction fees</b> from every bet they make!
       </p>
-
       <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.8 }}>
         Your rewards are automatic and paid instantly as your referrals play.
       </p>
-
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
-           {/* FINAL FIX: Copy Referral Link – funktioniert garantiert + schönes Feedback */}
       <button
         style={{
           width: '100%',
-          padding: '14px',
+          padding: '12px',
           background: 'rgba(0, 255, 174, 0.08)',
           border: '1px solid rgba(0, 255, 170, 0.25)',
           borderRadius: '12px',
@@ -339,63 +304,30 @@ export default function Header() {
           color: '#eafff7',
           boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
           marginBottom: '18px',
-          transition: 'all 0.3s ease',
-          position: 'relative',
-          userSelect: 'none',
+          transition: 'all 0.25s ease',
         }}
-        onClick={async () => {
-          // RICHTIGE Methode: useWallet aus GambaUi Provider (wie überall im Projekt!)
-          const { publicKey } = GambaUi.useWallet()
-
-          if (!publicKey) {
-            alert('Please connect your wallet first!')
-            return
-          }
-
-          const referralLink = `${window.location.origin}/?ref=${publicKey.toBase58()}`
-
-          try {
-            await navigator.clipboard.writeText(referralLink)
-
-            // Visuelles "Copied!" Feedback direkt im Button
-            const button = event?.currentTarget
-            const originalText = button.innerHTML
-
-            button.innerHTML = 'Copied! ✅'
-            button.style.background = 'rgba(0, 255, 174, 0.4)'
-            button.style.transform = 'scale(0.98)'
-
-            setTimeout(() => {
-              button.innerHTML = originalText
-              button.style.background = 'rgba(0, 255, 174, 0.08)'
-              button.style.transform = 'scale(1)'
-            }, 2000)
-          } catch (err) {
-            console.error('Copy failed:', err)
-            alert('Copy failed – please copy manually: ' + referralLink)
-          }
+        onClick={() => {
+          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
+          navigator.clipboard.writeText(link)
+          alert("Referral link copied!")
         }}
+        onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => {
-          if (!e.currentTarget.innerHTML.includes('Copied')) {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-            e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
-          }
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
         }}
         onMouseLeave={(e) => {
-          if (!e.currentTarget.innerHTML.includes('Copied')) {
-            e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-            e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
-          }
+          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
         }}
       >
-        Copy Referral Link
+        📋 Copy Referral Link
       </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
           Still confused? Watch the quick guide video:
         </p>
-
         <a
           href="https://www.linktr.ee/solwin_casino"
           target="_blank"
@@ -440,7 +372,6 @@ export default function Header() {
           onClose={() => setShowLeaderboard(false)}
         />
       )}
-
       {/* HEADER */}
       <StyledHeader>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -448,22 +379,18 @@ export default function Header() {
             <img alt="Sol-Win logo" src="/logo.svg" />
           </Logo>
         </div>
-
         <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-
           {balance.balance > 0 && (
             <BalanceBox>
               <span>Balance:</span>
               <TokenValue amount={balance.balance} />
             </BalanceBox>
           )}
-
           {balance.bonusBalance > 0 && (
             <Bonus onClick={() => setBonusHelp(true)}>
               ✨ <TokenValue amount={balance.bonusBalance} />
             </Bonus>
           )}
-
           {/* Desktop */}
           {isDesktop && (
             <>
@@ -474,7 +401,6 @@ export default function Header() {
               </GambaUi.Button>
             </>
           )}
-
           {/* Mobile menu button */}
           <MobileMenuIcon
             data-menu
@@ -483,10 +409,9 @@ export default function Header() {
             ☰
           </MobileMenuIcon>
         </div>
-
         {/* MOBILE DROPDOWN */}
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
-          
+         
           {pool.jackpotBalance > 0 && (
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
@@ -500,15 +425,12 @@ export default function Header() {
               </GlowButton>
             </>
           )}
-
           <MobileSectionLabel>Navigation</MobileSectionLabel>
-
           <MobileMenuItem onClick={() => setMobileOpen(false)}>
             <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>
               Games
             </NavLink>
           </MobileMenuItem>
-
           {/* REFERRAL BUTTON — opens modal */}
           <MobileMenuItem
             onClick={() => {
@@ -518,7 +440,6 @@ export default function Header() {
           >
             Referral Program
           </MobileMenuItem>
-
           <MobileMenuItem
             onClick={() => {
               setShowLeaderboard(true)
@@ -527,15 +448,12 @@ export default function Header() {
           >
             Leaderboard
           </MobileMenuItem>
-
           <MobileSectionLabel>Wallet</MobileSectionLabel>
-
           <div style={{ padding: "12px 18px" }}>
             <GlowWrapper>
               <TokenSelect />
             </GlowWrapper>
           </div>
-
           <div style={{ padding: "12px 18px" }}>
             <GlowButton>
               <CleanUserButtonWrapper>
