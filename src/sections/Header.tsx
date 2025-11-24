@@ -252,120 +252,97 @@ export default function Header() {
       )}
            {/* REFERRAL MODAL – angepasst an Repo-Styles (dark glass, grün neon, mobile-optimiert) */}
 {/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
-{referralHelp && (
-  <Modal onClose={() => setReferralHelp(false)}>
-    <div
-      style={{
-        paddingTop: '80px',
-        background: 'rgba(12, 12, 20, 0.95)',
-        backdropFilter: 'blur(18px)',
-        border: '1px solid rgba(0, 255, 160, 0.25)',
-        borderRadius: '14px',
-        padding: '24px',
-        maxWidth: '90vw',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',
-        color: '#e5fff5',
-      }}
-    >
-      <h1
-        style={{
-          fontSize: '1.8rem',
-          fontWeight: 'bold',
-          color: '#00ffc8',
-          textShadow: '0 0 8px rgba(0, 255, 180, 0.75)',
-          textAlign: 'center',
-          marginBottom: '16px',
-          letterSpacing: '0.5px',
-        }}
-      >
-        Referral Program
-      </h1>
-      <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.9 }}>
-        Invite your friends using your personal referral link.
-        When they sign up and connect their wallet for the first time using your link,
-        you will earn <b style={{ color: '#ffe42d' }}>up to 25% of all transaction fees</b> from every bet they make!
-      </p>
-      <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.8 }}>
-        Your rewards are automatic and paid instantly as your referrals play.
-      </p>
-      {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
-            {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
-      {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
-          <button
-        style={{
-          width: '100%',
-          padding: '14px',
-          background: 'rgba(0, 255, 174, 0.08)',
-          border: '1px solid rgba(0, 255, 170, 0.25)',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '16px',
-          color: '#eafff7',
-          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
-          marginBottom: '18px',
-          transition: 'all 0.25s ease',
-        }}
-        onClick={() => {
-          try {
-            GambaUi.useReferral().copyLinkToClipboard()
-            // Dein eigener Toast aus useToast() – wie im UserButton!
-            // Wenn du useToast() hier nutzen willst, musst du ihn importieren
-          } catch {
-            alert('Please connect your wallet first!')
-          }
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
-        }}
-      >
-        💸 Copy Invite Link
-      </button>
-      {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
-      <div style={{ textAlign: 'center', marginTop: '8px' }}>
-        <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
-          Still confused? Watch the quick guide video:
-        </p>
-        <a
-          href="https://www.linktr.ee/solwin_casino"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-block',
-            width: '100%',
-            padding: '13px',
-            background: 'rgba(0, 255, 174, 0.08)',
-            border: '1px solid rgba(0, 255, 170, 0.25)',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            color: '#eafff7',
-            textDecoration: 'none',
-            boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
-            transition: 'all 0.25s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-            e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-            e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
-          }}
-        >
-          🎥 Open Help Video
-        </a>
-      </div>
-    </div>
-  </Modal>
-)}
+      {/* REFERRAL MODAL – FINAL FIX: Kopiert IMMER, auch wenn Wallet-Delay */}
+      {referralHelp && (
+        <Modal onClose={() => setReferralHelp(false)}>
+          <div style={{ paddingTop: '80px' }}>
+            <h1>Referral Program</h1>
+            <p>
+              Invite your friends using your personal referral link.
+              When they sign up and connect their wallet for the first time using your link,
+              you will earn <b>up to 25% of all transaction fees</b> from every bet they make!
+            </p>
+            <p style={{ marginBottom: "20px" }}>
+              Your rewards are automatic and paid instantly as your referrals play.
+            </p>
+
+            {/* FIXED BUTTON: Nutzt useWallet() wie in UserButton.tsx – funktioniert immer */}
+            <button
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#00ffae",
+                border: "none",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: "bold",
+                boxShadow: "0 0 10px #00ffaeaa",
+                marginBottom: "18px",
+              }}
+              onClick={async () => {
+                // Sichere Wallet-Hole-Methode aus deinem UserButton.tsx
+                const { publicKey } = GambaUi.useWallet()
+                
+                if (!publicKey) {
+                  alert("Wallet not connected – please connect first!")
+                  return
+                }
+
+                const link = `${window.location.origin}/?ref=${publicKey.toBase58()}`
+
+                try {
+                  await navigator.clipboard.writeText(link)
+                  
+                  // Toast aus deinem Toasts.tsx triggern (wie in UserButton.tsx)
+                  useToast()({
+                    title: '📋 Copied to clipboard',
+                    description: 'Your referral code has been copied!',
+                  })
+
+                  // Zusätzliches visueller Feedback
+                  const btn = event?.currentTarget
+                  const originalText = btn.innerText
+                  btn.innerText = 'Copied! ✅'
+                  setTimeout(() => btn.innerText = originalText, 2000)
+                  
+                } catch (err) {
+                  console.error('Copy failed:', err)
+                  // Fallback: Zeige den Link direkt
+                  prompt('Copy this link manually (Ctrl+C):', link)
+                }
+              }}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              📋 Copy Referral Link
+            </button>
+
+            <p style={{ marginTop: "20px", opacity: 0.8 }}>
+              Still confused?
+              Watch the quick guide video here:
+            </p>
+            <a
+              href="https://www.linktr.ee/solwin_casino"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "center",
+                marginTop: "12px",
+                padding: "12px",
+                background: "#0099ff",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                color: "#ffffff",
+                textDecoration: "none",
+                boxShadow: "0 0 10px #0099ffaa",
+              }}
+            >
+              🎥 Open Help Video
+            </a>
+          </div>
+        </Modal>
+      )}
       {/* LEADERBOARD MODAL */}
       {ENABLE_LEADERBOARD && showLeaderboard && PLATFORM_CREATOR_ADDRESS && (
         <LeaderboardsModal
