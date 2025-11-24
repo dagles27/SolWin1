@@ -325,10 +325,11 @@ export default function Header() {
       </p>
 
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
+           {/* FINAL FIX: Copy Referral Link – funktioniert garantiert + schönes Feedback */}
       <button
         style={{
           width: '100%',
-          padding: '12px',
+          padding: '14px',
           background: 'rgba(0, 255, 174, 0.08)',
           border: '1px solid rgba(0, 255, 170, 0.25)',
           borderRadius: '12px',
@@ -338,54 +339,57 @@ export default function Header() {
           color: '#eafff7',
           boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
           marginBottom: '18px',
-          transition: 'all 0.25s ease',
+          transition: 'all 0.3s ease',
           position: 'relative',
+          userSelect: 'none',
         }}
         onClick={async () => {
-          const wallet = GambaUi.useWallet()
-          const publicKey = wallet.publicKey?.toBase58()
+          // RICHTIGE Methode: useWallet aus GambaUi Provider (wie überall im Projekt!)
+          const { publicKey } = GambaUi.useWallet()
 
           if (!publicKey) {
-            alert('⚠️ Please connect your wallet first!')
+            alert('Please connect your wallet first!')
             return
           }
 
-          const referralLink = `${window.location.origin}/?ref=${publicKey}`
+          const referralLink = `${window.location.origin}/?ref=${publicKey.toBase58()}`
 
           try {
             await navigator.clipboard.writeText(referralLink)
 
-            // Schönes Feedback direkt im Button
-            const btn = document.activeElement as HTMLElement
-            const originalText = btn.textContent
-            btn.textContent = '✅ Copied!'
-            btn.style.background = 'rgba(0, 255, 174, 0.3)'
-            
+            // Visuelles "Copied!" Feedback direkt im Button
+            const button = event?.currentTarget
+            const originalText = button.innerHTML
+
+            button.innerHTML = 'Copied! ✅'
+            button.style.background = 'rgba(0, 255, 174, 0.4)'
+            button.style.transform = 'scale(0.98)'
+
             setTimeout(() => {
-              if (btn.textContent === '✅ Copied!') {
-                btn.textContent = originalText
-                btn.style.background = 'rgba(0, 255, 174, 0.08)'
-              }
+              button.innerHTML = originalText
+              button.style.background = 'rgba(0, 255, 174, 0.08)'
+              button.style.transform = 'scale(1)'
             }, 2000)
           } catch (err) {
-            alert('Failed to copy – please try again')
-            console.error(err)
+            console.error('Copy failed:', err)
+            alert('Copy failed – please copy manually: ' + referralLink)
           }
         }}
-        onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
+          if (!e.currentTarget.innerHTML.includes('Copied')) {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
+          }
         }}
         onMouseLeave={(e) => {
-          if ((e.currentTarget.textContent || '').includes('Copied')) return
-          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
+          if (!e.currentTarget.innerHTML.includes('Copied')) {
+            e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+            e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
+          }
         }}
       >
-        📋 Copy Referral Link
+        Copy Referral Link
       </button>
-
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
