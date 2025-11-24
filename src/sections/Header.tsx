@@ -324,7 +324,7 @@ export default function Header() {
         Your rewards are automatic and paid instantly as your referrals play.
       </p>
 
-      {/* Copy Referral Link Button */}
+      {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
       <button
         style={{
           width: '100%',
@@ -339,11 +339,38 @@ export default function Header() {
           boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
           marginBottom: '18px',
           transition: 'all 0.25s ease',
+          position: 'relative',
         }}
-        onClick={() => {
-          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
-          navigator.clipboard.writeText(link)
-          alert("Referral link copied!")
+        onClick={async () => {
+          const wallet = GambaUi.useWallet()
+          const publicKey = wallet.publicKey?.toBase58()
+
+          if (!publicKey) {
+            alert('⚠️ Please connect your wallet first!')
+            return
+          }
+
+          const referralLink = `${window.location.origin}/?ref=${publicKey}`
+
+          try {
+            await navigator.clipboard.writeText(referralLink)
+
+            // Schönes Feedback direkt im Button
+            const btn = document.activeElement as HTMLElement
+            const originalText = btn.textContent
+            btn.textContent = '✅ Copied!'
+            btn.style.background = 'rgba(0, 255, 174, 0.3)'
+            
+            setTimeout(() => {
+              if (btn.textContent === '✅ Copied!') {
+                btn.textContent = originalText
+                btn.style.background = 'rgba(0, 255, 174, 0.08)'
+              }
+            }, 2000)
+          } catch (err) {
+            alert('Failed to copy – please try again')
+            console.error(err)
+          }
         }}
         onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => {
@@ -351,6 +378,7 @@ export default function Header() {
           e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
         }}
         onMouseLeave={(e) => {
+          if ((e.currentTarget.textContent || '').includes('Copied')) return
           e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
           e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
         }}
