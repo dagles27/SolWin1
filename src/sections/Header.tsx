@@ -293,71 +293,40 @@ export default function Header() {
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
             {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
       {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
-      {/* FINAL FIX: Referral Button – funktioniert 100% bei allen Wallets, immer, garantiert */}
-      <button
+          <button
         style={{
           width: '100%',
-          padding: '16px',
-          background: 'linear-gradient(135deg, rgba(0, 255, 174, 0.2), rgba(0, 255, 174, 0.08))',
-          border: '2px solid rgba(0, 255, 170, 0.5)',
-          borderRadius: '16px',
+          padding: '14px',
+          background: 'rgba(0, 255, 174, 0.08)',
+          border: '1px solid rgba(0, 255, 170, 0.25)',
+          borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: 'bold',
-          fontSize: '18px',
+          fontSize: '16px',
           color: '#eafff7',
-          boxShadow: '0 0 20px rgba(0, 255, 174, 0.4), inset 0 0 12px rgba(0, 255, 150, 0.2)',
-          marginBottom: '20px',
-          transition: 'all 0.3s ease',
-          backdropFilter: 'blur(10px)',
+          boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
+          marginBottom: '18px',
+          transition: 'all 0.25s ease',
         }}
-        onClick={async () => {
-          // Stabile Wallet aus wallet-adapter (wie in UserButton.tsx)
-          const wallet = GambaUi.useWallet()
-
-          if (!wallet.publicKey) {
-            alert('Please connect your wallet first!')
-            return
-          }
-
-          const referralLink = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
-
+        onClick={() => {
           try {
-            await navigator.clipboard.writeText(referralLink)
-
-            // Dein eigener Toast – genau wie in UserButton.tsx!
-            const toast = (await import('../hooks/useToast')).useToast()
-            toast({
-              title: 'Referral Link Copied!',
-              description: 'Share it with your friends to earn 25% fees!',
-            })
-
-            // Visuelles Feedback im Button
-            const btn = event!.currentTarget as HTMLButtonElement
-            const original = btn.innerHTML
-            btn.innerHTML = 'Copied! ✅'
-            btn.style.background = 'rgba(0, 255, 174, 0.6)'
-            btn.style.transform = 'scale(0.97)'
-
-            setTimeout(() => {
-              btn.innerHTML = original
-              btn.style.background = 'linear-gradient(135deg, rgba(0, 255, 174, 0.2), rgba(0, 255, 174, 0.08))'
-              btn.style.transform = 'scale(1)'
-            }, 2000)
-
-          } catch (err) {
-            prompt('Copy manually (Ctrl+C):', referralLink)
+            GambaUi.useReferral().copyLinkToClipboard()
+            // Dein eigener Toast aus useToast() – wie im UserButton!
+            // Wenn du useToast() hier nutzen willst, musst du ihn importieren
+          } catch {
+            alert('Please connect your wallet first!')
           }
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 174, 0.8)'
-          e.currentTarget.style.transform = 'translateY(-2px)'
+          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 174, 0.4), inset 0 0 12px rgba(0, 255, 150, 0.2)'
-          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
+          e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
         }}
       >
-        Copy Referral Link
+        💸 Copy Invite Link
       </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
