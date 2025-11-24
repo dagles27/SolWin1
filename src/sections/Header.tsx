@@ -291,10 +291,10 @@ export default function Header() {
         Your rewards are automatic and paid instantly as your referrals play.
       </p>
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
-      <button
+            <button
         style={{
           width: '100%',
-          padding: '12px',
+          padding: '14px',
           background: 'rgba(0, 255, 174, 0.08)',
           border: '1px solid rgba(0, 255, 170, 0.25)',
           borderRadius: '12px',
@@ -307,11 +307,14 @@ export default function Header() {
           transition: 'all 0.25s ease',
         }}
         onClick={() => {
-          const link = `${window.location.origin}/?ref=${GambaUi.useWallet().publicKey}`
-          navigator.clipboard.writeText(link)
-          alert("Referral link copied!")
+          try {
+            GambaUi.useReferral().copyLinkToClipboard()
+            // Dein eigener Toast aus useToast() – wie im UserButton!
+            // Wenn du useToast() hier nutzen willst, musst du ihn importieren
+          } catch {
+            alert('Please connect your wallet first!')
+          }
         }}
-        onMouseDown={(e) => e.preventDefault()}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
           e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
@@ -321,7 +324,7 @@ export default function Header() {
           e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
         }}
       >
-        📋 Copy Referral Link
+        💸 Copy Invite Link
       </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
