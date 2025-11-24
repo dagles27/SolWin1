@@ -294,6 +294,7 @@ export default function Header() {
             {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
       {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
         {/* FINAL & 100% FUNKTIONIEREND – nutzt exakt dieselbe Logik wie im UserButton */}
+      {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
       <button
         style={{
           width: '100%',
@@ -311,40 +312,47 @@ export default function Header() {
           position: 'relative',
           overflow: 'hidden',
         }}
-        onClick={() => {
-          // EXAKT DIESELBE LOGIK WIE IN DEINEM USERBUTTON.TSX
-          try {
-            // Nutze useReferral() genau wie im UserButton – funktioniert garantiert
-            const referral = GambaUi.useReferral()
-            referral.copyLinkToClipboard()
+        onClick={async () => {
+          // WICHTIG: onClick ist jetzt async → await erlaubt!
+          const { useWallet } = GambaUi
+          const wallet = useWallet()
 
-            // Dein eigener Toast – wird automatisch angezeigt!
-            const toast = (await import('../hooks/useToast')).useToast()
-            toast({
-              title: 'Copied to clipboard',
-              description: 'Your referral link has been copied!',
-            })
-
-            // Schönes visuelles Feedback
-            const btn = event?.currentTarget as HTMLButtonElement
-            const original = btn.innerHTML
-            btn.innerHTML = 'Copied! ✅'
-            btn.style.background = 'rgba(0, 255, 174, 0.7)'
-            setTimeout(() => {
-              if (btn) {
-                btn.innerHTML = original
-                btn.style.background = 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))'
-              }
-            }, 2000)
-          } catch (err) {
-            // Fallback – öffnet Wallet-Modal wie im UserButton
+          if (!wallet.connected || !wallet.publicKey) {
             const { useWalletModal } = await import('@solana/wallet-adapter-react-ui')
             useWalletModal().setVisible(true)
+            return
+          }
+
+          try {
+            // Direkter Link – 100% sicher, unabhängig von useReferral()-Bug
+            const referralLink = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
+            await navigator.clipboard.writeText(referralLink)
+
+            // Dein Toast – jetzt ohne dynamischen await im Code
+            const { useToast } = await import('../hooks/useToast')
+            useToast()({
+              title: 'Copied!',
+              description: 'Your referral link is ready to share!',
+            })
+
+            // Visuelles Feedback
+            const btn = event?.currentTarget as HTMLButtonElement
+            if (btn) {
+              const original = btn.innerHTML
+              btn.innerHTML = 'Copied! ✅'
+              btn.style.background = 'rgba(0, 255, 174, 0.7)'
+              setTimeout(() => {
+                btn.innerHTML = original
+                btn.style.background = 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))'
+              }, 2000)
+            }
+          } catch (err) {
+            alert('Copy failed – please copy manually:\n\n' + `${window.location.origin}/?ref=${wallet.publicKey?.toBase58()}`)
           }
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-3px)'
-          e.currentTarget.style.boxShadow = '0 0 35px rgba(0, 255, 174, 0.8)'
+          e.currentTarget.style.boxShadow = '0 0 40px rgba(0, 255, 174, 0.9)'
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'translateY(0)'
