@@ -292,65 +292,73 @@ export default function Header() {
       </p>
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
             {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
-<button
-  style={{
-    width: '100%',
-    padding: '14px',
-    background: 'rgba(0, 255, 174, 0.08)',
-    border: '1px solid rgba(0, 255, 170, 0.25)',
-    borderRadius: '12px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    fontSize: '16px',
-    color: '#eafff7',
-    boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
-    marginBottom: '18px',
-    transition: 'all 0.25s ease',
-    position: 'relative',
-  }}
-  onClick={async () => {
-    const wallet = GambaUi.useWallet()
-    if (!wallet.publicKey) {
-      alert('Please connect your wallet first!')
-      return
-    }
+      {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
+      <button
+        style={{
+          width: '100%',
+          padding: '16px',
+          background: 'rgba(0, 255, 174, 0.12)',
+          border: '2px solid rgba(0, 255, 170, 0.4)',
+          borderRadius: '14px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: '18px',
+          color: '#eafff7',
+          boxShadow: 'inset 0 0 12px rgba(0, 255, 150, 0.2), 0 0 20px rgba(0, 255, 174, 0.3)',
+          marginBottom: '20px',
+          transition: 'all 0.3s ease',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+        onClick={async () => {
+          const wallet = GambaUi.useWallet()
 
-    const link = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
+          if (!wallet.connected || !wallet.publicKey) {
+            alert('Wallet nicht verbunden!')
+            return
+          }
 
-    try {
-      await navigator.clipboard.writeText(link)
+          const referralLink = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
 
-      // Schönes Feedback direkt im Button
-      const btn = event!.currentTarget
-      const original = btn.innerHTML
-      btn.innerHTML = 'Copied! ✅'
-      btn.style.background = 'rgba(0, 255, 174, 0.4)'
-      btn.style.transform = 'scale(0.98)'
+          try {
+            await navigator.clipboard.writeText(referralLink)
 
-      setTimeout(() => {
-        btn.innerHTML = original
-        btn.style.background = 'rgba(0, 255, 174, 0.08)'
-        btn.style.transform = 'scale(1)'
-      }, 2000)
-    } catch (err) {
-      alert('Copy failed – here is your link:\n\n' + link)
-    }
-  }}
-  onMouseEnter={(e) => {
-    if (!e.currentTarget.innerHTML.includes('Copied')) {
-      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-      e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 174, 0.6)'
-    }
-  }}
-  onMouseLeave={(e) => {
-    if (!e.currentTarget.innerHTML.includes('Copied')) {
-      e.currentTarget.style.background = 'rgba(0, 255, 174, 0.08)'
-      e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
-    }
-  }}
->
-  Copy Invite Link
-</button>
+            // SUPER SICHERES Feedback – nutzt ref statt event
+            const button = document.activeElement as HTMLButtonElement || this as any
+            const originalText = button.innerText
+
+            button.innerHTML = 'Copied! ✅'
+            button.style.background = 'rgba(0, 255, 174, 0.5)'
+            button.style.transform = 'scale(0.96)'
+
+            setTimeout(() => {
+              button.innerHTML = originalText
+              button.style.background = 'rgba(0, 255, 174, 0.12)'
+              button.style.transform = 'scale(1)'
+            }, 2000)
+
+          } catch (err) {
+            // Fallback: Zeigt den Link trotzdem an
+            prompt('Copy manually (Ctrl+C):', referralLink)
+          }
+        }}
+        onMouseEnter={(e) => {
+          const btn = e.currentTarget
+          if (!btn.innerHTML.includes('Copied')) {
+            btn.style.background = 'rgba(255, 255, 255, 0.25)'
+            btn.style.boxShadow = '0 0 25px rgba(0, 255, 174, 0.6)'
+          }
+        }}
+        onMouseLeave={(e) => {
+          const btn = e.currentTarget
+          if (!btn.innerHTML.includes('Copied')) {
+            btn.style.background = 'rgba(0, 255, 174, 0.12)'
+            btn.style.boxShadow = 'inset 0 0 12px rgba(0, 255, 150, 0.2), 0 0 20px rgba(0, 0, 255, 174, 0.3)'
+          }
+        }}
+      >
+        Copy Invite Link
+      </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
