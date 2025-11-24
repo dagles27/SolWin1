@@ -14,8 +14,6 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
-import { useToast } from '../hooks/useToast'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 // ========================================================
 // STYLES
 // ========================================================
