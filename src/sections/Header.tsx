@@ -293,72 +293,9 @@ export default function Header() {
       {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
             {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
       {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
-      <button
-        style={{
-          width: '100%',
-          padding: '16px',
-          background: 'rgba(0, 255, 174, 0.12)',
-          border: '2px solid rgba(0, 255, 170, 0.4)',
-          borderRadius: '14px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '18px',
-          color: '#eafff7',
-          boxShadow: 'inset 0 0 12px rgba(0, 255, 150, 0.2), 0 0 20px rgba(0, 255, 174, 0.3)',
-          marginBottom: '20px',
-          transition: 'all 0.3s ease',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-        onClick={async () => {
-          const wallet = GambaUi.useWallet()
-
-          if (!wallet.connected || !wallet.publicKey) {
-            alert('Wallet nicht verbunden!')
-            return
-          }
-
-          const referralLink = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
-
-          try {
-            await navigator.clipboard.writeText(referralLink)
-
-            // SUPER SICHERES Feedback – nutzt ref statt event
-            const button = document.activeElement as HTMLButtonElement || this as any
-            const originalText = button.innerText
-
-            button.innerHTML = 'Copied! ✅'
-            button.style.background = 'rgba(0, 255, 174, 0.5)'
-            button.style.transform = 'scale(0.96)'
-
-            setTimeout(() => {
-              button.innerHTML = originalText
-              button.style.background = 'rgba(0, 255, 174, 0.12)'
-              button.style.transform = 'scale(1)'
-            }, 2000)
-
-          } catch (err) {
-            // Fallback: Zeigt den Link trotzdem an
-            prompt('Copy manually (Ctrl+C):', referralLink)
-          }
-        }}
-        onMouseEnter={(e) => {
-          const btn = e.currentTarget
-          if (!btn.innerHTML.includes('Copied')) {
-            btn.style.background = 'rgba(255, 255, 255, 0.25)'
-            btn.style.boxShadow = '0 0 25px rgba(0, 255, 174, 0.6)'
-          }
-        }}
-        onMouseLeave={(e) => {
-          const btn = e.currentTarget
-          if (!btn.innerHTML.includes('Copied')) {
-            btn.style.background = 'rgba(0, 255, 174, 0.12)'
-            btn.style.boxShadow = 'inset 0 0 12px rgba(0, 255, 150, 0.2), 0 0 20px rgba(0, 0, 255, 174, 0.3)'
-          }
-        }}
-      >
-        Copy Invite Link
-      </button>
+     <GambaUi.Button main onClick={() => user.set({ userModal: true })}>
+  🎉 Open Wallet & Copy Referral Link
+</GambaUi.Button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
