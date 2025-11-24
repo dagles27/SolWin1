@@ -469,22 +469,54 @@ export default function Header() {
             </>
           )}
 
-          <MobileSectionLabel>Navigation</MobileSectionLabel>
-
+                    <MobileSectionLabel>Navigation</MobileSectionLabel>
           <MobileMenuItem onClick={() => setMobileOpen(false)}>
             <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>
               Games
             </NavLink>
           </MobileMenuItem>
 
-          {/* REFERRAL BUTTON — opens modal */}
+          {/* NEU: Direkter Copy Referral Link Button – funktioniert sofort! */}
+          <GlowWrapper style={{ margin: '0 18px 12px 18px' }}>
+            <GlowButton
+              onClick={async () => {
+                try {
+                  const publicKey = GambaUi.useWallet().publicKey
+                  if (!publicKey) {
+                    alert("Wallet not connected!")
+                    return
+                  }
+                  const link = `${window.location.origin}/?ref=${publicKey}`
+                  await navigator.clipboard.writeText(link)
+                  // Schönes Feedback statt langweiliges alert()
+                  const originalText = "📋 Copy Referral Link"
+                  const button = document.activeElement as HTMLElement
+                  if (button) {
+                    button.textContent = "✅ Copied!"
+                    setTimeout(() => {
+                      if (button.textContent === "✅ Copied!") {
+                        button.textContent = originalText
+                      }
+                    }, 2000)
+                  }
+                } catch (err) {
+                  alert("Failed to copy – try again!")
+                }
+                setMobileOpen(false)
+              }}
+            >
+              📋 Copy Referral Link
+            </GlowButton>
+          </GlowWrapper>
+
+          {/* Optional: Referral Program Info behalten */}
           <MobileMenuItem
             onClick={() => {
               setReferralHelp(true)
               setMobileOpen(false)
             }}
           >
-            Referral Program
+            Referral Program Info
           </MobileMenuItem>
 
           <MobileMenuItem
