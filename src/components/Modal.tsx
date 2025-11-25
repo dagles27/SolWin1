@@ -7,40 +7,11 @@ interface Props extends React.PropsWithChildren {
   onClose?: () => void
 }
 
-const Container = styled.div`
-  display: flex;
-  padding: 20px;
-  min-height: calc(100vh - 6rem);
-  align-items: center;
-  justify-content: center;
-`
-
-const Wrapper = styled.div`
-  @keyframes wrapper-appear2 {
-    0% { transform: scale(.9); }
-    100% { transform: scale(1); }
-  }
-
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  z-index: 100;
-  max-width: min(100%, 460px);
-  border-radius: 10px;
-  background: #15151f;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
-  flex: 1;
-  padding-bottom: 20px;
-  animation: wrapper-appear2 .3s;
-  color: white;
-`
-
+// Overlay – jetzt deutlich höher als Header + Abstand von oben
 const StyledModal = styled.div`
   @keyframes appear {
-    0% { opacity: 0;}
-    100% { opacity: 1;}
+    0% { opacity: 0; }
+    100% { opacity: 1; }
   }
 
   position: fixed;
@@ -48,64 +19,89 @@ const StyledModal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  transition: opacity linear 150ms;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  background: rgba(0, 0, 0, 0.70);
+  backdrop-filter: blur(8px);
+  z-index: 100000;           /* VIEL höher als Header (9999) */
   overflow-y: auto;
-  height: 100vh;
-  animation: appear .3s;
+  animation: appear 0.3s;
+
+  /* WICHTIG: Nicht mehr mittig zentrieren, sondern oben beginnen */
+  padding: 90px 20px 40px;   /* 90px = Platz für den fixed Header */
+`
+
+// Container – jetzt flex-start statt center
+const Container = styled.div`
+  display: flex;
+  min-height: 1px;                    /* verhindert unnötige Höhe */
+  justify-content: center;
+  align-items: flex-start;            /* Startet oben! */
+`
+
+// Wrapper bleibt fast gleich, nur kleine Verbesserungen
+const Wrapper = styled.div`
+  @keyframes wrapper-appear2 {
+    0% { transform: scale(0.92); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  position: relative;
+  max-width: min(100%, 480px);
+  width: 100%;
+  background: #15151f;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  animation: wrapper-appear2 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  color: white;
 
   & h1 {
     text-align: center;
-    padding: 40px 0 20px 0;
+    padding: 40px 0 20px;
     font-size: 24px;
   }
 
   & p {
+   : center;
     padding: 0 30px;
-    text-align: center;
   }
 
   & button.close {
-    margin: 0;
     position: absolute;
-    cursor: pointer;
-    right: 10px;
-    top: 10px;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
-    z-index: 11;
-    opacity: .75;
-    transition: opacity .2s, background .2s;
-    background: transparent;
     border-radius: 50%;
-    width: 2em;
-    height: 2em;
+    cursor: pointer;
+    z-index: 11;
+    transition: all 0.2s;
+
     &:hover {
-      opacity: 1;
-      background: #ffffff22;
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.1);
     }
-    & svg {
+
+    svg {
       color: white;
-      vertical-align: middle;
+      width: 20px;
+      height: 20px;
     }
   }
 `
 
 export function Modal({ children, onClose }: Props) {
-  React.useEffect(
-    () => {
-      const oldValue = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
-      return () => {
-        document.body.style.overflow = oldValue
-      }
-    },
-    [],
-  )
+  React.useEffect(() => {
+    const oldOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = oldOverflow
+    }
+  }, [])
 
   const ref = React.useRef<HTMLDivElement>(null!)
-
-  useOutsideClick(ref, () => onClose && onClose())
+  useOutsideClick(ref, () => onClose?.())
 
   return (
     <StyledModal>
