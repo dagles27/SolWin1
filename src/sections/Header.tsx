@@ -260,21 +260,7 @@ export default function Header() {
 {/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
 {referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
-    <div
-      style={{
-        paddingTop: '80px',
-        background: 'rgba(12, 12, 20, 0.95)',
-        backdropFilter: 'blur(18px)',
-        border: '1px solid rgba(0, 255, 160, 0.25)',
-        borderRadius: '14px',
-        padding: '24px',
-        maxWidth: '90vw',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',
-        color: '#e5fff5',
-      }}
-    >
+<div style={{ padding: "10px", color: "#eafff7" }}>
       <h1
         style={{
           fontSize: '1.8rem',
