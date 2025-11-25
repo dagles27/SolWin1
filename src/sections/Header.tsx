@@ -344,10 +344,7 @@ export default function Header() {
               textArea.select()
               document.execCommand('copy')
               document.body.removeChild(textArea)
-              toast({
-                title: 'Copied!',
-                description: `Link copied: ${link}`,
-              })
+      alert('Link copied to clipboard! Ready to share')
             }
           }}
           style={{
