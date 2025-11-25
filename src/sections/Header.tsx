@@ -354,7 +354,7 @@ export default function Header() {
               </p>
               <input
                 type="text"
-                placeholder="vip1337"
+                placeholder="B3Bp63a...Essq"
                 value={customCode}
                 onChange={(e) => setCustomCode(e.target.value.trim())}
                 style={{
