@@ -217,7 +217,6 @@ export default function Header() {
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [referralCode, setReferralCode] = React.useState("")
   // NEW REFERRAL MODAL STATE
   const [referralHelp, setReferralHelp] = React.useState(false)
   // Dropdown outside click
@@ -260,7 +259,21 @@ export default function Header() {
 {/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
 {referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
-<div style={{ padding: "10px", color: "#eafff7" }}>
+    <div
+      style={{
+        paddingTop: '80px',
+        background: 'rgba(12, 12, 20, 0.95)',
+        backdropFilter: 'blur(18px)',
+        border: '1px solid rgba(0, 255, 160, 0.25)',
+        borderRadius: '14px',
+        padding: '24px',
+        maxWidth: '90vw',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        boxShadow: '0 10px 30px rgba(0, 255, 180, 0.3)',
+        color: '#e5fff5',
+      }}
+    >
       <h1
         style={{
           fontSize: '1.8rem',
@@ -290,30 +303,6 @@ export default function Header() {
             {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
 
 
-{/* Custom Referral Code Input */}
-<div style={{ marginBottom: '18px' }}>
-  <label style={{ display: 'block', marginBottom: '6px', color: '#eafff7' }}>
-    Your custom referral code:
-  </label>
-
-  <input
-    type="text"
-    placeholder="Enter your code..."
-    value={referralCode}
-    onChange={(e) => setReferralCode(e.target.value)}
-    style={{
-      width: '100%',
-      padding: '12px',
-      borderRadius: '10px',
-      border: '1px solid rgba(0,255,170,0.3)',
-      background: 'rgba(0,255,170,0.05)',
-      color: '#eafff7',
-      fontSize: '16px',
-      marginBottom: '12px',
-    }}
-  />
-</div>
-
 <button
   style={{
     width: '100%',
@@ -328,19 +317,31 @@ export default function Header() {
     boxShadow: '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)',
     marginBottom: '20px',
     transition: 'all 0.3s ease',
+    position: 'relative',
+    overflow: 'hidden',
   }}
   onClick={() => {
-    const fullLink = `https://www.sol-win.casino/${referralCode || ""}`
+    if (!wallet.connected) {
+      walletModal.setVisible(true)
+      return
+    }
 
-    navigator.clipboard.writeText(fullLink)
+    try {
+      referral.copyLinkToClipboard()
 
-    toast({
-      title: 'Copied!',
-      description: `Copied: ${fullLink}`,
-    })
+      toast({
+        title: 'Copied!',
+        description: 'Your referral link is ready to share!',
+      })
+    } catch (e) {
+      toast({
+        title: 'Error',
+        description: 'Could not copy referral link.',
+      })
+    }
   }}
 >
-  Copy Custom Link
+  Copy Invite Link
 </button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
