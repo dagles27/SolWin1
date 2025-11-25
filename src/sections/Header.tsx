@@ -15,6 +15,7 @@ import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
 import { useReferral } from 'gamba-react-ui-v2'
+import { useToast } from 'gamba-react-ui-v2'  // oder wo auch immer du es her hast
 // ========================================================
 // STYLES
 // ========================================================
@@ -217,6 +218,7 @@ export default function Header() {
   const [bonusHelp, setBonusHelp] = React.useState(false)
   const [jackpotHelp, setJackpotHelp] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [customCode, setCustomCode] = React.useState('')
   // NEW REFERRAL MODAL STATE
   const [referralHelp, setReferralHelp] = React.useState(false)
   // Dropdown outside click
@@ -257,6 +259,7 @@ export default function Header() {
       )}
            {/* REFERRAL MODAL – angepasst an Repo-Styles (dark glass, grün neon, mobile-optimiert) */}
 {/* REFERRAL MODAL – final fixiert, Help-Button jetzt perfekt sichtbar */}
+{/* REFERRAL MODAL – NEU mit Custom-Code Eingabe + Copy */}
 {referralHelp && (
   <Modal onClose={() => setReferralHelp(false)}>
     <div
@@ -287,63 +290,92 @@ export default function Header() {
       >
         Referral Program
       </h1>
+
       <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.9 }}>
-        Invite your friends using your personal referral link.
+        Invite your friends using your personal referral link.<br />
         When they sign up and connect their wallet for the first time using your link,
         you will earn <b style={{ color: '#ffe42d' }}>up to 25% of all transaction fees</b> from every bet they make!
       </p>
-      <p style={{ color: '#eafff7', fontSize: '1rem', lineHeight: '1.5', marginBottom: '20px', opacity: 0.8 }}>
-        Your rewards are automatic and paid instantly as your referrals play.
-      </p>
-      {/* Copy Referral Link Button – JETZT 100% FUNKTIONIEREND */}
-            {/* PERFEKTER Copy Referral Link Button – funktioniert IMMER, auch wenn kein Referrer existiert */}
-      {/* FINALER Copy Referral Link Button – funktioniert JETZT WIRKLICH immer */}
-        {/* FINAL & 100% FUNKTIONIEREND – nutzt exakt dieselbe Logik wie im UserButton */}
-      {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
-            {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
 
+      {/* === NEU: Custom Referral Code Eingabe === */}
+      <div style={{ marginBottom: '24px' }}>
+        <p style={{ marginBottom: '12px', opacity: 0.85 }}>
+          Create your own short referral code (letters/numbers only):
+        </p>
 
-<button
-  style={{
-    width: '100%',
-    padding: '16px',
-    background: 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))',
-    border: '2px solid rgba(0, 255, 170, 0.6)',
-    borderRadius: '16px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    color: '#eafff7',
-    boxShadow: '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)',
-    marginBottom: '20px',
-    transition: 'all 0.3s ease',
-    position: 'relative',
-    overflow: 'hidden',
-  }}
-  onClick={() => {
-    if (!wallet.connected) {
-      walletModal.setVisible(true)
-      return
-    }
+        <input
+          type="text"
+          placeholder="z.B. vip1337"
+          value={customCode}
+          onChange={(e) => setCustomCode(e.target.value.trim())}
+          style={{
+            width: '100%',
+            padding: '14px 16px',
+            background: 'rgba(0, 255, 174, 0.08)',
+            border: '1px solid rgba(0, 255, 170, 0.4)',
+            borderRadius: '12px',
+            color: '#eafff7',
+            fontSize: '16px',
+            outline: 'none',
+            boxShadow: 'inset 0 0 8px rgba(0, 255, 150, 0.12)',
+          }}
+        />
 
-    try {
-      referral.copyLinkToClipboard()
+        <button
+          onClick={async () => {
+            if (!customCode) {
+              toast({ title: 'Error', description: 'Please enter a code first!' })
+              return
+            }
 
-      toast({
-        title: 'Copied!',
-        description: 'Your referral link is ready to share!',
-      })
-    } catch (e) {
-      toast({
-        title: 'Error',
-        description: 'Could not copy referral link.',
-      })
-    }
-  }}
->
-  Copy Invite Link
-</button>
-      {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
+            const link = `https://www.sol-win.casino/${customCode}`
+
+            try {
+              await navigator.clipboard.writeText(link)
+              toast({
+                title: 'Copied!',
+                description: `Link copied: ${link}`,
+              })
+            } catch (err) {
+              // Fallback für ältere Browser
+              const textArea = document.createElement('textarea')
+              textArea.value = link
+              document.body.appendChild(textArea)
+              textArea.select()
+              document.execCommand('copy')
+              document.body.removeChild(textArea)
+              toast({
+                title: 'Copied!',
+                description: `Link copied: ${link}`,
+              })
+            }
+          }}
+          style={{
+            marginTop: '14px',
+            width: '100%',
+            padding: '16px',
+            background: 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))',
+            border: '2px solid rgba(0, 255, 170, 0.6)',
+            borderRadius: '16px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '18px',
+            color: '#eafff7',
+            boxShadow: '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)',
+            transition: 'all 0.3s ease',
+          }}
+        >
+          Copy Custom Link
+        </button>
+
+        {customCode && (
+          <div style={{ marginTop: '12px', fontSize: '14px', opacity: 0.8, wordBreak: 'break-all' }}>
+            → <strong>https://www.sol-win.casino/{customCode}</strong>
+          </div>
+        )}
+      </div>
+
+      {/* Help Video Button bleibt */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
           Still confused? Watch the quick guide video:
@@ -375,7 +407,7 @@ export default function Header() {
             e.currentTarget.style.boxShadow = 'inset 0 0 8px rgba(0, 255, 150, 0.12)'
           }}
         >
-          🎥 Open Help Video
+          Open Help Video
         </a>
       </div>
     </div>
