@@ -206,6 +206,10 @@ const BalanceBox = styled.div`
 // HEADER COMPONENT
 // ========================================================
 export default function Header() {
+  const referral = useReferral()
+  const toast = useToast()
+  const wallet = useWallet()
+  const walletModal = useWalletModal()
   const pool = useCurrentPool()
   const balance = useUserBalance()
   const isDesktop = useMediaQuery('lg')
@@ -297,10 +301,7 @@ export default function Header() {
         {/* FINAL & 100% FUNKTIONIEREND – nutzt exakt dieselbe Logik wie im UserButton */}
       {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
             {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
-const referral = useReferral()
-const toast = useToast()
-const wallet = useWallet()
-const walletModal = useWalletModal()
+
 
 <button
   style={{
