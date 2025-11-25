@@ -94,15 +94,70 @@ const MobileMenuIcon = styled.button`
   display: block;
   background: transparent;
   border: none;
-  font-size: 30px;
-  color: #00ffc8;
   cursor: pointer;
-  padding: 8px;
-  transition: 0.2s ease;
+  padding: 10px;
   margin-right: 6px;
-  text-shadow: 0 0 8px rgba(0, 255, 180, 0.75);
-  &:hover { color: #8affea; text-shadow: 0 0 12px rgba(0, 255, 200, 1); transform: scale(1.12); }
-  @media (min-width: 1025px) { display: none; }
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  /* Glow-Effekt bei Hover */
+  &:hover {
+    background: rgba(0, 255, 180, 0.12);
+    box-shadow: 0 0 20px rgba(0, 255, 180, 0.6);
+  }
+
+  /* Die drei Striche */
+  &::before,
+  &::after,
+  & > span {
+    content: '';
+    position: absolute;
+    width: 26px;
+    height: 3px;
+    background: #00ffc8;
+    border-radius: 3px;
+    left: 9px;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 10px #00ffc8;
+  }
+
+  &::before {
+    top: 13px;
+  }
+
+  & > span {
+    top: 20px;
+  }
+
+  &::after {
+    top: 27px;
+  }
+
+  /* Animation beim Öffnen → X */
+  ${({ open }: { open?: boolean }) =>
+    open &&
+    `
+    &::before {
+      transform: rotate(45deg) translate(6px, 6px);
+      top: 20px;
+    }
+    & > span {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    &::after {
+      transform: rotate(-45deg) translate(translate(-6px, -6px);
+      top: 20px;
+    }
+  `}
+
+  @media (min-width: 1025px) {
+    display: none;
+  }
 `
 
 const MobileDropdown = styled.div<{ open: boolean }>`
@@ -392,9 +447,13 @@ export default function Header() {
             </>
           )}
 
-          <MobileMenuIcon data-menu onClick={() => setMobileOpen(!mobileOpen)}>
-            Menu
-          </MobileMenuIcon>
+<MobileMenuIcon
+  data-menu
+  open={mobileOpen} // wichtig für die X-Animation
+  onClick={() => setMobileOpen(!mobileOpen)}
+>
+  <span /> {/* mittlerer Strich */}
+</MobileMenuIcon>
         </div>
 
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
