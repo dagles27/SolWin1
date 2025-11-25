@@ -138,26 +138,18 @@ const MobileMenuIcon = styled.button`
   }
 
   /* Animation beim Öffnen → X */
-  ${({ open }: { open?: boolean }) =>
-    open &&
-    `
-    &::before {
-      transform: rotate(45deg) translate(6px, 6px);
-      top: 20px;
-    }
-    & > span {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
+  ${({ open }) => open && `
+    &::before,
     &::after {
-      transform: rotate(-45deg) translate(translate(-6px, -6px);
-      top: 20px;
+      background: #00ffcc;
+      box-shadow: 0 0 16px #00ffcc, 0 0 30px #00ffcc;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 16px #00ffcc; }
+      50% { box-shadow: 0 0 30px #00ffcc, 0 0 50px rgba(0, 255, 204, 0.6); }
     }
   `}
-
-  @media (min-width: 1025px) {
-    display: none;
-  }
 `
 
 const MobileDropdown = styled.div<{ open: boolean }>`
