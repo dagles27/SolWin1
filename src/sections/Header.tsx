@@ -14,6 +14,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
+import { useReferral } from 'gamba-react-ui-v2'
 // ========================================================
 // STYLES
 // ========================================================
@@ -296,72 +297,51 @@ export default function Header() {
         {/* FINAL & 100% FUNKTIONIEREND – nutzt exakt dieselbe Logik wie im UserButton */}
       {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
             {/* FINAL BUTTON – 100% FUNKTIONIEREND, KEIN BUILD-FEHLER MEHR */}
-      <button
-        style={{
-          width: '100%',
-          padding: '16px',
-          background: 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))',
-          border: '2px solid rgba(0, 255, 170, 0.6)',
-          borderRadius: '16px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '18px',
-          color: '#eafff7',
-          boxShadow: '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)',
-          marginBottom: '20px',
-          transition: 'all 0.3s ease',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-        onClick={async () => {
-          // WICHTIG: onClick ist jetzt async → await erlaubt!
-          const { useWallet } = GambaUi
-          const wallet = useWallet()
+const referral = useReferral()
+const toast = useToast()
+const wallet = useWallet()
+const walletModal = useWalletModal()
 
-          if (!wallet.connected || !wallet.publicKey) {
-            const { useWalletModal } = await import('@solana/wallet-adapter-react-ui')
-            useWalletModal().setVisible(true)
-            return
-          }
+<button
+  style={{
+    width: '100%',
+    padding: '16px',
+    background: 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))',
+    border: '2px solid rgba(0, 255, 170, 0.6)',
+    borderRadius: '16px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    fontSize: '18px',
+    color: '#eafff7',
+    boxShadow: '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)',
+    marginBottom: '20px',
+    transition: 'all 0.3s ease',
+    position: 'relative',
+    overflow: 'hidden',
+  }}
+  onClick={() => {
+    if (!wallet.connected) {
+      walletModal.setVisible(true)
+      return
+    }
 
-          try {
-            // Direkter Link – 100% sicher, unabhängig von useReferral()-Bug
-            const referralLink = `${window.location.origin}/?ref=${wallet.publicKey.toBase58()}`
-            await navigator.clipboard.writeText(referralLink)
+    try {
+      referral.copyLinkToClipboard()
 
-            // Dein Toast – jetzt ohne dynamischen await im Code
-            const { useToast } = await import('../hooks/useToast')
-            useToast()({
-              title: 'Copied!',
-              description: 'Your referral link is ready to share!',
-            })
-
-            // Visuelles Feedback
-            const btn = event?.currentTarget as HTMLButtonElement
-            if (btn) {
-              const original = btn.innerHTML
-              btn.innerHTML = 'Copied! ✅'
-              btn.style.background = 'rgba(0, 255, 174, 0.7)'
-              setTimeout(() => {
-                btn.innerHTML = original
-                btn.style.background = 'linear-gradient(135deg, rgba(0, 255, 174, 0.25), rgba(0, 255, 174, 0.1))'
-              }, 2000)
-            }
-          } catch (err) {
-            alert('Copy failed – please copy manually:\n\n' + `${window.location.origin}/?ref=${wallet.publicKey?.toBase58()}`)
-          }
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-3px)'
-          e.currentTarget.style.boxShadow = '0 0 40px rgba(0, 255, 174, 0.9)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)'
-          e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 174, 0.5), inset 0 0 15px rgba(0, 255, 150, 0.2)'
-        }}
-      >
-        Copy Invite Link
-      </button>
+      toast({
+        title: 'Copied!',
+        description: 'Your referral link is ready to share!',
+      })
+    } catch (e) {
+      toast({
+        title: 'Error',
+        description: 'Could not copy referral link.',
+      })
+    }
+  }}
+>
+  Copy Invite Link
+</button>
       {/* Open Help Video Button – jetzt 100% sichtbar und im gleichen Stil */}
       <div style={{ textAlign: 'center', marginTop: '8px' }}>
         <p style={{ marginBottom: '10px', opacity: 0.8, fontSize: '14px' }}>
