@@ -15,7 +15,6 @@ import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
 import { Modal } from '../components/Modal'
 import { useReferral } from 'gamba-react-ui-v2'
-import { useToast } from 'gamba-react-ui-v2'  // oder wo auch immer du es her hast
 // ========================================================
 // STYLES
 // ========================================================
