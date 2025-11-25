@@ -90,7 +90,7 @@ const Logo = styled(NavLink)`
   }
 `
 
-const MobileMenuIcon = styled.button`
+const MobileMenuIcon = styled.button<{ open?: boolean }>`
   display: block;
   background: transparent;
   border: none;
@@ -104,13 +104,13 @@ const MobileMenuIcon = styled.button`
   transition: all 0.3s ease;
   overflow: hidden;
 
-  /* Glow-Effekt bei Hover */
+  /* Hover Glow */
   &:hover {
-    background: rgba(0, 255, 180, 0.12);
-    box-shadow: 0 0 20px rgba(0, 255, 180, 0.6);
+    background: rgba(0, 255, 180, 0.15);
+    box-shadow: 0 0 20px rgba(0, 255, 180, 0.7);
   }
 
-  /* Die drei Striche */
+  /* Die drei Neon-Striche */
   &::before,
   &::after,
   & > span {
@@ -118,38 +118,53 @@ const MobileMenuIcon = styled.button`
     position: absolute;
     width: 26px;
     height: 3px;
+    left: 9px;
     background: #00ffc8;
     border-radius: 3px;
-    left: 9px;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: 0 0 10px #00ffc8;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  &::before {
-    top: 13px;
-  }
+  &::before { top: 13px; }
+  & > span  { top: 20px; }
+  &::after  { top: 27px; }
 
-  & > span {
-    top: 20px;
-  }
-
-  &::after {
-    top: 27px;
-  }
-
-  /* Animation beim Öffnen → X */
+  /* Hamburger → X + PULSE wenn offen */
   ${({ open }) => open && `
-    &::before,
-    &::after {
+    &::before {
+      top: 20px;
+      transform: rotate(45deg) translate(7px, 7px);
       background: #00ffcc;
       box-shadow: 0 0 16px #00ffcc, 0 0 30px #00ffcc;
       animation: pulse 2s infinite;
     }
+
+    & > span {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    &::after {
+      top: 20px;
+      transform: rotate(-45deg) translate(7px, -7px);
+      background: #00ffcc;
+      box-shadow: 0 0 16px #00ffcc, 0 0 30px #00ffcc;
+      animation: pulse 2s infinite;
+    }
+
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 16px #00ffcc; }
-      50% { box-shadow: 0 0 30px #00ffcc, 0 0 50px rgba(0, 255, 204, 0.6); }
+      0%, 100% {
+        box-shadow: 0 0 16px #00ffcc, 0 0 30px #00ffcc;
+      }
+      50% {
+        box-shadow: 0 0 20px #00ffcc, 0 0 50px #00ffcc, 0 0 70px rgba(0, 255, 204, 0.6);
+      }
     }
   `}
+
+  @media (min-width: 1025px) {
+    display: none;
+  }
 `
 
 const MobileDropdown = styled.div<{ open: boolean }>`
