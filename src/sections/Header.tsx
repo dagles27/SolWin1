@@ -288,7 +288,7 @@ export default function Header() {
 
             <div style={{ marginBottom: '24px' }}>
               <p style={{ marginBottom: '12px', opacity: 0.85 }}>
-                Your custom referral code:
+                Enter your wallet address below! 
               </p>
               <input
                 type="text"
