@@ -467,14 +467,14 @@ export default function Header() {
         </div>
 
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
-  {pool.jackpotBalance > 0 && (
-    <>
-      <MobileSectionLabel>Jackpot</MobileSectionLabel>
-      <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
-        Jackpot: <TokenValue amount={pool.jackpotBalance} />
-      </GlowButton>
-    </>
-  )}
+{pool.jackpotBalance > 0 && (
+  <>
+    <MobileSectionLabel>Jackpot</MobileSectionLabel>
+    <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
+      Jackpot: <TokenValue amount={pool.jackpotBalance} />
+    </GlowButton>
+  </>
+)}
 
   <MobileSectionLabel>Navigation</MobileSectionLabel>
   <MobileMenuItem onClick={() => setMobileOpen(false)}>
