@@ -434,25 +434,24 @@ export default function Header() {
           </Logo>
         </div>
 
-        <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
-          {balance.balance > 0 && (
-            <BalanceBox>
-              <span>Balance:</span> <TokenValue amount={balance.balance} />
-            </BalanceBox>
-          )}
-          {balance.bonusBalance > 0 && (
-            <Bonus onClick={() => setBonusHelp(true)}>
-              Bonus: <TokenValue amount={balance.bonusBalance} />
-            </Bonus>
-          )}
+        <div style={{ 
+  display: "flex", 
+  gap: "10px", 
+  alignItems: "center",
+  flexWrap: "wrap",           /* erlaubt Umbruch bei zu wenig Platz */
+  justifyContent: "flex-end"
+}}>
+  {balance.balance > 0 && <BalanceBox>...}
+  {balance.bonusBalance > 0 && <Bonus>...}
 
-          {isDesktop && (
-            <>
-              <TokenSelect />
-              <UserButton />
-              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>Leaderboard</GambaUi.Button>
-            </>
-          )}
+  {isDesktop && (
+    <>
+      <TokenSelect />
+      <UserButton />
+      <GambaUi.Button>Leaderboard</GambaUi.Button>
+    </>
+  )}
+
 
 <MobileMenuIcon
   data-menu
