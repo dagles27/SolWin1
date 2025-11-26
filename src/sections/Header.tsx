@@ -428,42 +428,46 @@ export default function Header() {
 
       {/* HEADER */}
       <StyledHeader>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Logo to="/">
-            <img alt="Sol-Win logo" src="/logo.svg" />
-          </Logo>
-        </div>
-
         <div style={{ 
-  display: "flex", 
-  gap: "10px", 
-  alignItems: "center",
-  flexWrap: "wrap",           /* erlaubt Umbruch bei zu wenig Platz */
-  justifyContent: "flex-end"
-}}>
-  {balance.balance > 0 && <BalanceBox>...}
-  {balance.bonusBalance > 0 && <Bonus>...}
+          display: "flex", 
+          gap: "10px", 
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+          paddingRight: "4px" // extra Luft rechts auf kleinen Screens
+        }}>
+          {balance.balance > 0 && (
+            <BalanceBox>
+              <span>Balance:</span> <TokenValue amount={balance.balance} />
+            </BalanceBox>
+          )}
+          {balance.bonusBalance > 0 && (
+            <Bonus onClick={() => setBonusHelp(true)}>
+              Bonus: <TokenValue amount={balance.bonusBalance} />
+            </Bonus>
+          )}
 
-  {isDesktop && (
-    <>
-      <TokenSelect />
-      <UserButton />
-      <GambaUi.Button>Leaderboard</GambaUi.Button>
-    </>
-  )}
+          {isDesktop && (
+            <>
+              <TokenSelect />
+              <UserButton />
+              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
+                Leaderboard
+              </GambaUi.Button>
+            </>
+          )}
 
-
-<MobileMenuIcon
-  data-menu
-  open={mobileOpen} // wichtig für die X-Animation
-  onClick={() => setMobileOpen(!mobileOpen)}
->
-  <span /> {/* mittlerer Strich */}
-</MobileMenuIcon>
+          <MobileMenuIcon
+            data-menu
+            open={mobileOpen}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            <span /> {/* mittlerer Strich */}
+          </MobileMenuIcon>
         </div>
 
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
-          {pool.jackpotBalance > 0 && (
+          {/* ... der Rest bleibt 100% unverändert ... */}
             <>
               <MobileSectionLabel>Jackpot</MobileSectionLabel>
               <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
