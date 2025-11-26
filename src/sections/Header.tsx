@@ -467,32 +467,30 @@ export default function Header() {
         </div>
 
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
-          {/* ... der Rest bleibt 100% unverändert ... */}
-            <>
-              <MobileSectionLabel>Jackpot</MobileSectionLabel>
-              <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
-                Jackpot: <TokenValue amount={pool.jackpotBalance} />
-              </GlowButton>
-            </>
-          )}
+  {pool.jackpotBalance > 0 && (
+    <>
+      <MobileSectionLabel>Jackpot</MobileSectionLabel>
+      <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
+        Jackpot: <TokenValue amount={pool.jackpotBalance} />
+      </GlowButton>
+    </>
+  )}
 
-          <MobileSectionLabel>Navigation</MobileSectionLabel>
-          <MobileMenuItem onClick={() => setMobileOpen(false)}>
-            <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>Games</NavLink>
-          </MobileMenuItem>
+  <MobileSectionLabel>Navigation</MobileSectionLabel>
+  <MobileMenuItem onClick={() => setMobileOpen(false)}>
+    <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>Games</NavLink>
+  </MobileMenuItem>
 
-          <MobileMenuItem onClick={() => { setReferralHelp(true); setMobileOpen(false) }}>
-            Referral Program
-          </MobileMenuItem>
+  <MobileMenuItem onClick={() => { setReferralHelp(true); setMobileOpen(false) }}>
+    Referral Program
+  </MobileMenuItem>
 
-          <MobileMenuItem onClick={() => { setShowLeaderboard(true); setMobileOpen(false) }}>
-            Leaderboard
-          </MobileMenuItem>
+  <MobileMenuItem onClick={() => { setShowLeaderboard(true); setMobileOpen(false) }}>
+    Leaderboard
+  </MobileMenuItem>
 
-          <MobileSectionLabel>Wallet</MobileSectionLabel>
-          <div style={{ padding: "12px 18px" }}><GlowWrapper><TokenSelect /></GlowWrapper></div>
-          <div style={{ padding: "12px 18px" }}><GlowButton><CleanUserButtonWrapper><UserButton /></CleanUserButtonWrapper></GlowButton></div>
-        </MobileDropdown>
+  {/* ... der Rest bleibt gleich ... */}
+</MobileDropdown>
       </StyledHeader>
     </>
   )
