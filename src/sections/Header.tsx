@@ -428,14 +428,13 @@ export default function Header() {
 
       {/* HEADER */}
       <StyledHeader>
-        <div style={{ 
-          display: "flex", 
-          gap: "10px", 
-          alignItems: "center",
-          flexWrap: "wrap",
-          justifyContent: "flex-end",
-          paddingRight: "4px" // extra Luft rechts auf kleinen Screens
-        }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Logo to="/">
+            <img alt="Sol-Win logo" src="/logo.svg" />
+          </Logo>
+        </div>
+
+        <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
           {balance.balance > 0 && (
             <BalanceBox>
               <span>Balance:</span> <TokenValue amount={balance.balance} />
@@ -451,46 +450,46 @@ export default function Header() {
             <>
               <TokenSelect />
               <UserButton />
-              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>
-                Leaderboard
-              </GambaUi.Button>
+              <GambaUi.Button onClick={() => setShowLeaderboard(true)}>Leaderboard</GambaUi.Button>
             </>
           )}
 
-          <MobileMenuIcon
-            data-menu
-            open={mobileOpen}
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            <span /> {/* mittlerer Strich */}
-          </MobileMenuIcon>
+<MobileMenuIcon
+  data-menu
+  open={mobileOpen} // wichtig für die X-Animation
+  onClick={() => setMobileOpen(!mobileOpen)}
+>
+  <span /> {/* mittlerer Strich */}
+</MobileMenuIcon>
         </div>
 
         <MobileDropdown ref={dropdownRef} open={mobileOpen}>
-{pool.jackpotBalance > 0 && (
-  <>
-    <MobileSectionLabel>Jackpot</MobileSectionLabel>
-    <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
-      Jackpot: <TokenValue amount={pool.jackpotBalance} />
-    </GlowButton>
-  </>
-)}
+          {pool.jackpotBalance > 0 && (
+            <>
+              <MobileSectionLabel>Jackpot</MobileSectionLabel>
+              <GlowButton onClick={() => { setJackpotHelp(true); setMobileOpen(false) }}>
+                Jackpot: <TokenValue amount={pool.jackpotBalance} />
+              </GlowButton>
+            </>
+          )}
 
-  <MobileSectionLabel>Navigation</MobileSectionLabel>
-  <MobileMenuItem onClick={() => setMobileOpen(false)}>
-    <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>Games</NavLink>
-  </MobileMenuItem>
+          <MobileSectionLabel>Navigation</MobileSectionLabel>
+          <MobileMenuItem onClick={() => setMobileOpen(false)}>
+            <NavLink to="/games" style={{ textDecoration: "none", color: "inherit" }}>Games</NavLink>
+          </MobileMenuItem>
 
-  <MobileMenuItem onClick={() => { setReferralHelp(true); setMobileOpen(false) }}>
-    Referral Program
-  </MobileMenuItem>
+          <MobileMenuItem onClick={() => { setReferralHelp(true); setMobileOpen(false) }}>
+            Referral Program
+          </MobileMenuItem>
 
-  <MobileMenuItem onClick={() => { setShowLeaderboard(true); setMobileOpen(false) }}>
-    Leaderboard
-  </MobileMenuItem>
+          <MobileMenuItem onClick={() => { setShowLeaderboard(true); setMobileOpen(false) }}>
+            Leaderboard
+          </MobileMenuItem>
 
-  {/* ... der Rest bleibt gleich ... */}
-</MobileDropdown>
+          <MobileSectionLabel>Wallet</MobileSectionLabel>
+          <div style={{ padding: "12px 18px" }}><GlowWrapper><TokenSelect /></GlowWrapper></div>
+          <div style={{ padding: "12px 18px" }}><GlowButton><CleanUserButtonWrapper><UserButton /></CleanUserButtonWrapper></GlowButton></div>
+        </MobileDropdown>
       </StyledHeader>
     </>
   )
