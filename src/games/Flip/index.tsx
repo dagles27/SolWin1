@@ -147,7 +147,7 @@ export default function Flip() {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
-              2× Payout · 49.5% Win Chance
+              2× Payout · 50.0% Win Chance
             </div>
           </div>
         </div>
