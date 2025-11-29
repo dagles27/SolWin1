@@ -1,4 +1,4 @@
-index.tsx: import { Canvas } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { GambaUi, useSound } from 'gamba-react-ui-v2'
 import { useGamba } from 'gamba-react-v2'
 import React from 'react'
