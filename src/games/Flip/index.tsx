@@ -4,7 +4,6 @@ import { useGamba } from 'gamba-react-v2'
 import React from 'react'
 import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from './Coin'
 import { Effect } from './Effect'
-
 import SOUND_COIN from './coin.mp3'
 import SOUND_LOSE from './lose.mp3'
 import SOUND_WIN from './win.mp3'
@@ -25,7 +24,6 @@ export default function Flip() {
   const [resultIndex, setResultIndex] = React.useState(0)
   const [side, setSide] = React.useState<Side>('heads')
   const [wager, setWager] = React.useState(WAGER_OPTIONS[0])
-
   const sounds = useSound({ coin: SOUND_COIN, win: SOUND_WIN, lose: SOUND_LOSE })
 
   const play = async () => {
@@ -49,115 +47,104 @@ export default function Flip() {
   return (
     <>
       <GambaUi.Portal target="screen">
-        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-          <div
-            style={{
+        <GambaUi.Responsive>
+          <div style={{
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '20px 10px',
+            background: BG,
+          }}>
+            {/* Haupt-Card mit allem drin */}
+            <div style={{
               background: BG,
               borderRadius: '28px',
               padding: '30px 24px',
               boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,255,136,0.08)',
               border: '1px solid rgba(0,255,136,0.25)',
-              maxWidth: '400px',
+              maxWidth: '420px',
               width: '100%',
-            }}
-          >
-            <div style={{ marginBottom: '28px', borderRadius: '50%', overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,0.7)' }}>
-              <Canvas
-                linear
-                flat
-                orthographic
-                camera={{ zoom: 160, position: [0, 0, 100] }}
-                style={{ width: '100%', height: '340px', borderRadius: '50%' }}
-              >
-                <React.Suspense fallback={null}>
-                  <group scale={0.78}>
-                    <Coin result={resultIndex} flipping={flipping} />
-                  </group>
-                </React.Suspense>
-                <Effect color="white" />
-                {flipping && <Effect color="white" />}
-                {win && <Effect color={GREEN} />}
-                <ambientLight intensity={3} />
-                <directionalLight position={[0, 1, 1]} intensity={1.8} />
-              </Canvas>
-            </div>
+            }}>
+              {/* 3D Münze */}
+              <div style={{ marginBottom: '28px', borderRadius: '50%', overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,0.7)' }}>
+                <Canvas linear flat orthographic camera={{ zoom: 160, position: [0, 0, 100] }} style={{ width: '100%', height: '340px', borderRadius: '50%' }}>
+                  <React.Suspense fallback={null}>
+                    <group scale={0.78}>
+                      <Coin result={resultIndex} flipping={flipping} />
+                    </group>
+                  </React.Suspense>
+                  <Effect color="white" />
+                  {flipping && <Effect color="white" />}
+                  {win && <Effect color={GREEN} />}
+                  <ambientLight intensity={3} />
+                  <directionalLight position={[0, 1, 1]} intensity={1.8} />
+                </Canvas>
+              </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
-              <GambaUi.WagerInput
-                options={WAGER_OPTIONS}
-                value={wager}
-                onChange={setWager}
-                style={{
-                  background: GREEN_DARK,
-                  color: 'white',
-                  borderRadius: '18px',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  height: '56px',
-                }}
-              />
+              {/* ALLE 3 BUTTONS NEBENEINANDER */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.3fr', gap: '12px' }}>
+                <GambaUi.WagerInput
+                  options={WAGER_OPTIONS}
+                  value={wager}
+                  onChange={setWager}
+                  style={{ background: GREEN_DARK, color: 'white', borderRadius: '18px', fontWeight: 'bold', fontSize: '16px', height: '58px' }}
+                />
 
-              <GambaUi.Button
-                disabled={gamba.isPlaying || flipping}
-                onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
-                style={{
-                  background: side === 'heads' ? GREEN : GREEN_DARK,
-                  color: side === 'heads' ? '#000' : 'white',
-                  borderRadius: '18px',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  height: '56px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: side === 'heads' ? '0 0 25px rgba(0,255,136,0.7)' : 'none',
-                  transition: 'all 0.25s',
-                }}
-              >
-                <img height="24" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
-                {side.toUpperCase()}
-              </GambaUi.Button>
+                <GambaUi.Button
+                  disabled={gamba.isPlaying || flipping}
+                  onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
+                  style={{
+                    background: side === 'heads' ? GREEN : GREEN_DARK,
+                    color: side === 'heads' ? '#000' : 'white',
+                    borderRadius: '18px',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    height: '58px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    boxShadow: side === 'heads' ? '0 0 25px rgba(0,255,136,0.7)' : 'none',
+                  }}
+                >
+                  <img height="26" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
+                  {side.toUpperCase()}
+                </GambaUi.Button>
 
-              <GambaUi.PlayButton
-                onClick={play}
-                disabled={gamba.isPlaying || flipping}
-                style={{
-                  background: `linear-gradient(135deg, ${GREEN}, #00ffaa)`,
-                  color: '#000',
-                  borderRadius: '18px',
-                  fontWeight: '900',
-                  fontSize: '20px',
-                  height: '56px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1.5px',
-                  boxShadow: '0 8px 25px rgba(0,255,136,0.5)',
-                  transition: 'transform 0.15s',
-                }}
-                hoverStyle={{ transform: 'translateY(-4px) scale(1.05)' }}
-              >
-                FLIP
-              </GambaUi.PlayButton>
-            </div>
+                {/* FLIP BUTTON – jetzt groß, rot, auffällig und nur hier! */}
+                <GambaUi.PlayButton
+                  onClick={play}
+                  disabled={gamba.isPlaying || flipping}
+                  style={{
+                    background: 'linear-gradient(135deg, #ff3b5c, #ff6b8b)',
+                    color: 'white',
+                    borderRadius: '18px',
+                    fontWeight: '900',
+                    fontSize: '22px',
+                    height: '58px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '2px',
+                    boxShadow: '0 8px 30px rgba(255,59,92,0.6)',
+                  }}
+                >
+                  {flipping ? 'FLIPPING...' : 'FLIP'}
+                </GambaUi.PlayButton>
+              </div>
 
-            <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
-              2× Payout · 50.0% Win Chance
+              <div style={{ textAlign: 'center', marginTop: '16px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
+                2× Payout · 50.0% Win Chance
+              </div>
             </div>
           </div>
-        </div>
+        </GambaUi.Responsive>
       </GambaUi.Portal>
 
+      {/* UNTEREN FLIP-BUTTON KOMPLETT DEAKTIVIEREN */}
       <GambaUi.Portal target="controls">
-  <style>{`
-    [data-gamba-controls] {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      height: 0 !important;
-      overflow: hidden !important;
-    }
-  `}</style>
-</GambaUi.Portal>
-</>
-)
+        {null} {/* Rendert gar nichts – kein lila Button mehr! */}
+      </GambaUi.Portal>
+    </>
+  )
 }
