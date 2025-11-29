@@ -148,8 +148,13 @@ export default function Flip() {
       </GambaUi.Portal>
 
       <GambaUi.Portal target="controls">
-        <style>{`#gamba-controls { display: none !important; }`}</style>
-      </GambaUi.Portal>
-    </>
-  )
-}
+  <style>{`
+    [data-gamba-controls] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+  `}</style>
+</GambaUi.Portal>
