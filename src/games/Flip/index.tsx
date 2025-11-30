@@ -88,62 +88,81 @@ export default function Flip() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
               {/* Wager Input */}
               <GambaUi.WagerInput
-                options={WAGER_OPTIONS}
-                value={wager}
-                onChange={setWager}
-                style={{
-                  background: GREEN_DARK,
-                  color: 'white',
-                  borderRadius: '18px',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  height: '56px',
-                }}
-              />
+  options={WAGER_OPTIONS}
+  value={wager}
+  onChange={setWager}
+  style={{
+    background: '#0d2618',
+    color: 'white',
+    borderRadius: '18px',
+    fontWeight: '700',
+    fontSize: '17px',
+    height: '56px',
+    border: '1px solid rgba(0,255,136,0.32)',
+    boxShadow: '0 0 18px rgba(0,255,136,0.12) inset',
+    transition: 'all 0.2s',
+  }}
+  hoverStyle={{
+    boxShadow: '0 0 25px rgba(0,255,136,0.25) inset',
+  }}
+/>
 
               {/* Heads / Tails Toggle */}
               <GambaUi.Button
-                disabled={gamba.isPlaying || flipping}
-                onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
-                style={{
-                  background: side === 'heads' ? GREEN : GREEN_DARK,
-                  color: side === 'heads' ? '#000' : 'white',
-                  borderRadius: '18px',
-                  fontWeight: 'bold',
-                  fontSize: '16px',
-                  height: '56px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  boxShadow: side === 'heads' ? '0 0 25px rgba(0,255,136,0.7)' : 'none',
-                  transition: 'all 0.25s',
-                }}
-              >
-                <img height="24" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
-                {side.toUpperCase()}
-              </GambaUi.Button>
+  disabled={gamba.isPlaying || flipping}
+  onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
+  style={{
+    background: side === 'heads' ? '#00ff88' : '#0d2618',
+    color: side === 'heads' ? '#001303' : 'white',
+    borderRadius: '18px',
+    fontWeight: '700',
+    fontSize: '17px',
+    height: '56px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    border: side === 'heads'
+      ? '1px solid rgba(0,255,136,0.7)'
+      : '1px solid rgba(0,255,136,0.25)',
+    boxShadow: side === 'heads'
+      ? '0 0 25px rgba(0,255,136,0.55), inset 0 0 8px rgba(255,255,255,0.12)'
+      : '0 0 14px rgba(0,255,136,0.08) inset',
+    transition: 'all 0.18s',
+  }}
+  hoverStyle={{
+    boxShadow: side === 'heads'
+      ? '0 0 32px rgba(0,255,160,0.7)'
+      : '0 0 20px rgba(0,255,136,0.2) inset',
+    transform: 'translateY(-3px)',
+  }}
+>
+  <img height="24" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
+  {side.toUpperCase()}
+</GambaUi.Button>
 
               {/* FLIP Button – jetzt exakt gleich hoch und direkt daneben */}
               <GambaUi.Button
   onClick={play}
   disabled={gamba.isPlaying || flipping}
   style={{
-    background: `linear-gradient(135deg, ${GREEN}, #00ffaa)`,
-    color: '#000',
+    background: `linear-gradient(135deg, #00ff88, #00dd77)`,
+    color: '#001303',
     borderRadius: '18px',
     fontWeight: '900',
-    fontSize: '20px',
-    height: '56px',
+    fontSize: '22px',
+    height: '60px',
     textTransform: 'uppercase',
-    letterSpacing: '1.5px',
-    boxShadow: '0 8px 25px rgba(0,255,136,0.5)',
-    transition: 'transform 0.15s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    letterSpacing: '1.8px',
+    boxShadow:
+      '0 0 25px rgba(0,255,136,0.45), 0 8px 30px rgba(0,255,136,0.28), inset 0 0 12px rgba(255,255,255,0.12)',
+    border: '1px solid rgba(0,255,136,0.45)',
+    transition: 'all 0.18s ease-out',
   }}
-  hoverStyle={{ transform: 'translateY(-4px) scale(1.05)' }}
+  hoverStyle={{
+    transform: 'translateY(-4px) scale(1.05)',
+    boxShadow: '0 0 35px rgba(0,255,160,0.65), 0 12px 35px rgba(0,255,160,0.3)',
+  }}
 >
   FLIP
 </GambaUi.Button>
