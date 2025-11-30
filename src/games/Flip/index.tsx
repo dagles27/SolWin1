@@ -126,24 +126,25 @@ export default function Flip() {
 
               {/* FLIP Button – jetzt exakt gleich hoch und direkt daneben */}
               <GambaUi.PlayButton
-                onClick={play}
-                disabled={gamba.isPlaying || flipping}
-                style={{
-                  background: `linear-gradient(135deg, ${GREEN}, #00ffaa)`,
-                  color: '#000',
-                  borderRadius: '18px',
-                  fontWeight: '900',
-                  fontSize: '20px',
-                  height: '56px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1.5px',
-                  boxShadow: '0 8px 25px rgba(0,255,136,0.5)',
-                  transition: 'transform 0.15s',
-                }}
-                hoverStyle={{ transform: 'translateY(-4px) scale(1.05)' }}
-              >
-                FLIP
-              </GambaUi.PlayButton>
+  noPortal
+  onClick={play}
+  disabled={gamba.isPlaying || flipping}
+  style={{
+    background: `linear-gradient(135deg, ${GREEN}, #00ffaa)`,
+    color: '#000',
+    borderRadius: '18px',
+    fontWeight: '900',
+    fontSize: '20px',
+    height: '56px',
+    textTransform: 'uppercase',
+    letterSpacing: '1.5px',
+    boxShadow: '0 8px 25px rgba(0,255,136,0.5)',
+    transition: 'transform 0.15s',
+  }}
+  hoverStyle={{ transform: 'translateY(-4px) scale(1.05)' }}
+>
+  FLIP
+</GambaUi.PlayButton>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
