@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { GambaUi, useSound } from 'gamba-react-ui-v2'
-import { useGamba } from 'gamba-react-v2'           // ← war der Fehler!
+import { useGamba } from 'gamba-react-v2'
 import React from 'react'
 import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from './Coin'
 import { Effect } from './Effect'
@@ -25,11 +25,7 @@ export default function Flip() {
   const [side, setSide] = React.useState<Side>('heads')
   const [wager, setWager] = React.useState(WAGER_OPTIONS[0])
 
-  const sounds = useSound({
-    coin: SOUND_COIN,
-    win: SOUND_WIN,
-    lose: SOUND_LOSE,
-  })
+  const sounds = useSound({ coin: SOUND_COIN, win: SOUND_WIN, lose: SOUND_LOSE })
 
   const play = async () => {
     try {
@@ -51,96 +47,118 @@ export default function Flip() {
 
   return (
     <>
-      {/* ==================== CUSTOM CSS (funktioniert 100% auf Vercel) ==================== */}
+      {/* ULTRA-STARKES CSS – überschreibt wirklich ALLES von gamba-react-ui-v2 */}
       <style jsx global>{`
         /* Wager Input */
-        .custom-wager-input > div {
+        .custom-wager-input > div,
+        .custom-wager-input > div > div,
+        .custom-wager-input input {
           background: rgba(0, 25, 15, 0.9) !important;
           color: #00ffbf !important;
           border-radius: 18px !important;
-          font-weight: 800 !important;
-          font-size: 17px !important;
           height: 58px !important;
           border: 1px solid rgba(0,255,160,0.4) !important;
           box-shadow: 0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25) !important;
-          transition: all 0.18s !important;
+          font-weight: 800 !important;
+          font-size: 17px !important;
         }
         .custom-wager-input > div:hover {
           box-shadow: 0 0 30px rgba(0,255,160,0.45) inset, 0 0 16px rgba(0,255,180,0.35) !important;
           transform: translateY(-3px) !important;
-          border: 1px solid rgba(0,255,180,0.6) !important;
+          border-color: rgba(0,255,180,0.6) !important;
         }
 
-        /* Toggle Button (Heads/Tails) */
-        .custom-toggle {
-          height: 58px !important;
-          border-radius: 18px !important;
-          font-weight: 800 !important;
-          font-size: 17px !important;
+        /* Toggle & Flip Button – das überschreibt wirklich jedes !important von gamba-ui */
+        .custom-toggle,
+        .custom-flip-btn,
+        .custom-toggle > button,
+        .custom-flip-btn > button,
+        .custom-toggle div,
+        .custom-flip-btn div {
+          all: unset !important;
+          appearance: none !important;
+          cursor: pointer !important;
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
-          gap: 8px !important;
-          transition: all 0.18s ease !important;
+          width: 100% !important;
+          height: 100% !important;
+          font-family: inherit !important;
+          transition: all 0.2s ease-out !important;
+        }
+
+        /* Heads/Tails Toggle – inaktiv */
+        .custom-toggle {
           background: rgba(0, 25, 15, 0.85) !important;
           color: #00ffbf !important;
           border: 1px solid rgba(0,255,140,0.25) !important;
           box-shadow: 0 0 12px rgba(0,255,140,0.12) inset !important;
+          border-radius: 18px !important;
+          height: 58px !important;
+          gap: 8px !important;
+          font-weight: 800 !important;
+          font-size: 17px !important;
         }
+
+        /* Heads/Tails Toggle – aktiv */
         .custom-toggle.active {
           background: linear-gradient(135deg, #00ff99, #00dd77) !important;
           color: #002a12 !important;
           border: 1px solid rgba(0,255,160,0.7) !important;
           box-shadow: 0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08) !important;
         }
+
         .custom-toggle:hover:not(:disabled) {
           box-shadow: 0 0 34px rgba(0,255,170,0.7) !important;
           transform: translateY(-3px) !important;
         }
 
-        /* FLIP Button */
+        /* FLIP Button – dein fetter Hauptbutton */
         .custom-flip-btn {
-          height: 60px !important;
           background: linear-gradient(135deg, #00ff99, #00e68a) !important;
           color: #002a12 !important;
+          border: 1px solid rgba(0,255,160,0.55) !important;
+          box-shadow: 
+            0 0 28px rgba(0,255,150,0.55), 
+            0 8px 35px rgba(0,255,160,0.32), 
+            inset 0 0 16px rgba(255,255,255,0.10) !important;
           border-radius: 18px !important;
+          height: 60px !important;
           font-weight: 900 !important;
           font-size: 22px !important;
           text-transform: uppercase !important;
           letter-spacing: 2px !important;
-          border: 1px solid rgba(0,255,160,0.55) !important;
-          box-shadow: 0 0 28px rgba(0,255,150,0.55), 0 8px 35px rgba(0,255,160,0.32), inset 0 0 16px rgba(255,255,255,0.10) !important;
-          transition: all 0.2s ease-out !important;
         }
+
         .custom-flip-btn:hover:not(:disabled) {
           transform: translateY(-4px) scale(1.05) !important;
           box-shadow: 0 0 45px rgba(0,255,170,0.75), 0 12px 45px rgba(0,255,170,0.35) !important;
           letter-spacing: 2.5px !important;
         }
+
+        /* Disabled Zustand (optional – sieht sauber aus) */
+        .custom-toggle:disabled,
+        .custom-flip-btn:disabled {
+          opacity: 0.5 !important;
+          cursor: not-allowed !important;
+          transform: none !important;
+        }
       `}</style>
 
       <GambaUi.Portal target="screen">
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-          <div
-            style={{
-              background: BG,
-              borderRadius: '28px',
-              padding: '30px 24px',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,255,136,0.08)',
-              border: '1px solid rgba(0,255,136,0.25)',
-              maxWidth: '400px',
-              width: '100%',
-            }}
-          >
+          <div style={{
+            background: BG,
+            borderRadius: '28px',
+            padding: '30px 24px',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,255,136,0.08)',
+            border: '1px solid rgba(0,255,136,0.25)',
+            maxWidth: '400px',
+            width: '100%',
+          }}>
             {/* 3D Coin */}
             <div style={{ marginBottom: '28px', borderRadius: '50%', overflow: 'hidden', boxShadow: '0 12px 40px rgba(0,0,0,0.7)' }}>
-              <Canvas
-                linear
-                flat
-                orthographic
-                camera={{ zoom: 160, position: [0, 0, 100] }}
-                style={{ width: '100%', height: '340px', borderRadius: '50%' }}
-              >
+              <Canvas linear flat orthographic camera={{ zoom: 160, position: [0, 0, 100] }} style={{ width: '100%', height: '340px', borderRadius: '50%' }}>
                 <React.Suspense fallback={null}>
                   <group scale={0.78}>
                     <Coin result={resultIndex} flipping={flipping} />
@@ -154,14 +172,9 @@ export default function Flip() {
               </Canvas>
             </div>
 
-            {/* Controls */}
+            {/* Buttons */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
-              <GambaUi.WagerInput
-                options={WAGER_OPTIONS}
-                value={wager}
-                onChange={setWager}
-                className="custom-wager-input"
-              />
+              <GambaUi.WagerInput options={WAGER_OPTIONS} value={wager} onChange={setWager} className="custom-wager-input" />
 
               <GambaUi.Button
                 disabled={gamba.isPlaying || flipping}
