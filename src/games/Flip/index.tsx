@@ -76,24 +76,40 @@ export default function Flip() {
               </Canvas>
             </div>
 
-            {/* Controls */}
+            {/* === DIE DREI BUTTONS – ALLES SELBST GEMACHT === */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
-              {/* Wager Input (bleibt wie vorher – funktioniert ja) */}
-              <GambaUi.WagerInput options={WAGER_OPTIONS} value={wager} onChange={setWager} />
 
-              {/* === EIGENER TOGGLE BUTTON === */}
+              {/* 1. WAGER – jetzt auch komplett selbst gestyled */}
+              <div style={{
+                height: '58px',
+                background: 'rgba(0, 25, 15, 0.9)',
+                color: '#00ffbf',
+                borderRadius: '18px',
+                border: '1px solid rgba(0,255,160,0.4)',
+                boxShadow: '0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25)',
+                fontWeight: 800,
+                fontSize: '17px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.18s',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)', e.currentTarget.style.boxShadow = '0 0 30px rgba(0,255,160,0.45) inset, 0 0 16px rgba(0,255,180,0.35)', e.currentTarget.style.borderColor = 'rgba(0,255,180,0.6)'}
+              onMouseLeave={e => e.currentTarget.style.transform = '', e.currentTarget.style.boxShadow = '0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25)', e.currentTarget.style.borderColor = 'rgba(0,255,160,0.4)'}
+              >
+                <GambaUi.WagerInput options={WAGER_OPTIONS} value={wager} onChange={setWager} />
+              </div>
+
+              {/* 2. HEADS/TAILS TOGGLE */}
               <div
-                onClick={() => !disabled && setSide(side === 'heads' ? 'tails' : 'heads')}
+                onClick={() => !disabled && setSide(prev => prev === 'heads' ? 'tails' : 'heads')}
                 style={{
                   height: '58px',
                   borderRadius: '18px',
-                  background: side === 'heads'
-                    ? 'linear-gradient(135deg, #00ff99, #00dd77)'
-                    : 'rgba(0, 25, 15, 0.85)',
+                  background: side === 'heads' ? 'linear-gradient(135deg, #00ff99, #00dd77)' : 'rgba(0, 25, 15, 0.85)',
                   color: side === 'heads' ? '#002a12' : '#00ffbf',
-                  border: side === 'heads'
-                    ? '1px solid rgba(0,255,160,0.7)'
-                    : '1px solid rgba(0,255,140,0.25)',
+                  border: side === 'heads' ? '1px solid rgba(0,255,160,0.7)' : '1px solid rgba(0,255,140,0.25)',
                   boxShadow: side === 'heads'
                     ? '0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08)'
                     : '0 0 12px rgba(0,255,140,0.12) inset',
@@ -115,7 +131,7 @@ export default function Flip() {
                 {side.toUpperCase()}
               </div>
 
-              {/* === EIGENER FLIP BUTTON (mit GambaUi.PlayButton nur für die Logik) === */}
+              {/* 3. FLIP BUTTON – mit GambaUi.PlayButton nur für die Logik */}
               <GambaUi.PlayButton wager={wager} bet={SIDES[side]} metadata={[side]} onClick={play}>
                 {({ disabled: playDisabled, onClick }) => (
                   <div
@@ -146,6 +162,7 @@ export default function Flip() {
                   </div>
                 )}
               </GambaUi.PlayButton>
+
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
