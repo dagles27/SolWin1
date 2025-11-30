@@ -45,106 +45,10 @@ export default function Flip() {
     }
   }
 
+  const disabled = gamba.isPlaying || flipping
+
   return (
     <>
-      {/* ULTRA-STARKES CSS – überschreibt wirklich ALLES von gamba-react-ui-v2 */}
-      <style jsx global>{`
-        /* Wager Input */
-        .custom-wager-input > div,
-        .custom-wager-input > div > div,
-        .custom-wager-input input {
-          background: rgba(0, 25, 15, 0.9) !important;
-          color: #00ffbf !important;
-          border-radius: 18px !important;
-          height: 58px !important;
-          border: 1px solid rgba(0,255,160,0.4) !important;
-          box-shadow: 0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25) !important;
-          font-weight: 800 !important;
-          font-size: 17px !important;
-        }
-        .custom-wager-input > div:hover {
-          box-shadow: 0 0 30px rgba(0,255,160,0.45) inset, 0 0 16px rgba(0,255,180,0.35) !important;
-          transform: translateY(-3px) !important;
-          border-color: rgba(0,255,180,0.6) !important;
-        }
-
-        /* Toggle & Flip Button – das überschreibt wirklich jedes !important von gamba-ui */
-        .custom-toggle,
-        .custom-flip-btn,
-        .custom-toggle > button,
-        .custom-flip-btn > button,
-        .custom-toggle div,
-        .custom-flip-btn div {
-          all: unset !important;
-          appearance: none !important;
-          cursor: pointer !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          width: 100% !important;
-          height: 100% !important;
-          font-family: inherit !important;
-          transition: all 0.2s ease-out !important;
-        }
-
-        /* Heads/Tails Toggle – inaktiv */
-        .custom-toggle {
-          background: rgba(0, 25, 15, 0.85) !important;
-          color: #00ffbf !important;
-          border: 1px solid rgba(0,255,140,0.25) !important;
-          box-shadow: 0 0 12px rgba(0,255,140,0.12) inset !important;
-          border-radius: 18px !important;
-          height: 58px !important;
-          gap: 8px !important;
-          font-weight: 800 !important;
-          font-size: 17px !important;
-        }
-
-        /* Heads/Tails Toggle – aktiv */
-        .custom-toggle.active {
-          background: linear-gradient(135deg, #00ff99, #00dd77) !important;
-          color: #002a12 !important;
-          border: 1px solid rgba(0,255,160,0.7) !important;
-          box-shadow: 0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08) !important;
-        }
-
-        .custom-toggle:hover:not(:disabled) {
-          box-shadow: 0 0 34px rgba(0,255,170,0.7) !important;
-          transform: translateY(-3px) !important;
-        }
-
-        /* FLIP Button – dein fetter Hauptbutton */
-        .custom-flip-btn {
-          background: linear-gradient(135deg, #00ff99, #00e68a) !important;
-          color: #002a12 !important;
-          border: 1px solid rgba(0,255,160,0.55) !important;
-          box-shadow: 
-            0 0 28px rgba(0,255,150,0.55), 
-            0 8px 35px rgba(0,255,160,0.32), 
-            inset 0 0 16px rgba(255,255,255,0.10) !important;
-          border-radius: 18px !important;
-          height: 60px !important;
-          font-weight: 900 !important;
-          font-size: 22px !important;
-          text-transform: uppercase !important;
-          letter-spacing: 2px !important;
-        }
-
-        .custom-flip-btn:hover:not(:disabled) {
-          transform: translateY(-4px) scale(1.05) !important;
-          box-shadow: 0 0 45px rgba(0,255,170,0.75), 0 12px 45px rgba(0,255,170,0.35) !important;
-          letter-spacing: 2.5px !important;
-        }
-
-        /* Disabled Zustand (optional – sieht sauber aus) */
-        .custom-toggle:disabled,
-        .custom-flip-btn:disabled {
-          opacity: 0.5 !important;
-          cursor: not-allowed !important;
-          transform: none !important;
-        }
-      `}</style>
-
       <GambaUi.Portal target="screen">
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
           <div style={{
@@ -172,26 +76,76 @@ export default function Flip() {
               </Canvas>
             </div>
 
-            {/* Buttons */}
+            {/* Controls */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
-              <GambaUi.WagerInput options={WAGER_OPTIONS} value={wager} onChange={setWager} className="custom-wager-input" />
+              {/* Wager Input (bleibt wie vorher – funktioniert ja) */}
+              <GambaUi.WagerInput options={WAGER_OPTIONS} value={wager} onChange={setWager} />
 
-              <GambaUi.Button
-                disabled={gamba.isPlaying || flipping}
-                onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
-                className={`custom-toggle ${side === 'heads' ? 'active' : ''}`}
+              {/* === EIGENER TOGGLE BUTTON === */}
+              <div
+                onClick={() => !disabled && setSide(side === 'heads' ? 'tails' : 'heads')}
+                style={{
+                  height: '58px',
+                  borderRadius: '18px',
+                  background: side === 'heads'
+                    ? 'linear-gradient(135deg, #00ff99, #00dd77)'
+                    : 'rgba(0, 25, 15, 0.85)',
+                  color: side === 'heads' ? '#002a12' : '#00ffbf',
+                  border: side === 'heads'
+                    ? '1px solid rgba(0,255,160,0.7)'
+                    : '1px solid rgba(0,255,140,0.25)',
+                  boxShadow: side === 'heads'
+                    ? '0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08)'
+                    : '0 0 12px rgba(0,255,140,0.12) inset',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  fontWeight: 800,
+                  fontSize: '17px',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  opacity: disabled ? 0.5 : 1,
+                  transition: 'all 0.18s',
+                  userSelect: 'none',
+                }}
+                onMouseEnter={e => !disabled && (e.currentTarget.style.transform = 'translateY(-3px)', e.currentTarget.style.boxShadow = '0 0 34px rgba(0,255,170,0.7)')}
+                onMouseLeave={e => !disabled && (e.currentTarget.style.transform = '', e.currentTarget.style.boxShadow = side === 'heads' ? '0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08)' : '0 0 12px rgba(0,255,140,0.12) inset')}
               >
                 <img height="26" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
                 {side.toUpperCase()}
-              </GambaUi.Button>
+              </div>
 
-              <GambaUi.Button
-                onClick={play}
-                disabled={gamba.isPlaying || flipping}
-                className="custom-flip-btn"
-              >
-                FLIP
-              </GambaUi.Button>
+              {/* === EIGENER FLIP BUTTON (mit GambaUi.PlayButton nur für die Logik) === */}
+              <GambaUi.PlayButton wager={wager} bet={SIDES[side]} metadata={[side]} onClick={play}>
+                {({ disabled: playDisabled, onClick }) => (
+                  <div
+                    onClick={onClick}
+                    style={{
+                      height: '60px',
+                      background: 'linear-gradient(135deg, #00ff99, #00e68a)',
+                      color: '#002a12',
+                      borderRadius: '18px',
+                      fontWeight: 900,
+                      fontSize: '22px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '2px',
+                      border: '1px solid rgba(0,255,160,0.55)',
+                      boxShadow: '0 0 28px rgba(0,255,150,0.55), 0 8px 35px rgba(0,255,160,0.32), inset 0 0 16px rgba(255,255,255,0.10)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: playDisabled ? 'not-allowed' : 'pointer',
+                      opacity: playDisabled ? 0.5 : 1,
+                      transition: 'all 0.2s ease-out',
+                      userSelect: 'none',
+                    }}
+                    onMouseEnter={e => !playDisabled && (e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)', e.currentTarget.style.boxShadow = '0 0 45px rgba(0,255,170,0.75), 0 12px 45px rgba(0,255,170,0.35)', e.currentTarget.style.letterSpacing = '2.5px')}
+                    onMouseLeave={e => !playDisabled && (e.currentTarget.style.transform = '', e.currentTarget.style.boxShadow = '0 0 28px rgba(0,255,150,0.55), 0 8px 35px rgba(0,255,160,0.32), inset 0 0 16px rgba(255,255,255,0.10)', e.currentTarget.style.letterSpacing = '2px')}
+                  >
+                    FLIP
+                  </div>
+                )}
+              </GambaUi.PlayButton>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
