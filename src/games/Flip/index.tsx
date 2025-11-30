@@ -155,9 +155,6 @@ export default function Flip() {
       </GambaUi.Portal>
 
       {/* Kein Control-Balken mehr */}
-      <GambaUi.Portal target="controls">
-        <div style={{ display: 'none' }} />
-      </GambaUi.Portal>
     </>
   )
 }
