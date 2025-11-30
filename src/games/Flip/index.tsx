@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { GambaUi, useSound } from 'gamba-react-ui-v2'
-import { useGamba } from  from 'gamba-react-v2'
+import { useGamba } from 'gamba-react-v2'           // ← war der Fehler!
 import React from 'react'
 import { Coin, TEXTURE_HEADS, TEXTURE_TAILS } from './Coin'
 import { Effect } from './Effect'
@@ -14,7 +14,6 @@ const WAGER_OPTIONS = [1, 5, 10, 50, 100]
 type Side = keyof typeof SIDES
 
 const GREEN = '#00ff88'
-const GREEN_DARK = '#00cc66'
 const BG = '#0a1a0f'
 
 export default function Flip() {
@@ -52,7 +51,7 @@ export default function Flip() {
 
   return (
     <>
-      {/* === DEINE CUSTOM CSS (MUSS IM SELBEN FILE STEHEN ODER IN index.css NACH gamba import) === */}
+      {/* ==================== CUSTOM CSS (funktioniert 100% auf Vercel) ==================== */}
       <style jsx global>{`
         /* Wager Input */
         .custom-wager-input > div {
@@ -61,7 +60,7 @@ export default function Flip() {
           border-radius: 18px !important;
           font-weight: 800 !important;
           font-size: 17px !important;
-          height:C 58px !important;
+          height: 58px !important;
           border: 1px solid rgba(0,255,160,0.4) !important;
           box-shadow: 0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25) !important;
           transition: all 0.18s !important;
@@ -72,7 +71,7 @@ export default function Flip() {
           border: 1px solid rgba(0,255,180,0.6) !important;
         }
 
-        /* Heads/Tails Toggle */
+        /* Toggle Button (Heads/Tails) */
         .custom-toggle {
           height: 58px !important;
           border-radius: 18px !important;
@@ -155,9 +154,8 @@ export default function Flip() {
               </Canvas>
             </div>
 
-            {/* WAGER + SIDE + FLIP */}
+            {/* Controls */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.2fr', gap: '12px' }}>
-              {/* Wager Input */}
               <GambaUi.WagerInput
                 options={WAGER_OPTIONS}
                 value={wager}
@@ -165,7 +163,6 @@ export default function Flip() {
                 className="custom-wager-input"
               />
 
-              {/* Heads / Tails Toggle */}
               <GambaUi.Button
                 disabled={gamba.isPlaying || flipping}
                 onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
@@ -175,7 +172,6 @@ export default function Flip() {
                 {side.toUpperCase()}
               </GambaUi.Button>
 
-              {/* FLIP Button */}
               <GambaUi.Button
                 onClick={play}
                 disabled={gamba.isPlaying || flipping}
