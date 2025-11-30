@@ -1,6 +1,22 @@
 import styled, { css, keyframes } from 'styled-components'
 import { CellStatus } from './types'
 
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  height: auto !important;
+`;
+
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 80px);
+  grid-template-rows: repeat(5, 80px);
+  gap: 10px;
+`;
+
 const tickingAnimation = keyframes`
   0%, 50%, 100% {
     transform: scale(1);
