@@ -125,8 +125,7 @@ export default function Flip() {
               </GambaUi.Button>
 
               {/* FLIP Button – jetzt exakt gleich hoch und direkt daneben */}
-              <GambaUi.PlayButton
-  noPortal
+              <GambaUi.Button
   onClick={play}
   disabled={gamba.isPlaying || flipping}
   style={{
@@ -140,11 +139,14 @@ export default function Flip() {
     letterSpacing: '1.5px',
     boxShadow: '0 8px 25px rgba(0,255,136,0.5)',
     transition: 'transform 0.15s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }}
   hoverStyle={{ transform: 'translateY(-4px) scale(1.05)' }}
 >
   FLIP
-</GambaUi.PlayButton>
+</GambaUi.Button>
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '14px', color: '#88ffaa', fontSize: '15px', fontWeight: '600' }}>
