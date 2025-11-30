@@ -92,18 +92,20 @@ export default function Flip() {
   value={wager}
   onChange={setWager}
   style={{
-    background: '#0d2618',
-    color: 'white',
+    background: 'rgba(0, 25, 15, 0.9)',
+    color: '#00ffbf',
     borderRadius: '18px',
-    fontWeight: '700',
+    fontWeight: '800',
     fontSize: '17px',
-    height: '56px',
-    border: '1px solid rgba(0,255,136,0.32)',
-    boxShadow: '0 0 18px rgba(0,255,136,0.12) inset',
-    transition: 'all 0.2s',
+    height: '58px',
+    border: '1px solid rgba(0,255,160,0.4)',
+    boxShadow: '0 0 18px rgba(0,255,140,0.18) inset, 0 0 12px rgba(0,255,180,0.25)',
+    transition: 'all 0.18s',
   }}
   hoverStyle={{
-    boxShadow: '0 0 25px rgba(0,255,136,0.25) inset',
+    boxShadow: '0 0 30px rgba(0,255,160,0.45) inset, 0 0 16px rgba(0,255,180,0.35)',
+    transform: 'translateY(-3px)',
+    border: '1px solid rgba(0,255,180,0.6)',
   }}
 />
 
@@ -112,56 +114,59 @@ export default function Flip() {
   disabled={gamba.isPlaying || flipping}
   onClick={() => setSide(side === 'heads' ? 'tails' : 'heads')}
   style={{
-    background: side === 'heads' ? '#00ff88' : '#0d2618',
-    color: side === 'heads' ? '#001303' : 'white',
+    background: side === 'heads'
+      ? 'linear-gradient(135deg, #00ff99, #00dd77)'
+      : 'rgba(0, 25, 15, 0.85)',
+    color: side === 'heads' ? '#002a12' : '#00ffbf',
     borderRadius: '18px',
-    fontWeight: '700',
+    fontWeight: '800',
     fontSize: '17px',
-    height: '56px',
+    height: '58px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
     border: side === 'heads'
-      ? '1px solid rgba(0,255,136,0.7)'
-      : '1px solid rgba(0,255,136,0.25)',
+      ? '1px solid rgba(0,255,160,0.7)'
+      : '1px solid rgba(0,255,140,0.25)',
     boxShadow: side === 'heads'
-      ? '0 0 25px rgba(0,255,136,0.55), inset 0 0 8px rgba(255,255,255,0.12)'
-      : '0 0 14px rgba(0,255,136,0.08) inset',
+      ? '0 0 22px rgba(0,255,170,0.45), inset 0 0 14px rgba(255,255,255,0.08)'
+      : '0 0 12px rgba(0,255,140,0.12) inset',
     transition: 'all 0.18s',
   }}
   hoverStyle={{
     boxShadow: side === 'heads'
-      ? '0 0 32px rgba(0,255,160,0.7)'
-      : '0 0 20px rgba(0,255,136,0.2) inset',
+      ? '0 0 34px rgba(0,255,170,0.7)'
+      : '0 0 20px rgba(0,255,160,0.25) inset',
     transform: 'translateY(-3px)',
   }}
 >
-  <img height="24" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
+  <img height="26" src={side === 'heads' ? TEXTURE_HEADS : TEXTURE_TAILS} alt={side} />
   {side.toUpperCase()}
 </GambaUi.Button>
-
               {/* FLIP Button – jetzt exakt gleich hoch und direkt daneben */}
               <GambaUi.Button
   onClick={play}
   disabled={gamba.isPlaying || flipping}
   style={{
-    background: `linear-gradient(135deg, #00ff88, #00dd77)`,
-    color: '#001303',
+    background: 'linear-gradient(135deg, #00ff99, #00e68a)',
+    color: '#002a12',
     borderRadius: '18px',
     fontWeight: '900',
     fontSize: '22px',
     height: '60px',
     textTransform: 'uppercase',
-    letterSpacing: '1.8px',
+    letterSpacing: '2px',
+    border: '1px solid rgba(0,255,160,0.55)',
     boxShadow:
-      '0 0 25px rgba(0,255,136,0.45), 0 8px 30px rgba(0,255,136,0.28), inset 0 0 12px rgba(255,255,255,0.12)',
-    border: '1px solid rgba(0,255,136,0.45)',
-    transition: 'all 0.18s ease-out',
+      '0 0 28px rgba(0,255,150,0.55), 0 8px 35px rgba(0,255,160,0.32), inset 0 0 16px rgba(255,255,255,0.10)',
+    transition: 'all 0.2s ease-out',
   }}
   hoverStyle={{
     transform: 'translateY(-4px) scale(1.05)',
-    boxShadow: '0 0 35px rgba(0,255,160,0.65), 0 12px 35px rgba(0,255,160,0.3)',
+    boxShadow:
+      '0 0 45px rgba(0,255,170,0.75), 0 12px 45px rgba(0,255,170,0.35)',
+    letterSpacing: '2.5px',
   }}
 >
   FLIP
